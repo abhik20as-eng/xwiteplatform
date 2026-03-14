@@ -3,92 +3,72 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>XWITE — AI Workforce Network</title>
+<title>XWITE</title>
 <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}
 body{background:#050B14;font-family:'Urbanist',sans-serif;color:#E8F4FD;min-height:100vh;overflow-x:hidden}
 input,button,textarea,select{font-family:inherit;outline:none}
 button{cursor:pointer}
-::-webkit-scrollbar{width:3px;height:3px}
-::-webkit-scrollbar-track{background:#0A1628}
-::-webkit-scrollbar-thumb{background:#1A3A5C;border-radius:2px}
-
-:root{
-  --bg:#050B14;--surface:#0A1628;--card:#0D1F35;
-  --border:#1A3A5C;--accent:#00E5FF;--accentD:#0099BB;
-  --glow:rgba(0,229,255,.12);--gold:#FFB800;--green:#00FF9D;
-  --red:#FF4560;--purple:#9B5DE5;--pink:#FF6B9D;
-  --text:#E8F4FD;--muted:#7B9BB8;--dim:#3D6080;
-  --nav-h:64px;--top-h:54px;--mono:'Fira Code',monospace;
-}
-
+::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-track{background:#0A1628}::-webkit-scrollbar-thumb{background:#1A3A5C;border-radius:2px}
+:root{--bg:#050B14;--surface:#0A1628;--card:#0D1F35;--border:#1A3A5C;--accent:#00E5FF;--accentD:#0099BB;--glow:rgba(0,229,255,.12);--gold:#FFB800;--green:#00FF9D;--red:#FF4560;--purple:#9B5DE5;--pink:#FF6B9D;--text:#E8F4FD;--muted:#7B9BB8;--dim:#3D6080;--nav-h:64px;--top-h:54px;--mono:'Fira Code',monospace}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideRight{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 @keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes scanStep{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
-
-.fade-up{animation:fadeUp .38s ease both}
-.fade-in{animation:fadeIn .25s ease both}
-.mono{font-family:var(--mono)}
-
+@keyframes scanStep{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+.fade-up{animation:fadeUp .35s ease both}
 #app{padding-bottom:calc(var(--nav-h)+10px);padding-top:var(--top-h)}
 .page{display:none;padding:16px 14px 0;max-width:640px;margin:0 auto}
-.page.active{display:block;animation:fadeUp .3s ease both}
-
-/* TOPBAR */
-#topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--top-h);background:rgba(5,11,20,.96);backdrop-filter:blur(28px);border-bottom:1px solid rgba(26,58,92,.6)}
-.topbar-inner{max-width:640px;margin:0 auto;height:100%;padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.logo{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0}
+.page.active{display:block;animation:fadeUp .28s ease both}
+#topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--top-h);background:rgba(5,11,20,.96);backdrop-filter:blur(28px);border-bottom:1px solid rgba(26,58,92,.5)}
+.topbar-inner{max-width:640px;margin:0 auto;height:100%;padding:0 14px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
 .logo-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accentD));display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(0,229,255,.25)}
 .logo-mark svg{fill:var(--bg)}
-.logo-word{font-family:'Urbanist',sans-serif;font-weight:900;font-size:18px;letter-spacing:3px;color:var(--text);text-transform:uppercase}
-.page-label{font-family:'Urbanist',sans-serif;font-weight:700;font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.logo-word{font-weight:900;font-size:18px;letter-spacing:3px;text-transform:uppercase}
+.page-label{font-weight:700;font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
 .topbar-actions{display:flex;align-items:center;gap:4px}
-.icon-btn{width:38px;height:38px;border-radius:10px;background:none;border:none;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:color .15s,background .15s;position:relative}
+.icon-btn{width:38px;height:38px;border-radius:10px;background:none;border:none;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s;position:relative}
 .icon-btn:hover{color:var(--accent);background:var(--glow)}
 .badge{position:absolute;top:5px;right:5px;width:13px;height:13px;border-radius:50%;background:var(--red);border:1.5px solid var(--bg);font-size:7px;font-weight:900;color:#fff;display:flex;align-items:center;justify-content:center}
 .badge.hidden{display:none}
-
-/* BOTTOM NAV */
-#bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(5,11,20,.97);backdrop-filter:blur(28px);border-top:1px solid rgba(26,58,92,.5);display:flex;justify-content:center;align-items:center;padding:0 8px 4px}
+#bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(5,11,20,.97);backdrop-filter:blur(28px);border-top:1px solid rgba(26,58,92,.45);display:flex;justify-content:center;align-items:center;padding:0 8px 4px}
 .nav-inner{display:flex;gap:2px;width:100%;max-width:480px}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px 6px;border-radius:10px;border:1px solid transparent;background:none;color:var(--dim);font-family:'Urbanist',sans-serif;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;transition:all .2s}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px 6px;border-radius:10px;border:1px solid transparent;background:none;color:var(--dim);font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;transition:all .2s}
 .nav-btn.active{color:var(--accent);border-color:rgba(0,229,255,.2);background:rgba(0,229,255,.07)}
-
-/* FAB */
 #fab{position:fixed;bottom:calc(var(--nav-h)+14px);right:16px;z-index:90;width:48px;height:48px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,229,255,.4);transition:all .2s}
-#fab:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,229,255,.5)}
-
-/* SHARED */
+#fab:hover{transform:translateY(-2px)}
+#fab:active{transform:scale(.95)}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;transition:border-color .2s}
-.card:hover{border-color:rgba(0,229,255,.2)}
-.btn{background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);border:none;padding:10px 20px;border-radius:9px;font-family:'Urbanist',sans-serif;font-weight:800;font-size:11px;letter-spacing:.8px;text-transform:uppercase;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
-.btn:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(0,229,255,.35)}
+.card:hover{border-color:rgba(0,229,255,.18)}
+.btn{background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);border:none;padding:10px 20px;border-radius:9px;font-weight:800;font-size:11px;letter-spacing:.8px;text-transform:uppercase;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,229,255,.35)}
+.btn:active{transform:scale(.97)}
 .btn:disabled{opacity:.45;pointer-events:none}
-.btn-sm{padding:7px 14px;font-size:10px;border-radius:7px}
+.btn-sm{padding:7px 14px;font-size:10px;border-radius:8px}
 .btn-xs{padding:5px 10px;font-size:10px;border-radius:7px}
-.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border);padding:9px 18px;border-radius:9px;font-family:'Urbanist',sans-serif;font-weight:700;font-size:11px;letter-spacing:.8px;text-transform:uppercase;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border);padding:9px 18px;border-radius:9px;font-weight:700;font-size:11px;letter-spacing:.8px;text-transform:uppercase;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .btn-ghost:hover{border-color:var(--accent);background:var(--glow)}
 .btn-ghost.active-g{background:var(--glow);border-color:var(--accent)}
 .btn-ghost-sm{padding:6px 12px;font-size:10px;border-radius:7px}
-.btn-ghost-xs{padding:4px 10px;font-size:10px;border-radius:7px}
-.btn-follow{background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);border:none;padding:7px 16px;border-radius:8px;font-family:'Urbanist',sans-serif;font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;transition:all .2s;white-space:nowrap}
+.btn-ghost-xs{padding:4px 10px;font-size:10px;border-radius:6px}
+.btn-follow{background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);border:none;padding:7px 16px;border-radius:8px;font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;transition:all .2s;white-space:nowrap}
 .btn-follow.following{background:transparent;color:var(--muted);border:1px solid var(--border)}
 .btn-follow.following:hover{border-color:var(--red);color:var(--red)}
 .tag{display:inline-block;background:rgba(0,229,255,.08);color:var(--accent);border:1px solid rgba(0,229,255,.2);border-radius:5px;padding:2px 8px;font-size:10px;font-family:var(--mono);font-weight:400}
 .tag-green{background:rgba(0,255,157,.08);color:var(--green);border-color:rgba(0,255,157,.2)}
 .tag-gold{background:rgba(255,184,0,.08);color:var(--gold);border-color:rgba(255,184,0,.2)}
 .tag-red{background:rgba(255,69,96,.08);color:var(--red);border-color:rgba(255,69,96,.2)}
-.input{background:var(--surface);border:1px solid var(--border);border-radius:11px;color:var(--text);padding:11px 14px;font-family:'Urbanist',sans-serif;font-size:14px;font-weight:400;outline:none;transition:all .2s;width:100%}
+.input{background:var(--surface);border:1px solid var(--border);border-radius:11px;color:var(--text);padding:11px 14px;font-size:14px;font-weight:400;outline:none;transition:all .2s;width:100%}
 .input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,229,255,.07)}
 .input::placeholder{color:var(--dim);font-weight:300}
 textarea.input{resize:none;line-height:1.6}
-.section-hd{font-family:'Urbanist',sans-serif;font-weight:800;font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+select.input{cursor:pointer}
+.section-hd{font-weight:800;font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
 .section-hd::after{content:'';flex:1;height:1px;background:var(--border)}
 .stat-row{display:flex;gap:10px;margin-bottom:18px}
 .stat-c{flex:1;background:linear-gradient(135deg,var(--card),var(--surface));border:1px solid var(--border);border-radius:12px;padding:14px 12px;position:relative;overflow:hidden}
@@ -97,176 +77,90 @@ textarea.input{resize:none;line-height:1.6}
 .stat-val{font-size:22px;font-weight:900;font-family:var(--mono);line-height:1}
 .stat-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:4px}
 
-/* ── FEED ──────────────────────────────── */
-.feed-search-wrap{
-  margin-bottom:16px;
-  position:relative;
-}
-.feed-search-inner{
-  display:flex;align-items:center;gap:13px;
-  background:rgba(13,31,53,.9);
-  border:1.5px solid rgba(0,229,255,.18);
-  border-radius:18px;
-  padding:15px 18px;
-  transition:all .3s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 2px 20px rgba(0,0,0,.25),0 0 0 0 rgba(0,229,255,0);
-  backdrop-filter:blur(16px);
-}
-.feed-search-inner.focused{
-  border-color:rgba(0,229,255,.55);
-  box-shadow:0 4px 32px rgba(0,0,0,.35),0 0 0 4px rgba(0,229,255,.07);
-  background:rgba(8,20,38,.97);
-}
+/* SEARCH */
+.feed-search-wrap{margin-bottom:14px}
+.feed-search-inner{display:flex;align-items:center;gap:13px;background:rgba(13,31,53,.9);border:1.5px solid rgba(0,229,255,.18);border-radius:18px;padding:15px 18px;transition:all .3s;box-shadow:0 2px 20px rgba(0,0,0,.25);backdrop-filter:blur(16px)}
+.feed-search-inner.focused{border-color:rgba(0,229,255,.55);box-shadow:0 4px 32px rgba(0,0,0,.35),0 0 0 4px rgba(0,229,255,.07)}
 .feed-s-icon{color:var(--accent);flex-shrink:0;transition:all .25s}
 .feed-search-inner.focused .feed-s-icon{color:#7DFCFF;transform:scale(1.1)}
-.feed-s-input{
-  flex:1;background:none;border:none;color:var(--text);
-  font-family:'Urbanist',sans-serif;font-size:15px;font-weight:400;
-  caret-color:var(--accent);min-width:0;
-}
+.feed-s-input{flex:1;background:none;border:none;color:var(--text);font-size:15px;font-weight:400;caret-color:var(--accent);min-width:0}
 .feed-s-input::placeholder{color:var(--dim);font-weight:300}
-.feed-s-kbd{
-  font-family:var(--mono);font-size:9px;color:var(--dim);
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
-  border-radius:5px;padding:3px 7px;flex-shrink:0;
-}
+.feed-s-kbd{font-family:var(--mono);font-size:9px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:3px 7px;flex-shrink:0}
 @media(max-width:400px){.feed-s-kbd{display:none}}
 
-/* Trending strip */
-.feed-trending{margin-bottom:20px}
-.feed-trending-scroll{
-  display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;
-  -webkit-overflow-scrolling:touch;
-}
-.feed-trending-scroll::-webkit-scrollbar{display:none}
-.ftag{
-  display:inline-block;flex-shrink:0;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:20px;padding:6px 14px;
-  font-family:'Urbanist',sans-serif;font-size:12px;font-weight:600;
-  color:var(--muted);cursor:pointer;transition:all .18s;white-space:nowrap;
-}
-.ftag:hover{background:rgba(0,229,255,.08);border-color:rgba(0,229,255,.3);color:var(--accent);transform:translateY(-1px)}
-.ftag.hot{background:rgba(255,184,0,.06);border-color:rgba(255,184,0,.22);color:#E8A800}
+/* MARKETPLACE */
+.mkt-top-row{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.mkt-cats-scroll{flex:1;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.mkt-cats-scroll::-webkit-scrollbar{display:none}
+.mkt-cat{flex-shrink:0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .18s;white-space:nowrap}
+.mkt-cat:hover{background:rgba(0,229,255,.07);border-color:rgba(0,229,255,.25);color:var(--accent)}
+.mkt-cat.active{background:rgba(0,229,255,.12);border-color:rgba(0,229,255,.4);color:var(--accent)}
 
-/* Post cards */
-.post-card{
-  margin-bottom:12px;padding:0;overflow:hidden;
-  border-radius:18px;
-}
-.post-head{display:flex;gap:12px;padding:16px 16px 0;margin-bottom:12px;align-items:center}
-.avatar{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:14px;font-weight:800}
-.post-user{font-family:'Urbanist',sans-serif;font-weight:800;font-size:14px;line-height:1.2}
-.post-meta{color:var(--muted);font-size:11px;font-weight:400;margin-top:2px}
-.post-verified{
-  display:inline-flex;align-items:center;gap:3px;
-  background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.15);
-  border-radius:4px;padding:1px 6px;font-size:9px;color:var(--accent);
-  font-weight:800;letter-spacing:.5px;text-transform:uppercase;font-family:'Urbanist',sans-serif;
-}
-.post-body{font-size:14px;line-height:1.72;color:#BDD6EE;font-weight:400;padding:0 16px 12px}
-.post-tags-row{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 13px}
-.post-actions{
-  display:flex;border-top:1px solid rgba(255,255,255,.05);
-}
-.act-btn{
-  flex:1;background:none;border:none;
-  display:flex;align-items:center;justify-content:center;gap:6px;
-  color:var(--muted);font-size:12px;font-weight:600;
-  padding:12px 8px;transition:all .15s;
-  border-right:1px solid rgba(255,255,255,.05);
-  font-family:'Urbanist',sans-serif;
-}
-.act-btn:last-child{border-right:none}
-.act-btn:hover{color:var(--accent);background:rgba(0,229,255,.04)}
-.act-btn.liked{color:var(--red)}
+/* FEATURED */
+.feat-scroll{display:flex;gap:12px;overflow-x:auto;margin-bottom:20px;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.feat-scroll::-webkit-scrollbar{display:none}
+.feat-card{flex-shrink:0;width:74vw;max-width:285px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:transform .2s,border-color .2s}
+.feat-card:hover{transform:translateY(-3px);border-color:rgba(0,229,255,.3)}
+.feat-cover{height:95px;display:flex;align-items:center;justify-content:center;position:relative}
+.feat-cover-emoji{font-size:40px;filter:drop-shadow(0 4px 14px rgba(0,0,0,.4));position:relative;z-index:1}
+.feat-badge{position:absolute;top:8px;left:10px;z-index:2;font-size:8px;font-weight:900;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(0,229,255,.18);color:var(--accent);border:1px solid rgba(0,229,255,.3)}
+.feat-body{padding:13px 14px 15px;background:var(--card)}
+.feat-cat{font-size:9px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
+.feat-name{font-weight:900;font-size:14px;margin-bottom:5px;line-height:1.3}
+.feat-desc{color:var(--muted);font-size:11px;line-height:1.5;margin-bottom:12px}
+.feat-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.feat-price{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--green)}
+.feat-was{font-family:var(--mono);font-size:10px;color:var(--dim);text-decoration:line-through;margin-left:4px}
+.mkt-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.mkt-hd-label{font-weight:800;font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.mkt-hd-count{font-family:var(--mono);font-size:11px;color:var(--dim)}
 
-/* Update card */
-.feed-update-card{
-  display:flex;gap:14px;align-items:flex-start;
-  margin-bottom:14px;padding:16px;
-  border-radius:16px;
-  background:linear-gradient(135deg,rgba(0,229,255,.04) 0%,transparent 100%);
-  border:1px solid rgba(0,229,255,.12);
-}
-.fuc-icon{
-  width:34px;height:34px;border-radius:10px;flex-shrink:0;
-  background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.2);
-  display:flex;align-items:center;justify-content:center;color:var(--accent);
-}
-.fuc-title{
-  font-family:'Urbanist',sans-serif;font-weight:800;font-size:12px;
-  color:var(--accent);letter-spacing:.5px;margin-bottom:4px;
-}
-.fuc-text{color:var(--muted);font-size:12px;line-height:1.6;font-weight:400}
-
-/* ── PRODUCT MARKETPLACE ─────────────── */
-.prod-cats{margin-bottom:16px}
-.prod-cats-scroll{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
-.prod-cats-scroll::-webkit-scrollbar{display:none}
-.prod-cat{flex-shrink:0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:7px 15px;font-family:'Urbanist',sans-serif;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .18s;white-space:nowrap}
-.prod-cat:hover{background:rgba(0,229,255,.07);border-color:rgba(0,229,255,.25);color:var(--accent)}
-.prod-cat.active{background:rgba(0,229,255,.12);border-color:rgba(0,229,255,.4);color:var(--accent)}
-.prod-featured-row{display:flex;gap:12px;overflow-x:auto;margin-bottom:20px;-webkit-overflow-scrolling:touch;padding-bottom:2px}
-.prod-featured-row::-webkit-scrollbar{display:none}
-.prod-feat-card{flex-shrink:0;width:76vw;max-width:290px;border-radius:18px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:transform .2s}
-.prod-feat-card:hover{transform:translateY(-3px)}
-.prod-feat-bg{height:100px;display:flex;align-items:center;justify-content:center;position:relative}
-.prod-feat-emoji{font-size:38px;position:relative;z-index:1;filter:drop-shadow(0 4px 16px rgba(0,0,0,.5))}
-.prod-feat-body{padding:13px 14px 15px;background:var(--card)}
-.prod-feat-cat{font-family:'Urbanist',sans-serif;font-size:9px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
-.prod-feat-name{font-family:'Urbanist',sans-serif;font-weight:900;font-size:15px;margin-bottom:4px;line-height:1.25}
-.prod-feat-desc{color:var(--muted);font-size:11px;font-weight:400;line-height:1.5;margin-bottom:12px}
-.prod-feat-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.prod-feat-price{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--green)}
-.prod-feat-was{font-family:var(--mono);font-size:10px;color:var(--dim);text-decoration:line-through;margin-left:4px}
-.prod-feat-badge{font-family:'Urbanist',sans-serif;font-size:9px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;padding:3px 8px;border-radius:5px}
-.prod-section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.prod-section-hd>span:first-child{font-family:'Urbanist',sans-serif;font-weight:800;font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
-.prod-count{font-family:var(--mono);font-size:11px;color:var(--dim);font-weight:400}
-.prod-card{margin-bottom:10px;border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s}
-.prod-card:hover{transform:translateY(-2px);border-color:rgba(0,229,255,.28)!important}
+/* PRODUCT CARD */
+.prod-card{margin-bottom:10px;border-radius:16px;overflow:hidden;transition:transform .2s,border-color .2s}
+.prod-card:hover{transform:translateY(-1px)}
 .prod-card-top{display:flex;gap:14px;padding:16px 16px 0;align-items:flex-start}
-.prod-icon-wrap{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.prod-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
 .prod-info{flex:1;min-width:0}
-.prod-name{font-family:'Urbanist',sans-serif;font-weight:900;font-size:15px;margin-bottom:3px;line-height:1.25}
-.prod-seller{display:flex;align-items:center;gap:6px;margin-bottom:6px}
-.prod-seller-av{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;font-family:'Urbanist',sans-serif;flex-shrink:0}
-.prod-seller-name{font-size:11px;color:var(--muted);font-weight:500}
+.prod-name{font-weight:900;font-size:15px;margin-bottom:4px;line-height:1.25}
+.prod-seller-row{display:flex;align-items:center;gap:7px;margin-bottom:7px;cursor:pointer;width:fit-content;padding:3px 8px 3px 0;border-radius:6px;transition:background .15s}
+.prod-seller-row:hover{background:rgba(0,229,255,.06)}
+.prod-seller-row:hover .prod-seller-name{color:var(--accent)}
+.prod-seller-av{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;flex-shrink:0}
+.prod-seller-name{font-size:11px;color:var(--muted);font-weight:600;transition:color .15s}
+.prod-seller-arrow{color:var(--dim);transition:color .15s;flex-shrink:0}
+.prod-seller-row:hover .prod-seller-arrow{color:var(--accent)}
 .prod-stars{display:flex;align-items:center;gap:2px;color:var(--gold);font-size:11px}
-.prod-stars span{color:var(--muted);font-size:10px;margin-left:3px;font-family:'Urbanist',sans-serif}
+.prod-stars span{color:var(--muted);font-size:10px;margin-left:3px}
 .prod-desc{font-size:13px;line-height:1.65;color:var(--muted);font-weight:400;padding:10px 16px 12px}
-.prod-tags-row{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 14px}
+.prod-tags{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 14px}
 .prod-foot{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid rgba(255,255,255,.05);background:rgba(0,0,0,.18)}
-.prod-price-wrap{display:flex;align-items:baseline;gap:6px}
+.prod-price-area{display:flex;align-items:baseline;gap:7px}
 .prod-price{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--green)}
 .prod-was{font-family:var(--mono);font-size:11px;color:var(--dim);text-decoration:line-through}
-.prod-save-pct{font-family:'Urbanist',sans-serif;font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;background:rgba(0,255,157,.1);color:var(--green);border:1px solid rgba(0,255,157,.2)}
+.prod-save{font-size:9px;font-weight:900;padding:2px 7px;border-radius:4px;background:rgba(0,255,157,.1);color:var(--green);border:1px solid rgba(0,255,157,.2)}
 .prod-actions{display:flex;gap:8px;align-items:center}
-.prod-wish{width:34px;height:34px;border-radius:9px;background:transparent;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .18s;cursor:pointer}
+.prod-wish{width:34px;height:34px;border-radius:9px;background:transparent;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .18s}
 .prod-wish:hover{border-color:var(--red);color:var(--red)}
 .prod-wish.saved{border-color:var(--red);color:var(--red);background:rgba(255,69,96,.08)}
-.prod-buy{background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);border:none;padding:8px 18px;border-radius:9px;font-family:'Urbanist',sans-serif;font-weight:800;font-size:11px;letter-spacing:.5px;text-transform:uppercase;transition:all .18s;cursor:pointer}
-.prod-buy:hover{box-shadow:0 4px 18px rgba(0,229,255,.35);transform:translateY(-1px)}
+.prod-get{background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);border:none;padding:8px 18px;border-radius:9px;font-weight:800;font-size:11px;letter-spacing:.5px;text-transform:uppercase;transition:all .18s}
+.prod-get:hover{box-shadow:0 4px 18px rgba(0,229,255,.35);transform:translateY(-1px)}
 
-
+/* TASKS */
 .task-top-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .task-search-wrap{flex:1;position:relative;min-width:160px}
 .task-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--dim)}
 .task-search-wrap .input{padding-left:36px}
 .cat-wrap{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
 .cat-wrap::-webkit-scrollbar{display:none}
-.pill{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:5px 14px;white-space:nowrap;font-family:'Urbanist',sans-serif;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;transition:all .15s;flex-shrink:0}
+.pill{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:5px 14px;white-space:nowrap;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;transition:all .15s;flex-shrink:0}
 .pill.active{background:rgba(0,229,255,.1);border-color:var(--accent);color:var(--accent)}
 .task-card{padding:16px;margin-bottom:10px}
 .task-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
-.task-title{font-family:'Urbanist',sans-serif;font-weight:800;font-size:13px;line-height:1.45}
+.task-title{font-weight:800;font-size:13px;line-height:1.45}
 .task-client{color:var(--muted);font-size:11px;margin-top:2px;font-weight:400}
 .task-skills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
 .task-foot{display:flex;justify-content:space-between;align-items:center}
 .task-budget{display:flex;align-items:center;gap:5px;color:var(--gold);font-weight:700;font-size:13px;font-family:var(--mono)}
-.task-right{display:flex;align-items:center;gap:10px}
 .task-bids{color:var(--muted);font-size:11px}
 
 /* AGENT */
@@ -278,13 +172,12 @@ textarea.input{resize:none;line-height:1.6}
 .ring-arc.spin{animation:rotate .9s linear infinite}
 .agent-core{position:absolute;inset:9px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:box-shadow .4s}
 .agent-core.scanning{box-shadow:0 0 28px rgba(0,229,255,.5);animation:pulse 1s ease-in-out infinite}
-.agent-name{font-family:'Urbanist',sans-serif;font-size:20px;font-weight:900;margin-bottom:2px;letter-spacing:.5px}
-.agent-lens{color:var(--muted);font-size:13px;margin-bottom:10px}
+.agent-name{font-weight:900;font-size:20px;margin-bottom:2px}
+.agent-lens{color:var(--muted);font-size:13px;margin-bottom:14px}
 .agent-lens span{color:var(--accent)}
-.agent-status{display:flex;justify-content:center;gap:12px;margin-bottom:16px;align-items:center}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+.a-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
 .agent-tabs{display:flex;gap:3px;margin-bottom:16px;background:var(--surface);padding:4px;border-radius:12px;border:1px solid var(--border)}
-.agent-tab{flex:1;padding:8px 0;background:transparent;border:1px solid transparent;border-radius:8px;color:var(--muted);font-family:'Urbanist',sans-serif;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;transition:all .15s}
+.agent-tab{flex:1;padding:8px 0;background:transparent;border:1px solid transparent;border-radius:8px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;transition:all .15s}
 .agent-tab.active{background:var(--card);border-color:var(--border);color:var(--accent)}
 .agent-panel{display:none}
 .agent-panel.active{display:block}
@@ -295,10 +188,10 @@ textarea.input{resize:none;line-height:1.6}
 .scan-step{display:flex;align-items:center;gap:10px;justify-content:center;color:var(--muted);font-size:12px;margin-bottom:10px;opacity:0;animation:scanStep .4s ease both}
 .spin-sm{width:11px;height:11px;border:2px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:rotate .7s linear infinite;flex-shrink:0}
 .match-card{padding:13px 15px;margin-bottom:8px;display:flex;gap:12px;align-items:center;opacity:0;animation:fadeUp .35s ease both}
-.match-ring{width:48px;height:48px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative}
+.match-ring{width:48px;height:48px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .match-inner{width:36px;height:36px;border-radius:6px;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--accent);font-family:var(--mono)}
 .match-info{flex:1;min-width:0}
-.match-title{font-family:'Urbanist',sans-serif;font-weight:800;font-size:13px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.match-title{font-weight:800;font-size:13px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .match-meta{display:flex;gap:7px;align-items:center}
 .match-budget{color:var(--gold);font-size:11px;font-family:var(--mono)}
 .match-btns{display:flex;gap:5px;flex-shrink:0}
@@ -312,15 +205,14 @@ textarea.input{resize:none;line-height:1.6}
 .bubble-out{background:linear-gradient(135deg,var(--accentD),var(--accent));color:var(--bg);font-weight:600;border-radius:12px 12px 2px 12px}
 .typing-dots{display:flex;gap:4px;align-items:center;padding:4px 0}
 .typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1s ease-in-out infinite}
-.typing-dots span:nth-child(2){animation-delay:.2s}
-.typing-dots span:nth-child(3){animation-delay:.4s}
+.typing-dots span:nth-child(2){animation-delay:.2s}.typing-dots span:nth-child(3){animation-delay:.4s}
 .chat-input-row{border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:8px}
 .chat-input-row input{flex:1;padding:9px 13px;font-size:13px}
 .chat-sugg{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
 .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .tool-card{padding:18px;cursor:pointer}
 .tool-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:11px}
-.tool-name{font-family:'Urbanist',sans-serif;font-weight:800;font-size:13px;margin-bottom:3px}
+.tool-name{font-weight:800;font-size:13px;margin-bottom:3px}
 .tool-desc{color:var(--muted);font-size:11px;line-height:1.5;font-weight:400}
 
 /* NETWORK */
@@ -328,26 +220,25 @@ textarea.input{resize:none;line-height:1.6}
 .people-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .person-card{padding:16px;cursor:pointer;transition:border-color .2s;text-align:center}
 .person-card:hover{border-color:rgba(0,229,255,.3)}
-.person-avatar{width:48px;height:48px;border-radius:50%;margin:0 auto 11px;display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:17px;font-weight:800}
-.person-name{font-family:'Urbanist',sans-serif;font-weight:800;font-size:13px;margin-bottom:2px}
-.person-role{color:var(--muted);font-size:11px;font-weight:400;margin-bottom:7px;line-height:1.4}
+.person-avatar{width:48px;height:48px;border-radius:50%;margin:0 auto 11px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800}
+.person-name{font-weight:800;font-size:13px;margin-bottom:2px}
+.person-role{color:var(--muted);font-size:11px;font-weight:400;margin-bottom:7px}
 .person-mutual{color:var(--dim);font-size:10px;margin-bottom:11px;font-weight:500}
-.company-item{margin-bottom:10px;overflow:hidden;cursor:pointer}
+.company-item{margin-bottom:10px;overflow:hidden;cursor:pointer;border-radius:14px}
 .company-cover{height:80px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:10px;border-radius:12px 12px 0 0}
-.company-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(5,11,20,.65));pointer-events:none}
-.company-cover-logo{width:44px;height:44px;border-radius:10px;background:rgba(5,11,20,.6);border:2px solid rgba(255,255,255,.2);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:19px;font-weight:900;position:relative;z-index:1}
+.company-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(5,11,20,.6));pointer-events:none}
+.company-cover-logo{width:44px;height:44px;border-radius:10px;background:rgba(5,11,20,.6);border:2px solid rgba(255,255,255,.2);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;position:relative;z-index:1}
 .company-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.company-name{font-family:'Urbanist',sans-serif;font-weight:800;font-size:14px;margin-bottom:2px}
+.company-name{font-weight:800;font-size:14px;margin-bottom:2px}
 .company-meta{color:var(--muted);font-size:11px;font-weight:400}
 .company-right{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
 
 /* PROFILE */
 .profile-hero{background:linear-gradient(135deg,rgba(0,229,255,.07),rgba(0,229,255,.02));border:1px solid rgba(0,229,255,.2);border-radius:16px;padding:22px 18px;margin-bottom:18px}
 .profile-top{display:flex;gap:16px;align-items:flex-start}
-.profile-av-wrap{position:relative;flex-shrink:0}
-.profile-av{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,rgba(0,229,255,.2),rgba(0,229,255,.4));border:2px solid rgba(0,229,255,.4);display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:24px;font-weight:900;color:var(--accent)}
+.profile-av{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,rgba(0,229,255,.2),rgba(0,229,255,.4));border:2px solid rgba(0,229,255,.4);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:var(--accent);flex-shrink:0;position:relative}
 .online-ind{position:absolute;bottom:2px;right:2px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2px solid var(--card)}
-.profile-name{font-family:'Urbanist',sans-serif;font-size:21px;font-weight:900;margin-bottom:2px}
+.profile-name{font-size:21px;font-weight:900;margin-bottom:2px}
 .profile-role{color:var(--accent);font-size:13px;font-weight:700;margin-bottom:6px}
 .profile-bio{color:var(--muted);font-size:13px;margin-bottom:11px;line-height:1.55;font-weight:400}
 .profile-badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
@@ -361,32 +252,36 @@ textarea.input{resize:none;line-height:1.6}
 .proj-item{display:flex;gap:11px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--border)}
 .proj-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
 .proj-icon{width:36px;height:36px;border-radius:8px;flex-shrink:0;background:rgba(0,255,157,.06);border:1px solid rgba(0,255,157,.15);display:flex;align-items:center;justify-content:center}
-.proj-title{font-family:'Urbanist',sans-serif;font-weight:800;font-size:13px;margin-bottom:2px}
+.proj-title{font-weight:800;font-size:13px;margin-bottom:2px}
 .proj-client{color:var(--muted);font-size:11px;font-weight:400}
 .proj-right{text-align:right;margin-left:auto}
 .proj-earned{color:var(--gold);font-weight:800;font-size:13px;font-family:var(--mono)}
-.stars-r{display:flex;gap:2px;justify-content:flex-end;margin-top:3px}
+.stars-r{display:flex;gap:2px;justify-content:flex-end;margin-top:3px;color:var(--gold);font-size:11px}
 
-/* PROFILE MODAL */
-#profile-modal{display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto}
-#profile-modal.open{display:block;animation:slideUp .3s ease both}
-.pm-header{position:sticky;top:0;z-index:10;padding:0 14px;height:50px;display:flex;align-items:center;gap:12px;background:rgba(5,11,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.pm-back{width:34px;height:34px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0}
-.pm-back-label{font-family:'Urbanist',sans-serif;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.5px}
-.pm-cover{height:160px;position:relative;overflow:hidden}
-.pm-body{padding:0 16px 30px;max-width:640px;margin:0 auto}
-.pm-av-row{display:flex;justify-content:space-between;align-items:flex-end;margin-top:-38px;margin-bottom:14px}
-.pm-avatar{width:76px;height:76px;border-radius:50%;border:3px solid var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:26px;font-weight:900}
-.pm-ctas{display:flex;gap:8px;align-items:center}
-.pm-name{font-family:'Urbanist',sans-serif;font-size:22px;font-weight:900;margin-bottom:2px}
-.pm-role{font-size:13px;font-weight:700;margin-bottom:6px}
-.pm-bio{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:14px;font-weight:400}
-.pm-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
-.pm-stats{display:flex;gap:0;margin-bottom:22px;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.pm-stat{flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border)}
-.pm-stat:last-child{border-right:none}
-.pm-stat-val{font-family:var(--mono);font-size:18px;font-weight:800;line-height:1}
-.pm-stat-lbl{font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-family:'Urbanist',sans-serif}
+/* SELLER MODAL */
+#seller-modal{display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto}
+#seller-modal.open{display:block;animation:slideUp .28s ease both}
+.sm-header{position:sticky;top:0;z-index:10;padding:0 14px;height:50px;display:flex;align-items:center;gap:12px;background:rgba(5,11,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.sm-back{width:34px;height:34px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;flex-shrink:0}
+.sm-back-label{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.5px}
+.sm-cover{height:160px;position:relative;overflow:hidden}
+.sm-body{padding:0 16px 30px;max-width:640px;margin:0 auto}
+.sm-av-row{display:flex;justify-content:space-between;align-items:flex-end;margin-top:-38px;margin-bottom:14px}
+.sm-avatar{width:76px;height:76px;border-radius:50%;border:3px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900}
+.sm-ctas{display:flex;gap:8px;align-items:center}
+.sm-name{font-size:22px;font-weight:900;margin-bottom:2px}
+.sm-role{font-size:13px;font-weight:700;margin-bottom:6px}
+.sm-bio{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:14px;font-weight:400}
+.sm-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+.sm-stats{display:flex;margin-bottom:22px;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.sm-stat{flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border)}
+.sm-stat:last-child{border-right:none}
+.sm-stat-val{font-family:var(--mono);font-size:18px;font-weight:800;line-height:1}
+.sm-stat-lbl{font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.sm-prod-mini{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:8px}
+.sm-prod-emoji{font-size:22px;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sm-prod-name{font-weight:800;font-size:13px;margin-bottom:2px}
+.sm-prod-price{font-family:var(--mono);font-size:12px;color:var(--green)}
 
 /* PEOPLE PANEL */
 #people-panel{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
@@ -394,132 +289,98 @@ textarea.input{resize:none;line-height:1.6}
 .pp-sheet{position:fixed;top:0;right:0;bottom:0;width:min(340px,95vw);background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;animation:slideRight .25s ease both}
 .pp-header{padding:14px 14px 0;border-bottom:1px solid var(--border)}
 .pp-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
-.pp-title{font-family:'Urbanist',sans-serif;font-weight:900;font-size:17px}
-.pp-close{width:32px;height:32px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.pp-title{font-weight:900;font-size:17px}
+.pp-close{width:32px;height:32px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer}
 .pp-search-wrap{position:relative;margin-bottom:10px}
 .pp-search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--dim)}
-.pp-search-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:9px 12px 9px 34px;font-family:'Urbanist',sans-serif;font-size:13px;font-weight:400;transition:border-color .2s}
+.pp-search-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:9px 12px 9px 34px;font-size:13px;font-weight:400;transition:border-color .2s}
 .pp-search-input:focus{border-color:rgba(0,229,255,.4);outline:none}
 .pp-search-input::placeholder{color:var(--dim);font-weight:300}
-.pp-tabs{display:flex;gap:0;padding:0}
-.pp-tab{flex:1;padding:9px 0;background:none;border:none;font-family:'Urbanist',sans-serif;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s}
+.pp-tabs{display:flex}
+.pp-tab{flex:1;padding:9px 0;background:none;border:none;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s}
 .pp-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 .pp-body{flex:1;overflow-y:auto;padding:12px}
 .pp-panel{display:none}
 .pp-panel.active{display:block}
 .pp-person{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:10px;transition:background .15s;margin-bottom:2px;cursor:pointer}
 .pp-person:hover{background:var(--card)}
-.pp-av{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:13px;font-weight:800}
+.pp-av{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
 .pp-info{flex:1;min-width:0}
-.pp-name{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Urbanist',sans-serif}
+.pp-name{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pp-role{color:var(--muted);font-size:11px;font-weight:400}
-.discover-card{padding:11px;border-radius:10px;background:var(--card);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:11px;align-items:center;cursor:pointer}
-.discover-card:hover{border-color:rgba(0,229,255,.25)}
+.disc-card{padding:11px;border-radius:10px;background:var(--card);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:11px;align-items:center;cursor:pointer}
+.disc-card:hover{border-color:rgba(0,229,255,.25)}
 
 /* MODALS */
-.overlay{display:none;position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center}
+.overlay{display:none;position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center}
 @media(min-width:500px){.overlay{align-items:center}}
 .overlay.open{display:flex;animation:fadeIn .2s ease both}
 .sheet{background:var(--card);border:1px solid var(--border);border-radius:18px 18px 0 0;padding:22px;width:100%;animation:slideUp .25s ease both;max-height:90vh;overflow-y:auto}
-@media(min-width:500px){.sheet{border-radius:18px;max-width:460px;animation:fadeUp .25s ease both}}
+@media(min-width:500px){.sheet{border-radius:18px;max-width:480px;animation:fadeUp .25s ease both}}
 .sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 18px;display:block}
 @media(min-width:500px){.sheet-handle{display:none}}
-.sheet-title{font-family:'Urbanist',sans-serif;font-size:18px;font-weight:900;margin-bottom:4px}
-.sheet-sub{color:var(--muted);font-size:12px;margin-bottom:18px;font-weight:400}
+.sheet-title{font-size:19px;font-weight:900;margin-bottom:4px}
+.sheet-sub{color:var(--muted);font-size:12px;margin-bottom:20px;font-weight:400;line-height:1.5}
 .field{margin-bottom:14px}
-.field-label{font-family:'Urbanist',sans-serif;font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block}
+.field-label{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block}
 .field-hint{font-size:10px;color:var(--dim);margin-top:3px}
-.sheet-btns{display:flex;gap:10px;margin-top:18px}
+.sheet-btns{display:flex;gap:10px;margin-top:20px}
 .sheet-btns .btn-ghost{flex:1}
 .sheet-btns .btn{flex:2}
 .sheet-footer{text-align:center;color:var(--dim);font-size:10px;margin-top:8px}
 .success-body{text-align:center;padding:14px 0}
 .success-ico{width:54px;height:54px;border-radius:50%;background:rgba(0,255,157,.1);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
-.success-title{font-family:'Urbanist',sans-serif;font-size:18px;font-weight:900;margin-bottom:7px}
+.success-title{font-size:18px;font-weight:900;margin-bottom:7px}
 .success-sub{color:var(--muted);font-size:13px;margin-bottom:18px;font-weight:400}
-.page-pad{height:20px}
+.page-pad{height:24px}
 #cover-input{display:none}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 </style>
 </head>
 <body>
 
 <div id="topbar">
   <div class="topbar-inner">
-    <a class="logo" href="#">
-      <div class="logo-mark"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-      <span class="logo-word">XWITE</span>
-    </a>
-    <span class="page-label" id="page-label">Feed</span>
+    <a class="logo" href="#"><div class="logo-mark"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span class="logo-word">XWITE</span></a>
+    <span class="page-label" id="page-label">Marketplace</span>
     <div class="topbar-actions">
-      <button class="icon-btn" id="notif-btn" onclick="clearNotif()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 10a6 6 0 0112 0v4l2 2H4l2-2v-4z"/><path d="M10 18a2 2 0 004 0" stroke-linecap="round"/></svg>
-        <span class="badge" id="notif-badge">3</span>
-      </button>
-      <button class="icon-btn" onclick="openPeople()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke-linecap="round"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-linecap="round"/></svg>
-      </button>
+      <button class="icon-btn" onclick="clearNotif()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 10a6 6 0 0112 0v4l2 2H4l2-2v-4z"/><path d="M10 18a2 2 0 004 0" stroke-linecap="round"/></svg><span class="badge" id="notif-badge">3</span></button>
+      <button class="icon-btn" onclick="openPeople()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke-linecap="round"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-linecap="round"/></svg></button>
     </div>
   </div>
 </div>
 
 <div id="app">
-
-  <!-- HOME -->
+  <!-- HOME / MARKETPLACE -->
   <div id="page-home" class="page active">
-
-    <!-- Search Bar -->
     <div class="feed-search-wrap fade-up">
-      <div class="feed-search-inner" id="fsh-box"
-        onfocus="this.classList.add('focused')"
-        onblur="this.classList.remove('focused')">
+      <div class="feed-search-inner" id="fsh-box">
         <svg class="feed-s-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/></svg>
-        <input class="feed-s-input" id="fsh-input" placeholder="Search people, tasks, skills…"
-          onfocus="document.getElementById('fsh-box').classList.add('focused')"
-          onblur="document.getElementById('fsh-box').classList.remove('focused')"/>
+        <input class="feed-s-input" id="mkt-search" placeholder="Search products, tools, creators…" onfocus="document.getElementById('fsh-box').classList.add('focused')" onblur="document.getElementById('fsh-box').classList.remove('focused')" oninput="filterProducts()"/>
         <kbd class="feed-s-kbd">⌘K</kbd>
       </div>
     </div>
-
-    <!-- Category filter -->
-    <div class="prod-cats fade-up" style="animation-delay:50ms">
-      <div class="prod-cats-scroll" id="prod-cats-scroll">
-        <button class="prod-cat active" onclick="filterProducts('ALL',this)">All</button>
-        <button class="prod-cat" onclick="filterProducts('Chatbot',this)">🤖 Chatbot</button>
-        <button class="prod-cat" onclick="filterProducts('Automation',this)">⚡ Automation</button>
-        <button class="prod-cat" onclick="filterProducts('SaaS',this)">☁️ SaaS Tool</button>
-        <button class="prod-cat" onclick="filterProducts('AI',this)">✦ AI Tool</button>
-        <button class="prod-cat" onclick="filterProducts('Analytics',this)">📊 Analytics</button>
-        <button class="prod-cat" onclick="filterProducts('Web App',this)">🌐 Web App</button>
-        <button class="prod-cat" onclick="filterProducts('Mobile',this)">📱 Mobile</button>
-      </div>
+    <div class="mkt-top-row fade-up" style="animation-delay:50ms">
+      <div class="mkt-cats-scroll" id="mkt-cats"></div>
+      <button class="btn btn-sm" style="flex-shrink:0" onclick="openModal('add-product-modal')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        Sell
+      </button>
     </div>
-
-    <!-- Featured banner -->
-    <div class="prod-featured-row fade-up" style="animation-delay:80ms" id="prod-featured"></div>
-
-    <!-- Section header -->
-    <div class="prod-section-hd fade-up" style="animation-delay:100ms">
-      <span>All Products</span>
-      <span class="prod-count" id="prod-count"></span>
+    <div class="feat-scroll fade-up" id="feat-scroll" style="animation-delay:80ms"></div>
+    <div class="mkt-hd fade-up" style="animation-delay:100ms">
+      <span class="mkt-hd-label">All Products</span>
+      <span class="mkt-hd-count" id="mkt-count"></span>
     </div>
-
-    <!-- Products list -->
     <div id="products-container"></div>
-
     <div class="page-pad"></div>
   </div>
 
   <!-- TASKS -->
   <div id="page-task" class="page">
     <div class="task-top-row">
-      <div class="task-search-wrap">
-        <svg class="task-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/></svg>
-        <input class="input" type="text" placeholder="Search tasks, skills…" id="task-search" oninput="renderTasks()"/>
-      </div>
-      <button class="btn btn-sm" onclick="openModal('list-task-modal')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
-        List Task
-      </button>
+      <div class="task-search-wrap"><svg class="task-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/></svg><input class="input" type="text" placeholder="Search tasks, skills…" id="task-search" oninput="renderTasks()"/></div>
+      <button class="btn btn-sm" onclick="openModal('list-task-modal')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>List Task</button>
     </div>
     <div class="cat-wrap" id="cat-wrap"></div>
     <div class="stat-row">
@@ -527,52 +388,21 @@ textarea.input{resize:none;line-height:1.6}
       <div class="stat-c"><div class="stat-lbl">Bids</div><div class="stat-val" style="color:var(--accent)">9,441</div></div>
       <div class="stat-c"><div class="stat-lbl">Avg</div><div class="stat-val" style="color:var(--gold)">$780</div></div>
     </div>
-    <div id="tasks-container"></div>
-    <div class="page-pad"></div>
+    <div id="tasks-container"></div><div class="page-pad"></div>
   </div>
 
   <!-- AGENT -->
   <div id="page-agent" class="page">
     <div class="card agent-hero">
-      <div class="agent-ring">
-        <svg class="ring-svg" viewBox="0 0 88 88"><circle class="ring-bg" cx="44" cy="44" r="40"/><circle class="ring-arc" id="agent-arc" cx="44" cy="44" r="40"/></svg>
-        <div class="agent-core" id="agent-core">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" stroke-linecap="round"/></svg>
-        </div>
-      </div>
+      <div class="agent-ring"><svg class="ring-svg" viewBox="0 0 88 88"><circle class="ring-bg" cx="44" cy="44" r="40"/><circle class="ring-arc" id="agent-arc" cx="44" cy="44" r="40"/></svg><div class="agent-core" id="agent-core"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" stroke-linecap="round"/></svg></div></div>
       <div class="agent-name">XWITE AI Agent</div>
       <div class="agent-lens">Cognitive Lens: <span>Analytical · Technical</span></div>
-      <div class="agent-status">
-        <div class="dot"></div>
-        <span style="color:var(--green);font-size:10px;font-weight:800;letter-spacing:.8px;font-family:'Urbanist',sans-serif">PREMIUM ACTIVE</span>
-        <span style="color:var(--dim)">·</span>
-        <span style="color:var(--muted);font-size:11px">Next: 6h 24m</span>
-      </div>
-      <button class="btn" id="scan-btn" onclick="startScan()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke-linecap="round"/></svg>
-        Run Daily Scan
-      </button>
+      <div style="display:flex;justify-content:center;gap:12px;margin-bottom:16px;align-items:center"><div class="a-dot"></div><span style="color:var(--green);font-size:10px;font-weight:800;letter-spacing:.8px">PREMIUM ACTIVE</span><span style="color:var(--dim)">·</span><span style="color:var(--muted);font-size:11px">Next: 6h 24m</span></div>
+      <button class="btn" id="scan-btn" onclick="startScan()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke-linecap="round"/></svg>Run Daily Scan</button>
     </div>
-    <div class="agent-tabs">
-      <button class="agent-tab active" onclick="switchAgentTab('tasks',this)">Matched</button>
-      <button class="agent-tab" onclick="switchAgentTab('chat',this)">AI Chat</button>
-      <button class="agent-tab" onclick="switchAgentTab('tools',this)">Tools</button>
-    </div>
-    <div class="agent-panel active" id="agent-tasks">
-      <div id="scan-empty" class="scan-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--dim)" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" stroke-linecap="round"/></svg><p>Run your daily scan to receive 7 AI-matched tasks</p></div>
-      <div id="scan-steps" class="scan-steps" style="display:none"></div>
-      <div id="matched-list"></div>
-    </div>
-    <div class="agent-panel" id="agent-chat">
-      <div class="chat-wrap">
-        <div class="chat-msgs" id="chat-msgs"></div>
-        <div class="chat-input-row">
-          <input class="input" type="text" id="chat-input" placeholder="Ask your agent…" onkeydown="if(event.key==='Enter')sendChat()"/>
-          <button class="btn" style="padding:10px 12px;" onclick="sendChat()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/></svg></button>
-        </div>
-      </div>
-      <div class="chat-sugg" id="chat-sugg"></div>
-    </div>
+    <div class="agent-tabs"><button class="agent-tab active" onclick="switchAgentTab('tasks',this)">Matched</button><button class="agent-tab" onclick="switchAgentTab('chat',this)">AI Chat</button><button class="agent-tab" onclick="switchAgentTab('tools',this)">Tools</button></div>
+    <div class="agent-panel active" id="agent-tasks"><div id="scan-empty" class="scan-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--dim)" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" stroke-linecap="round"/></svg><p>Run your daily scan to receive 7 AI-matched tasks</p></div><div id="scan-steps" class="scan-steps" style="display:none"></div><div id="matched-list"></div></div>
+    <div class="agent-panel" id="agent-chat"><div class="chat-wrap"><div class="chat-msgs" id="chat-msgs"></div><div class="chat-input-row"><input class="input" type="text" id="chat-input" placeholder="Ask your agent…" onkeydown="if(event.key==='Enter')sendChat()"/><button class="btn" style="padding:10px 13px" onclick="sendChat()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/></svg></button></div></div><div class="chat-sugg" id="chat-sugg"></div></div>
     <div class="agent-panel" id="agent-tools"><div class="tools-grid" id="tools-grid"></div></div>
     <div class="page-pad"></div>
   </div>
@@ -589,13 +419,8 @@ textarea.input{resize:none;line-height:1.6}
   <div id="page-profile" class="page">
     <div class="profile-hero">
       <div class="profile-top">
-        <div class="profile-av-wrap"><div class="profile-av">DU</div><div class="online-ind"></div></div>
-        <div style="flex:1">
-          <div class="profile-name">Dev User</div>
-          <div class="profile-role">Full Stack Developer · 5 Years</div>
-          <div class="profile-bio">Building scalable web apps. Passionate about clean code, DX, and AI tools.</div>
-          <div class="profile-badges"><span class="tag tag-green">PREMIUM</span><span class="tag">Analytical</span><span class="tag">Technical</span><div class="star-row">★★★★★ <span style="color:var(--muted);font-size:11px;margin-left:2px">(147)</span></div></div>
-        </div>
+        <div class="profile-av" style="position:relative">DU<div class="online-ind"></div></div>
+        <div style="flex:1"><div class="profile-name">Dev User</div><div class="profile-role">Full Stack Developer · 5 Yrs</div><div class="profile-bio">Building scalable web apps. Passionate about clean code, DX, and AI-powered tools.</div><div class="profile-badges"><span class="tag tag-green">PREMIUM</span><span class="tag">Analytical</span><span class="tag">Technical</span><div class="star-row">★★★★★<span style="color:var(--muted);font-size:11px;margin-left:2px">(147)</span></div></div></div>
         <button class="btn-ghost btn-ghost-sm" style="flex-shrink:0">Edit</button>
       </div>
     </div>
@@ -604,23 +429,17 @@ textarea.input{resize:none;line-height:1.6}
       <div class="stat-c"><div class="stat-lbl">Earned</div><div class="stat-val" style="color:var(--gold)">$28K</div></div>
       <div class="stat-c"><div class="stat-lbl">Repeat</div><div class="stat-val" style="color:var(--accent)">67%</div></div>
     </div>
-    <div class="card" style="padding:20px;margin-bottom:14px">
-      <div class="section-hd" style="margin-bottom:14px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><path d="M23 6l-9.5 9.5-5-5L1 18M17 6h6v6" stroke-linecap="round" stroke-linejoin="round"/></svg> Skills</div>
-      <div class="skills-list" id="skills-list"></div>
-    </div>
-    <div class="card" style="padding:20px">
-      <div class="section-hd" style="margin-bottom:14px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 014 0v2M3 12h18" stroke-linecap="round"/></svg> Projects</div>
-      <div id="projects-list"></div>
-    </div>
+    <div class="card" style="padding:20px;margin-bottom:14px"><div class="section-hd" style="margin-bottom:14px">Skills</div><div class="skills-list" id="skills-list"></div></div>
+    <div class="card" style="padding:20px"><div class="section-hd" style="margin-bottom:14px">Recent Projects</div><div id="projects-list"></div></div>
     <div class="page-pad"></div>
   </div>
 </div>
 
-<button id="fab" onclick="openModal('post-modal')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></button>
+<button id="fab" onclick="openModal('add-product-modal')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></button>
 
 <nav id="bottomnav">
   <div class="nav-inner">
-    <button class="nav-btn active" onclick="goPage('home',this,'Feed')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z" stroke-linejoin="round"/></svg>Home</button>
+    <button class="nav-btn active" onclick="goPage('home',this,'Marketplace')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
     <button class="nav-btn" onclick="goPage('network',this,'Network')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4M12 11L5 17M12 11l7 6"/></svg>Network</button>
     <button class="nav-btn" onclick="goPage('task',this,'Tasks')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4" stroke-linecap="round"/></svg>Tasks</button>
     <button class="nav-btn" onclick="goPage('agent',this,'AI Agent')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" stroke-linecap="round"/></svg>Agent</button>
@@ -628,49 +447,42 @@ textarea.input{resize:none;line-height:1.6}
   </div>
 </nav>
 
-<!-- PROFILE MODAL -->
-<div id="profile-modal">
-  <div class="pm-header"><button class="pm-back" onclick="closeProfileModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="pm-back-label" id="pm-label">Profile</span></div>
-  <div id="pm-content"></div>
-</div>
+<!-- SELLER MODAL -->
+<div id="seller-modal"><div class="sm-header"><button class="sm-back" onclick="closeSellerModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round"/></svg></button><span class="sm-back-label" id="sm-label">Seller Profile</span></div><div id="sm-content"></div></div>
 
 <!-- PEOPLE PANEL -->
 <div id="people-panel" onclick="closePeopleIfBg(event)">
   <div class="pp-sheet">
     <div class="pp-header">
       <div class="pp-title-row"><div class="pp-title">People</div><button class="pp-close" onclick="closePeople()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg></button></div>
-      <div class="pp-search-wrap">
-        <svg class="pp-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/></svg>
-        <input class="pp-search-input" id="pp-search" placeholder="Search people…" oninput="filterPeople()"/>
-      </div>
-      <div class="pp-tabs">
-        <button class="pp-tab active" onclick="switchPP('followers',this)">Followers</button>
-        <button class="pp-tab" onclick="switchPP('following',this)">Following</button>
-        <button class="pp-tab" onclick="switchPP('discover',this)">Discover</button>
-      </div>
+      <div class="pp-search-wrap"><svg class="pp-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/></svg><input class="pp-search-input" id="pp-search" placeholder="Search people…" oninput="filterPeople()"/></div>
+      <div class="pp-tabs"><button class="pp-tab active" onclick="switchPP('followers',this)">Followers</button><button class="pp-tab" onclick="switchPP('following',this)">Following</button><button class="pp-tab" onclick="switchPP('discover',this)">Discover</button></div>
     </div>
-    <div class="pp-body">
-      <div class="pp-panel active" id="pp-followers"></div>
-      <div class="pp-panel" id="pp-following"></div>
-      <div class="pp-panel" id="pp-discover"></div>
+    <div class="pp-body"><div class="pp-panel active" id="pp-followers"></div><div class="pp-panel" id="pp-following"></div><div class="pp-panel" id="pp-discover"></div></div>
+  </div>
+</div>
+
+<!-- ADD PRODUCT MODAL -->
+<div class="overlay" id="add-product-modal" onclick="closeIfBg(event,'add-product-modal')">
+  <div class="sheet">
+    <span class="sheet-handle"></span>
+    <div class="sheet-title">🚀 List Your Product</div>
+    <div class="sheet-sub">Sell your software or digital tool to 14,000+ buyers — zero commission, keep 100%</div>
+    <div class="field"><label class="field-label">Product Name</label><input class="input" type="text" id="ap-name" placeholder="e.g. FlowBot — AI Chatbot Builder"/></div>
+    <div class="field"><label class="field-label">Category</label><select class="input" id="ap-cat"><option value="">Select category…</option><option>Chatbot</option><option>Automation</option><option>SaaS Tool</option><option>AI Tool</option><option>Analytics</option><option>Web App</option><option>Mobile App</option><option>API / Backend</option><option>Design System</option><option>Other</option></select></div>
+    <div class="field"><label class="field-label">Emoji Icon</label><input class="input" type="text" id="ap-emoji" placeholder="🤖" maxlength="2" style="font-size:22px;text-align:center;letter-spacing:4px"/></div>
+    <div class="two-col">
+      <div class="field"><label class="field-label">Your Price ($)</label><input class="input" type="number" id="ap-price" placeholder="e.g. 99"/></div>
+      <div class="field"><label class="field-label">Custom Dev Cost ($)</label><input class="input" type="number" id="ap-was" placeholder="e.g. 8000"/><div class="field-hint">What a dev would charge to build this from scratch</div></div>
     </div>
+    <div class="field"><label class="field-label">Description</label><textarea class="input" rows="3" id="ap-desc" placeholder="What does it do? What problem does it solve? Who is it for?"></textarea></div>
+    <div class="field"><label class="field-label">Tags (comma separated)</label><input class="input" type="text" id="ap-tags" placeholder="e.g. AI, No-Code, SaaS"/></div>
+    <div class="sheet-btns"><button class="btn-ghost" onclick="closeModal('add-product-modal')">Cancel</button><button class="btn" onclick="submitProduct()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/></svg>Publish Product</button></div>
   </div>
 </div>
 
 <!-- BID MODAL -->
 <div class="overlay" id="bid-modal" onclick="closeIfBg(event,'bid-modal')"><div class="sheet" id="bid-sheet"></div></div>
-
-<!-- POST MODAL -->
-<div class="overlay" id="post-modal" onclick="closeIfBg(event,'post-modal')">
-  <div class="sheet">
-    <span class="sheet-handle"></span>
-    <div class="sheet-title">New Post</div>
-    <div class="sheet-sub">Share with the XWITE community</div>
-    <div class="field"><textarea class="input" rows="4" placeholder="Share an insight, update, or opportunity…"></textarea></div>
-    <div class="field"><div style="display:flex;gap:8px"><button class="btn-ghost btn-ghost-sm"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21" stroke-linecap="round"/></svg>Photo</button><button class="btn-ghost btn-ghost-sm"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>Task</button></div></div>
-    <div class="sheet-btns"><button class="btn-ghost" onclick="closeModal('post-modal')">Cancel</button><button class="btn" onclick="closeModal('post-modal')">Publish Post</button></div>
-  </div>
-</div>
 
 <!-- LIST TASK MODAL -->
 <div class="overlay" id="list-task-modal" onclick="closeIfBg(event,'list-task-modal')">
@@ -679,261 +491,245 @@ textarea.input{resize:none;line-height:1.6}
     <div class="sheet-title">List a Task</div>
     <div class="sheet-sub">Post your task to 14,000+ skilled Jobbers</div>
     <div class="field"><label class="field-label">Task Title</label><input class="input" type="text" placeholder="e.g. Build a React Dashboard…"/></div>
-    <div class="field"><label class="field-label">Category</label><select class="input" style="cursor:pointer"><option>Frontend</option><option>Backend</option><option>Design</option><option>AI/ML</option><option>Blockchain</option><option>Full Stack</option></select></div>
+    <div class="field"><label class="field-label">Category</label><select class="input"><option>Frontend</option><option>Backend</option><option>Design</option><option>AI/ML</option><option>Blockchain</option><option>Full Stack</option></select></div>
     <div class="field"><label class="field-label">Budget (USD)</label><input class="input" type="text" placeholder="e.g. $500 – $1,000"/></div>
     <div class="field"><label class="field-label">Description</label><textarea class="input" rows="3" placeholder="Describe the task, skills needed, timeline…"></textarea></div>
     <div class="sheet-btns"><button class="btn-ghost" onclick="closeModal('list-task-modal')">Cancel</button><button class="btn" onclick="closeModal('list-task-modal')">List Task</button></div>
   </div>
 </div>
 
-<input type="file" id="cover-input" accept="image/*" onchange="handleCoverChange(event)"/>
+<input type="file" id="cover-input" accept="image/*"/>
 
 <script>
-const PRODUCTS=[
-  {id:1,emoji:"🤖",name:"FlowBot — AI Customer Support",cat:"Chatbot",seller:"Arjun Mehta",sellerColor:"#00E5FF",sellerBg:"rgba(0,229,255,.15)",desc:"Plug-and-play AI chatbot trained on your docs. Handles 80% of support tickets automatically. Custom dev would cost $8,000+.",price:99,was:8000,rating:4.9,reviews:312,tags:["AI","Support","GPT-4"],color:"#00E5FF",featured:true},
-  {id:2,emoji:"⚡",name:"Zapify — No-Code Automation Suite",cat:"Automation",seller:"Sofia Chen",sellerColor:"#FFB800",sellerBg:"rgba(255,184,0,.15)",desc:"50+ pre-built automation workflows for Notion, Gmail, Slack, Sheets. Connect any tool in minutes without writing a single line of code.",price:49,was:3500,rating:4.8,reviews:189,tags:["No-Code","Automation","Workflows"],color:"#FFB800",featured:true},
-  {id:3,emoji:"📊",name:"InsightDash — Analytics Dashboard",cat:"Analytics",seller:"Marcus Webb",sellerColor:"#9B5DE5",sellerBg:"rgba(155,93,229,.15)",desc:"Real-time business analytics with AI-generated summaries. Connects to Stripe, GA4, Shopify, and 20+ data sources instantly.",price:79,was:5000,rating:4.7,reviews:94,tags:["Analytics","SaaS","Dashboard"],color:"#9B5DE5",featured:false},
-  {id:4,emoji:"🌐",name:"SiteForge — AI Website Builder",cat:"Web App",seller:"Priya Sharma",sellerColor:"#FF6B9D",sellerBg:"rgba(255,107,157,.15)",desc:"Generate a full-stack website from a single prompt. Includes SEO, hosting-ready export, and dark/light mode. No dev needed.",price:59,was:4200,rating:4.6,reviews:227,tags:["AI","Website","Builder"],color:"#FF6B9D",featured:false},
-  {id:5,emoji:"📱",name:"AppShell — Mobile App Starter Kit",cat:"Mobile",seller:"Lucas Oliveira",sellerColor:"#00FF9D",sellerBg:"rgba(0,255,157,.15)",desc:"React Native starter with auth, payments, push notifications, and dark mode baked in. Skip 3 weeks of boilerplate setup.",price:129,was:6000,rating:4.9,reviews:78,tags:["React Native","Mobile","Boilerplate"],color:"#00FF9D",featured:false},
-  {id:6,emoji:"✦",name:"PromptOS — AI Workflow Engine",cat:"AI",seller:"Kevin Zhang",sellerColor:"#9B5DE5",sellerBg:"rgba(155,93,229,.15)",desc:"Chain LLM calls, web scraping, and API calls into powerful AI pipelines — visually. No Python needed. Deploy in one click.",price:89,was:7500,rating:4.8,reviews:143,tags:["AI","LLM","Automation"],color:"#9B5DE5",featured:false},
-  {id:7,emoji:"📧",name:"MailFlow — Cold Email Automator",cat:"SaaS",seller:"Riya Menon",sellerColor:"#00E5FF",sellerBg:"rgba(0,229,255,.15)",desc:"AI-personalized cold email sequences with auto-follow-up. Integrates with Apollo, HubSpot, and any SMTP provider out of the box.",price:39,was:2500,rating:4.5,reviews:204,tags:["Email","SaaS","Outreach"],color:"#00E5FF",featured:false},
-  {id:8,emoji:"🔐",name:"VaultAuth — Auth & User Management",cat:"SaaS",seller:"Dev Anand",sellerColor:"#FFB800",sellerBg:"rgba(255,184,0,.15)",desc:"Drop-in auth system: OAuth, magic links, MFA, and role-based access. Full API + UI kit. Saves 2 weeks of backend work.",price:69,was:4800,rating:4.7,reviews:156,tags:["Auth","Backend","Security"],color:"#FFB800",featured:false},
+const SELLERS={
+  arjun:{id:'arjun',name:'Arjun Mehta',role:'Full Stack Developer',color:'#00E5FF',bg:'rgba(0,229,255,.15)',bio:'Building AI-powered products and tools. XWITE Premium seller with 4.9★ rating across 312 reviews.',tags:['React','Node.js','AI'],rating:4.9,reviews:312,earned:'$48K',tasks:94,products:2},
+  sofia:{id:'sofia',name:'Sofia Chen',role:'UX / UI Designer',color:'#FFB800',bg:'rgba(255,184,0,.15)',bio:'Designing beautiful SaaS products. Obsessed with dark mode and micro-interactions that delight users.',tags:['Figma','SaaS','Design'],rating:4.8,reviews:189,earned:'$31K',tasks:67,products:1},
+  marcus:{id:'marcus',name:'Marcus Webb',role:'Blockchain Engineer',color:'#00FF9D',bg:'rgba(0,255,157,.15)',bio:'Web3 developer and security auditor. Building trustless tools for the decentralized economy.',tags:['Solidity','DeFi','Security'],rating:4.7,reviews:94,earned:'$62K',tasks:110,products:2},
+  priya:{id:'priya',name:'Priya Sharma',role:'Data Scientist',color:'#FF6B9D',bg:'rgba(255,107,157,.15)',bio:'Turning data into insights. Building analytics tools that are actually intuitive to use.',tags:['Python','Analytics','ML'],rating:4.6,reviews:227,earned:'$29K',tasks:53,products:1},
+  lucas:{id:'lucas',name:'Lucas Oliveira',role:'DevOps Engineer',color:'#00FF9D',bg:'rgba(0,255,157,.15)',bio:'Cloud architect and automation expert. Helping teams ship faster with less friction and zero downtime.',tags:['AWS','Docker','CI/CD'],rating:4.9,reviews:78,earned:'$37K',tasks:44,products:1},
+  kevin:{id:'kevin',name:'Kevin Zhang',role:'ML Engineer',color:'#9B5DE5',bg:'rgba(155,93,229,.15)',bio:'LLM researcher turned product builder. Turning complex AI research into tools anyone can use.',tags:['LLM','Python','AI'],rating:4.8,reviews:143,earned:'$55K',tasks:82,products:1},
+  riya:{id:'riya',name:'Riya Menon',role:'Frontend Developer',color:'#00E5FF',bg:'rgba(0,229,255,.15)',bio:'React and TypeScript specialist. Building fast, beautiful frontends for high-growth SaaS products.',tags:['React','TypeScript','Email'],rating:4.5,reviews:204,earned:'$22K',tasks:61,products:1},
+  dev:{id:'dev',name:'Dev Anand',role:'Backend Engineer',color:'#FFB800',bg:'rgba(255,184,0,.15)',bio:'Auth, APIs, and scalable architecture. Providing drop-in backend solutions for indie makers worldwide.',tags:['Go','Auth','Security'],rating:4.7,reviews:156,earned:'$41K',tasks:88,products:1},
+};
+
+let PRODUCTS=[
+  {id:1,emoji:'🤖',name:'FlowBot — AI Customer Support',cat:'Chatbot',sellerId:'arjun',desc:'Plug-and-play AI chatbot trained on your own docs. Handles 80% of support tickets automatically. Embeds in any website in under 10 minutes. Custom dev would cost $8,000+.',price:99,was:8000,rating:4.9,reviews:312,tags:['AI','Support','GPT-4'],color:'#00E5FF',featured:true},
+  {id:2,emoji:'⚡',name:'Zapify — No-Code Automation Suite',cat:'Automation',sellerId:'sofia',desc:'50+ pre-built automation workflows for Notion, Gmail, Slack, and Sheets. Connect any tool in minutes without writing a single line of code. Saves 10+ hours per week.',price:49,was:3500,rating:4.8,reviews:189,tags:['No-Code','Workflows','Zapier-alt'],color:'#FFB800',featured:true},
+  {id:3,emoji:'📊',name:'InsightDash — Analytics Dashboard',cat:'Analytics',sellerId:'marcus',desc:'Real-time business analytics with AI-generated weekly summaries. Connects to Stripe, GA4, Shopify, and 20+ sources instantly. No SQL needed.',price:79,was:5000,rating:4.7,reviews:94,tags:['Analytics','Dashboard','BI'],color:'#9B5DE5',featured:false},
+  {id:4,emoji:'🌐',name:'SiteForge — AI Website Builder',cat:'Web App',sellerId:'priya',desc:'Generate a full-stack website from a single prompt. Includes SEO, hosting-ready export, dark/light mode, and a built-in CMS. No developer needed.',price:59,was:4200,rating:4.6,reviews:227,tags:['AI','Website','Builder'],color:'#FF6B9D',featured:false},
+  {id:5,emoji:'📱',name:'AppShell — Mobile Starter Kit',cat:'Mobile App',sellerId:'lucas',desc:'React Native starter with auth, Stripe payments, push notifications, and dark mode baked in. Skip 3 weeks of boilerplate setup and start building features on day one.',price:129,was:6000,rating:4.9,reviews:78,tags:['React Native','Mobile','Boilerplate'],color:'#00FF9D',featured:false},
+  {id:6,emoji:'✦',name:'PromptOS — AI Workflow Engine',cat:'AI Tool',sellerId:'kevin',desc:'Chain LLM calls, web scraping, and API calls into powerful AI pipelines visually. No Python needed. Deploy in one click to production.',price:89,was:7500,rating:4.8,reviews:143,tags:['AI','LLM','Pipelines'],color:'#9B5DE5',featured:false},
+  {id:7,emoji:'📧',name:'MailFlow — Cold Email Automator',cat:'SaaS Tool',sellerId:'riya',desc:'AI-personalized cold email sequences with automatic follow-up. Integrates with Apollo, HubSpot, and any SMTP. Boosts reply rates by 3x.',price:39,was:2500,rating:4.5,reviews:204,tags:['Email','Outreach','SaaS'],color:'#00E5FF',featured:false},
+  {id:8,emoji:'🔐',name:'VaultAuth — Auth & User System',cat:'API / Backend',sellerId:'dev',desc:'Drop-in auth system: OAuth, magic links, MFA, and role-based access control. Includes a full API plus React UI kit. Saves 2 weeks of backend work instantly.',price:69,was:4800,rating:4.7,reviews:156,tags:['Auth','Backend','Security'],color:'#FFB800',featured:false},
 ];
-const wishlist=new Set();
-let prodCat='ALL';
+
+let prodCat='ALL',prodSearch='',nextId=9;
+const wishlist=new Set(),following=new Set();
 
 const TASKS=[
-  {id:1,title:"Build React Dashboard with Real-time Analytics",budget:"$800–1,200",cat:"Frontend",skills:["React","TypeScript","D3.js"],bids:12,status:"OPEN",posted:"3h",client:"NovaTech Labs"},
-  {id:2,title:"Node.js REST API for E-commerce Platform",budget:"$600–900",cat:"Backend",skills:["Node.js","MongoDB","Redis"],bids:8,status:"OPEN",posted:"5h",client:"ShopFlow Inc"},
-  {id:3,title:"Mobile App UI/UX Design — 12 Screens",budget:"$400–700",cat:"Design",skills:["Figma","Prototyping","UI"],bids:19,status:"OPEN",posted:"1h",client:"Pulse Digital"},
-  {id:4,title:"Python ML Pipeline for Sentiment Analysis",budget:"$1,000–1,500",cat:"AI/ML",skills:["Python","TensorFlow","NLP"],bids:5,status:"OPEN",posted:"30m",client:"DataMind Co"},
-  {id:5,title:"WordPress to Next.js Migration",budget:"$500–800",cat:"Full Stack",skills:["Next.js","WordPress","SEO"],bids:14,status:"ASSIGNED",posted:"1d",client:"MediaBlast"},
-  {id:6,title:"Smart Contract Audit — ERC-20 Token",budget:"$1,200–2,000",cat:"Blockchain",skills:["Solidity","Security","Web3"],bids:3,status:"OPEN",posted:"2h",client:"ChainVault"},
+  {id:1,title:'Build React Dashboard with Real-time Analytics',budget:'$800–1,200',cat:'Frontend',skills:['React','TypeScript','D3.js'],bids:12,status:'OPEN',posted:'3h',client:'NovaTech Labs'},
+  {id:2,title:'Node.js REST API for E-commerce Platform',budget:'$600–900',cat:'Backend',skills:['Node.js','MongoDB','Redis'],bids:8,status:'OPEN',posted:'5h',client:'ShopFlow Inc'},
+  {id:3,title:'Mobile App UI/UX Design — 12 Screens',budget:'$400–700',cat:'Design',skills:['Figma','Prototyping','UI'],bids:19,status:'OPEN',posted:'1h',client:'Pulse Digital'},
+  {id:4,title:'Python ML Pipeline for Sentiment Analysis',budget:'$1,000–1,500',cat:'AI/ML',skills:['Python','TensorFlow','NLP'],bids:5,status:'OPEN',posted:'30m',client:'DataMind Co'},
+  {id:5,title:'WordPress to Next.js Migration',budget:'$500–800',cat:'Full Stack',skills:['Next.js','WordPress','SEO'],bids:14,status:'ASSIGNED',posted:'1d',client:'MediaBlast'},
+  {id:6,title:'Smart Contract Audit — ERC-20 Token',budget:'$1,200–2,000',cat:'Blockchain',skills:['Solidity','Security','Web3'],bids:3,status:'OPEN',posted:'2h',client:'ChainVault'},
 ];
-const CATS=["ALL","Frontend","Backend","Design","AI/ML","Blockchain","Full Stack"];
-let currentCat="ALL";
-const AGENT_TASKS=[
-  {id:1,title:"Build GraphQL API with Auth",match:97,budget:"$900",cat:"Backend"},
-  {id:2,title:"React Native Fintech App",match:94,budget:"$1,400",cat:"Mobile"},
-  {id:3,title:"PostgreSQL Performance Tuning",match:91,budget:"$600",cat:"Database"},
-  {id:4,title:"Next.js SEO Optimization",match:89,budget:"$450",cat:"Frontend"},
-  {id:5,title:"AWS Lambda Microservices",match:86,budget:"$1,100",cat:"DevOps"},
-  {id:6,title:"TypeScript Codebase Refactor",match:83,budget:"$700",cat:"Full Stack"},
-  {id:7,title:"Docker + Kubernetes Deployment",match:80,budget:"$850",cat:"DevOps"},
-];
+const TASK_CATS=['ALL','Frontend','Backend','Design','AI/ML','Blockchain','Full Stack'];
+let currentTaskCat='ALL';
+const AGENT_TASKS=[{id:1,title:'Build GraphQL API with Auth',match:97,budget:'$900',cat:'Backend'},{id:2,title:'React Native Fintech App',match:94,budget:'$1,400',cat:'Mobile'},{id:3,title:'PostgreSQL Performance Tuning',match:91,budget:'$600',cat:'Database'},{id:4,title:'Next.js SEO Optimization',match:89,budget:'$450',cat:'Frontend'},{id:5,title:'AWS Lambda Microservices',match:86,budget:'$1,100',cat:'DevOps'},{id:6,title:'TypeScript Codebase Refactor',match:83,budget:'$700',cat:'Full Stack'},{id:7,title:'Docker + Kubernetes Deployment',match:80,budget:'$850',cat:'DevOps'}];
 const savedTasks=new Set();let scanDone=false;
-const SUGGESTIONS=[
-  {id:1,name:"Priya Sharma",role:"Data Scientist",mutual:"12 mutual",color:"#FFB800",bg:"rgba(255,184,0,.15)",skills:["Python","TensorFlow"]},
-  {id:2,name:"Lucas Oliveira",role:"DevOps Engineer",mutual:"8 mutual",color:"#00FF9D",bg:"rgba(0,255,157,.15)",skills:["AWS","Docker"]},
-  {id:3,name:"Aisha Patel",role:"Product Manager",mutual:"15 mutual",color:"#FF6B9D",bg:"rgba(255,107,157,.15)",skills:["Strategy","Agile"]},
-  {id:4,name:"Kevin Zhang",role:"ML Engineer",mutual:"6 mutual",color:"#9B5DE5",bg:"rgba(155,93,229,.15)",skills:["PyTorch","NLP"]},
-];
-const CIRCLE=[
-  {id:5,name:"Riya Menon",role:"Frontend Developer",mutual:"Same niche",color:"#00E5FF",bg:"rgba(0,229,255,.15)",skills:["React","Vue"]},
-  {id:6,name:"Sam Torres",role:"Full Stack Dev",mutual:"Same niche",color:"#FFB800",bg:"rgba(255,184,0,.15)",skills:["Node.js","React"]},
-  {id:7,name:"Nina Park",role:"TypeScript Dev",mutual:"Same niche",color:"#00FF9D",bg:"rgba(0,255,157,.15)",skills:["TS","GraphQL"]},
-  {id:8,name:"Dev Anand",role:"Backend Engineer",mutual:"Same niche",color:"#9B5DE5",bg:"rgba(155,93,229,.15)",skills:["Go","Postgres"]},
-];
-const COMPANIES=[
-  {name:"NovaTech Labs",ind:"SaaS / Fintech",size:"50–200",jobs:7,hiring:true,cover:"linear-gradient(135deg,#0099BB,#00E5FF,#005580)",logo:"N"},
-  {name:"DataMind Co",ind:"AI / Machine Learning",size:"20–50",jobs:3,hiring:true,cover:"linear-gradient(135deg,#9B5DE5,#7B2FBE,#5A0FA0)",logo:"D"},
-  {name:"ChainVault",ind:"Web3 / Blockchain",size:"10–20",jobs:0,hiring:false,cover:"linear-gradient(135deg,#FFB800,#FF8C00,#FF4560)",logo:"C"},
-  {name:"Pulse Digital",ind:"Product Design",size:"100–500",jobs:12,hiring:true,cover:"linear-gradient(135deg,#00FF9D,#00CC7A,#008855)",logo:"P"},
-];
-const PEOPLE_DATA={
-  followers:[{name:"Zara Ahmed",role:"UX Designer",color:"#FF6B9D",bg:"rgba(255,107,157,.15)"},{name:"Tom Blake",role:"Backend Dev",color:"#00E5FF",bg:"rgba(0,229,255,.15)"},{name:"Mia Russo",role:"Data Analyst",color:"#FFB800",bg:"rgba(255,184,0,.15)"},{name:"Jake Morris",role:"React Developer",color:"#00FF9D",bg:"rgba(0,255,157,.15)"}],
-  following:[{name:"Arjun Mehta",role:"Full Stack Dev",color:"#00E5FF",bg:"rgba(0,229,255,.15)"},{name:"Sofia Chen",role:"UI Designer",color:"#FFB800",bg:"rgba(255,184,0,.15)"},{name:"Marcus Webb",role:"Blockchain Eng",color:"#00FF9D",bg:"rgba(0,255,157,.15)"}],
-  discover:[{name:"Carlos Reyes",role:"DevOps Engineer",color:"#00FF9D",bg:"rgba(0,255,157,.15)"},{name:"Yuki Tanaka",role:"ML Researcher",color:"#9B5DE5",bg:"rgba(155,93,229,.15)"},{name:"Ana Ferreira",role:"Product Lead",color:"#FF6B9D",bg:"rgba(255,107,157,.15)"},{name:"Ali Hassan",role:"Blockchain Dev",color:"#FFB800",bg:"rgba(255,184,0,.15)"},{name:"Sara Kim",role:"Data Engineer",color:"#00E5FF",bg:"rgba(0,229,255,.15)"}]
-};
-const SKILLS=[{name:"React",pct:95},{name:"Node.js",pct:88},{name:"TypeScript",pct:92},{name:"MongoDB",pct:84},{name:"GraphQL",pct:78},{name:"Redis",pct:72},{name:"AWS",pct:80},{name:"Docker",pct:70}];
-const PROJECTS=[{title:"E-commerce Dashboard",client:"ShopFlow Inc",earned:"$950",rating:5,date:"Feb 2026"},{title:"API Gateway Architecture",client:"DataMind Co",earned:"$1,200",rating:5,date:"Jan 2026"},{title:"Mobile App Backend",client:"Pulse Digital",earned:"$800",rating:4.8,date:"Dec 2025"}];
-const TOOLS=[{icon:"briefcase",name:"Resume Builder",desc:"AI-generated resume from your profile",color:"#00E5FF"},{icon:"send",name:"Proposal Writer",desc:"Auto-write winning client proposals",color:"#FFB800"},{icon:"trending",name:"Market Insights",desc:"Trending skills & rates in your niche",color:"#00FF9D"},{icon:"users",name:"Network Scout",desc:"AI-recommended people to connect",color:"#9B5DE5"},{icon:"comment",name:"Message Polish",desc:"Improve tone & clarity of messages",color:"#FF6B9D"},{icon:"search",name:"Skill Gap Finder",desc:"Find skills to boost your earnings",color:"#0099BB"}];
-const CHAT_SUGG=["Find React tasks","Write a proposal","Boost my rate","Add skills"];
-const following=new Set();
+const SUGGESTIONS=[{id:1,name:'Priya Sharma',role:'Data Scientist',mutual:'12 mutual',color:'#FFB800',bg:'rgba(255,184,0,.15)',skills:['Python','TensorFlow']},{id:2,name:'Lucas Oliveira',role:'DevOps Engineer',mutual:'8 mutual',color:'#00FF9D',bg:'rgba(0,255,157,.15)',skills:['AWS','Docker']},{id:3,name:'Aisha Patel',role:'Product Manager',mutual:'15 mutual',color:'#FF6B9D',bg:'rgba(255,107,157,.15)',skills:['Strategy','Agile']},{id:4,name:'Kevin Zhang',role:'ML Engineer',mutual:'6 mutual',color:'#9B5DE5',bg:'rgba(155,93,229,.15)',skills:['PyTorch','NLP']}];
+const CIRCLE=[{id:5,name:'Riya Menon',role:'Frontend Dev',mutual:'Same niche',color:'#00E5FF',bg:'rgba(0,229,255,.15)',skills:['React','Vue']},{id:6,name:'Sam Torres',role:'Full Stack Dev',mutual:'Same niche',color:'#FFB800',bg:'rgba(255,184,0,.15)',skills:['Node.js','React']},{id:7,name:'Nina Park',role:'TypeScript Dev',mutual:'Same niche',color:'#00FF9D',bg:'rgba(0,255,157,.15)',skills:['TS','GraphQL']},{id:8,name:'Dev Anand',role:'Backend Engineer',mutual:'Same niche',color:'#9B5DE5',bg:'rgba(155,93,229,.15)',skills:['Go','Postgres']}];
+const COMPANIES=[{name:'NovaTech Labs',ind:'SaaS / Fintech',size:'50–200',jobs:7,hiring:true,cover:'linear-gradient(135deg,#0099BB,#00E5FF,#005580)',logo:'N'},{name:'DataMind Co',ind:'AI / Machine Learning',size:'20–50',jobs:3,hiring:true,cover:'linear-gradient(135deg,#9B5DE5,#7B2FBE,#5A0FA0)',logo:'D'},{name:'ChainVault',ind:'Web3 / Blockchain',size:'10–20',jobs:0,hiring:false,cover:'linear-gradient(135deg,#FFB800,#FF8C00,#FF4560)',logo:'C'},{name:'Pulse Digital',ind:'Product Design',size:'100–500',jobs:12,hiring:true,cover:'linear-gradient(135deg,#00FF9D,#00CC7A,#008855)',logo:'P'}];
+const PEOPLE_DATA={followers:[{name:'Zara Ahmed',role:'UX Designer',color:'#FF6B9D',bg:'rgba(255,107,157,.15)'},{name:'Tom Blake',role:'Backend Dev',color:'#00E5FF',bg:'rgba(0,229,255,.15)'},{name:'Mia Russo',role:'Data Analyst',color:'#FFB800',bg:'rgba(255,184,0,.15)'},{name:'Jake Morris',role:'React Developer',color:'#00FF9D',bg:'rgba(0,255,157,.15)'}],following:[{name:'Arjun Mehta',role:'Full Stack Dev',color:'#00E5FF',bg:'rgba(0,229,255,.15)'},{name:'Sofia Chen',role:'UI Designer',color:'#FFB800',bg:'rgba(255,184,0,.15)'},{name:'Marcus Webb',role:'Blockchain Eng',color:'#00FF9D',bg:'rgba(0,255,157,.15)'}],discover:[{name:'Carlos Reyes',role:'DevOps Engineer',color:'#00FF9D',bg:'rgba(0,255,157,.15)'},{name:'Yuki Tanaka',role:'ML Researcher',color:'#9B5DE5',bg:'rgba(155,93,229,.15)'},{name:'Ana Ferreira',role:'Product Lead',color:'#FF6B9D',bg:'rgba(255,107,157,.15)'},{name:'Ali Hassan',role:'Blockchain Dev',color:'#FFB800',bg:'rgba(255,184,0,.15)'},{name:'Sara Kim',role:'Data Engineer',color:'#00E5FF',bg:'rgba(0,229,255,.15)'}]};
+const SKILLS=[{name:'React',pct:95},{name:'Node.js',pct:88},{name:'TypeScript',pct:92},{name:'MongoDB',pct:84},{name:'GraphQL',pct:78},{name:'Redis',pct:72},{name:'AWS',pct:80},{name:'Docker',pct:70}];
+const PROJECTS=[{title:'E-commerce Dashboard',client:'ShopFlow Inc',earned:'$950',rating:5,date:'Feb 2026'},{title:'API Gateway Architecture',client:'DataMind Co',earned:'$1,200',rating:5,date:'Jan 2026'},{title:'Mobile App Backend',client:'Pulse Digital',earned:'$800',rating:4.8,date:'Dec 2025'}];
+const TOOLS=[{icon:'briefcase',name:'Resume Builder',desc:'AI-generated resume from your profile',color:'#00E5FF'},{icon:'send',name:'Proposal Writer',desc:'Auto-write winning client proposals',color:'#FFB800'},{icon:'trending',name:'Market Insights',desc:'Trending skills & rates in your niche',color:'#00FF9D'},{icon:'users',name:'Network Scout',desc:'AI-recommended people to connect',color:'#9B5DE5'},{icon:'comment',name:'Message Polish',desc:'Improve tone & clarity of messages',color:'#FF6B9D'},{icon:'search',name:'Skill Gap Finder',desc:'Find skills to boost your earnings',color:'#0099BB'}];
+const CHAT_SUGG=['Find React tasks','Write a proposal','Boost my rate','Add skills'];
 
 window.addEventListener('DOMContentLoaded',()=>{
-  renderProducts();renderCats();renderTasks();renderNetwork();
-  renderSkills();renderProjects();renderTools();initChat();renderPeoplePanel();
+  renderMarketplace();renderMktCats();renderTaskCats();renderTasks();
+  renderNetwork();renderSkills();renderProjects();renderTools();initChat();renderPeoplePanel();
 });
 
-function goPage(id,btn,label){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  btn.classList.add('active');
-  document.getElementById('page-label').textContent=label;
-  if(id==='profile')setTimeout(animateSkills,120);
-}
+function goPage(id,btn,label){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');btn.classList.add('active');document.getElementById('page-label').textContent=label;if(id==='profile')setTimeout(animateSkills,120)}
 function clearNotif(){document.getElementById('notif-badge').classList.add('hidden')}
 function openModal(id){document.getElementById(id).classList.add('open')}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
 function closeIfBg(e,id){if(e.target===document.getElementById(id))closeModal(id)}
+function initials(n){return(n||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function savePct(p,w){return Math.round((1-p/w)*100)}
+function starsHtml(r){return'★'.repeat(Math.round(r))+'☆'.repeat(5-Math.round(r))}
 
-function savePct(price,was){return Math.round((1-price/was)*100)}
+const MKT_CATS=['ALL','Chatbot','Automation','SaaS Tool','AI Tool','Analytics','Web App','Mobile App','API / Backend'];
+function renderMktCats(){document.getElementById('mkt-cats').innerHTML=MKT_CATS.map(c=>`<button class="mkt-cat ${c===prodCat?'active':''}" onclick="setCat('${c}',this)">${c==='ALL'?'✦ All':c}</button>`).join('')}
+function setCat(cat,btn){prodCat=cat;document.querySelectorAll('.mkt-cat').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderMarketplace()}
+function filterProducts(){prodSearch=document.getElementById('mkt-search').value.toLowerCase();renderMarketplace()}
+function getFiltered(){return PRODUCTS.filter(p=>{const catOk=prodCat==='ALL'||p.cat===prodCat;const srchOk=!prodSearch||p.name.toLowerCase().includes(prodSearch)||p.desc.toLowerCase().includes(prodSearch)||p.tags.some(t=>t.toLowerCase().includes(prodSearch));return catOk&&srchOk})}
 
-function renderProducts(){
-  const feat=PRODUCTS.filter(p=>p.featured&&(prodCat==='ALL'||p.cat===prodCat));
-  const list=PRODUCTS.filter(p=>!p.featured&&(prodCat==='ALL'||p.cat===prodCat));
-  const allFiltered=PRODUCTS.filter(p=>(prodCat==='ALL'||p.cat===prodCat));
-
-  // Featured
-  document.getElementById('prod-featured').innerHTML=feat.map(p=>`
-    <div class="prod-feat-card fade-up" style="animation-delay:40ms">
-      <div class="prod-feat-bg" style="background:linear-gradient(135deg,${p.color}28,${p.color}0A)">
-        <div class="prod-feat-emoji">${p.emoji}</div>
-        <div style="position:absolute;top:8px;left:10px">
-          <span class="prod-feat-badge" style="background:rgba(0,229,255,.14);color:var(--accent);border:1px solid rgba(0,229,255,.25)">✦ FEATURED</span>
+function renderMarketplace(){
+  const all=getFiltered(),feat=all.filter(p=>p.featured),list=all.filter(p=>!p.featured);
+  const featEl=document.getElementById('feat-scroll');
+  if(feat.length){
+    featEl.style.display='flex';
+    featEl.innerHTML=feat.map(p=>{
+      const s=SELLERS[p.sellerId]||{};
+      return`<div class="feat-card" onclick="openSellerModal('${p.sellerId}')">
+        <div class="feat-cover" style="background:linear-gradient(135deg,${p.color}2A,${p.color}0D)">
+          <span class="feat-badge">✦ FEATURED</span>
+          <span class="feat-cover-emoji">${p.emoji}</span>
         </div>
-      </div>
-      <div class="prod-feat-body">
-        <div class="prod-feat-cat" style="color:${p.color}">${p.cat}</div>
-        <div class="prod-feat-name">${p.name}</div>
-        <div class="prod-feat-desc">${p.desc.substring(0,72)}…</div>
-        <div class="prod-feat-foot">
-          <div>
-            <span class="prod-feat-price">$${p.price}</span>
-            <span class="prod-feat-was">$${p.was.toLocaleString()}</span>
+        <div class="feat-body">
+          <div class="feat-cat" style="color:${p.color}">${p.cat}</div>
+          <div class="feat-name">${p.name}</div>
+          <div class="feat-desc">${p.desc.substring(0,70)}…</div>
+          <div class="feat-foot">
+            <div><span class="feat-price">$${p.price}</span><span class="feat-was">$${p.was.toLocaleString()}</span></div>
+            <button class="btn btn-xs" onclick="event.stopPropagation()">Get Now</button>
           </div>
-          <button class="prod-buy" onclick="event.stopPropagation()">Get Now</button>
         </div>
+      </div>`;
+    }).join('');
+  }else{featEl.style.display='none';featEl.innerHTML=''}
+  document.getElementById('mkt-count').textContent=`${all.length} product${all.length!==1?'s':''}`;
+  const toRender=list.length?list:feat;
+  document.getElementById('products-container').innerHTML=toRender.length?toRender.map((p,i)=>prodCard(p,i)).join(''):`<div style="text-align:center;padding:40px 20px;color:var(--muted)"><div style="font-size:32px;margin-bottom:12px">🔍</div><div>No products match your search.</div></div>`;
+}
+
+function prodCard(p,i){
+  const s=SELLERS[p.sellerId]||{name:'Unknown',role:'Seller',color:'#7B9BB8',bg:'rgba(123,155,184,.15)'};
+  const saved=wishlist.has(p.id),pct=savePct(p.price,p.was);
+  return`<div class="card prod-card fade-up" style="animation-delay:${i*45}ms;border-color:${p.color}18;background:linear-gradient(170deg,var(--card) 65%,${p.color}07)">
+    <div class="prod-card-top">
+      <div class="prod-icon" style="background:${p.color}14;border:1.5px solid ${p.color}22">${p.emoji}</div>
+      <div class="prod-info">
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-seller-row" onclick="openSellerModal('${p.sellerId}')" title="View ${s.name}'s profile">
+          <div class="prod-seller-av" style="background:${s.bg};color:${s.color}">${initials(s.name)}</div>
+          <span class="prod-seller-name">by ${s.name}</span>
+          <svg class="prod-seller-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="prod-stars">${starsHtml(p.rating)}<span>(${p.reviews})</span></div>
+      </div>
+      <span class="tag" style="font-size:9px;padding:2px 7px;background:${p.color}0F;color:${p.color};border-color:${p.color}22;flex-shrink:0">${p.cat}</span>
+    </div>
+    <div class="prod-desc">${p.desc}</div>
+    <div class="prod-tags">${p.tags.map(t=>`<span class="tag" style="background:transparent;color:var(--muted);border-color:var(--border)">${t}</span>`).join('')}</div>
+    <div class="prod-foot">
+      <div class="prod-price-area">
+        <span class="prod-price">$${p.price}</span>
+        <span class="prod-was">$${p.was.toLocaleString()}</span>
+        <span class="prod-save">-${pct}%</span>
+      </div>
+      <div class="prod-actions">
+        <button class="prod-wish ${saved?'saved':''}" onclick="toggleWish(${p.id})" title="${saved?'Remove':'Save'}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        </button>
+        <button class="prod-get">Get Product</button>
       </div>
     </div>
-  `).join('');
+  </div>`;
+}
 
-  // Count
-  document.getElementById('prod-count').textContent=`${allFiltered.length} products`;
+function toggleWish(id){if(wishlist.has(id))wishlist.delete(id);else wishlist.add(id);renderMarketplace()}
 
-  // List
-  const toShow=feat.length>0?list:allFiltered;
-  document.getElementById('products-container').innerHTML=toShow.map((p,i)=>`
-    <div class="card prod-card fade-up" style="animation-delay:${i*55}ms;border-color:${p.color}18;background:linear-gradient(170deg,var(--card) 65%,${p.color}07)">
-      <div class="prod-card-top">
-        <div class="prod-icon-wrap" style="background:${p.color}14;border:1.5px solid ${p.color}22">${p.emoji}</div>
-        <div class="prod-info">
-          <div class="prod-name">${p.name}</div>
-          <div class="prod-seller">
-            <div class="prod-seller-av" style="background:${p.sellerBg};color:${p.sellerColor}">${initials(p.seller)}</div>
-            <span class="prod-seller-name">by ${p.seller}</span>
-            <span class="tag" style="font-size:9px;padding:1px 6px;background:${p.color}0F;color:${p.color};border-color:${p.color}22">${p.cat}</span>
-          </div>
-          <div class="prod-stars">★★★★${p.rating>=4.8?'★':'☆'}<span>(${p.reviews})</span></div>
+function submitProduct(){
+  const name=document.getElementById('ap-name').value.trim(),cat=document.getElementById('ap-cat').value,emoji=document.getElementById('ap-emoji').value.trim()||'📦',price=parseFloat(document.getElementById('ap-price').value)||0,was=parseFloat(document.getElementById('ap-was').value)||0,desc=document.getElementById('ap-desc').value.trim(),tagsRaw=document.getElementById('ap-tags').value.trim();
+  if(!name||!cat||!price||!desc){alert('Please fill in name, category, price, and description.');return}
+  const tags=tagsRaw?tagsRaw.split(',').map(t=>t.trim()).filter(Boolean):['Product'];
+  const colors=['#00E5FF','#FFB800','#00FF9D','#9B5DE5','#FF6B9D','#0099BB'];
+  PRODUCTS.push({id:nextId++,emoji,name,cat,sellerId:'arjun',desc,price,was:was||price*20,rating:5.0,reviews:0,tags,color:colors[nextId%colors.length],featured:false});
+  ['ap-name','ap-emoji','ap-price','ap-was','ap-desc','ap-tags'].forEach(id=>{document.getElementById(id).value=''});
+  document.getElementById('ap-cat').selectedIndex=0;
+  closeModal('add-product-modal');renderMarketplace();
+  const f=document.createElement('div');f.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#00E5FF,#0099BB);color:#050B14;font-weight:800;font-size:12px;letter-spacing:.5px;padding:10px 22px;border-radius:20px;z-index:999;box-shadow:0 4px 20px rgba(0,229,255,.4)';f.textContent='✓ Product Published!';document.body.appendChild(f);setTimeout(()=>f.remove(),2400);
+}
+
+function openSellerModal(sellerId){
+  const s=SELLERS[sellerId];if(!s)return;
+  const sellerProds=PRODUCTS.filter(p=>p.sellerId===sellerId);
+  document.getElementById('sm-label').textContent=s.name;
+  document.getElementById('sm-content').innerHTML=`
+    <div class="sm-cover" style="background:linear-gradient(135deg,${s.color}50,${s.color}15,transparent)"><div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(5,11,20,.55))"></div></div>
+    <div class="sm-body">
+      <div class="sm-av-row">
+        <div class="sm-avatar" style="background:${s.bg};color:${s.color}">${initials(s.name)}</div>
+        <div class="sm-ctas">
+          <button class="btn btn-sm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/></svg>Message</button>
+          <button class="btn-follow ${following.has(sellerId)?'following':''}" id="sm-fw" onclick="toggleSellerFollow('${sellerId}')">${following.has(sellerId)?'Unfollow':'Follow'}</button>
         </div>
       </div>
-      <div class="prod-desc">${p.desc}</div>
-      <div class="prod-tags-row">${p.tags.map(t=>`<span class="tag" style="font-size:10px;background:transparent;color:var(--muted);border-color:var(--border)">${t}</span>`).join('')}</div>
-      <div class="prod-foot">
-        <div class="prod-price-wrap">
-          <span class="prod-price">$${p.price}</span>
-          <span class="prod-was">$${p.was.toLocaleString()}</span>
-          <span class="prod-save-pct">-${savePct(p.price,p.was)}%</span>
-        </div>
-        <div class="prod-actions">
-          <button class="prod-wish ${wishlist.has(p.id)?'saved':''}" onclick="toggleWish(${p.id})" title="Save">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="${wishlist.has(p.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-          </button>
-          <button class="prod-buy">Get Product</button>
-        </div>
+      <div class="sm-name">${s.name}</div>
+      <div class="sm-role" style="color:${s.color}">${s.role}</div>
+      <div class="sm-bio">${s.bio}</div>
+      <div class="sm-badges">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}<span class="tag tag-green">★ ${s.rating}</span><span class="tag tag-gold">${s.reviews} reviews</span></div>
+      <div class="sm-stats">
+        <div class="sm-stat"><div class="sm-stat-val" style="color:var(--green)">${s.tasks}</div><div class="sm-stat-lbl">Tasks</div></div>
+        <div class="sm-stat"><div class="sm-stat-val" style="color:var(--gold)">${s.earned}</div><div class="sm-stat-lbl">Earned</div></div>
+        <div class="sm-stat"><div class="sm-stat-val" style="color:var(--accent)">${sellerProds.length}</div><div class="sm-stat-lbl">Products</div></div>
+        <div class="sm-stat"><div class="sm-stat-val" style="color:var(--purple)">${s.rating}★</div><div class="sm-stat-lbl">Rating</div></div>
       </div>
-    </div>
-  `).join('');
+      <div class="section-hd" style="margin-bottom:12px">Products by ${s.name.split(' ')[0]}</div>
+      <div>${sellerProds.map(p=>`<div class="sm-prod-mini"><div class="sm-prod-emoji" style="background:${p.color}14;border:1px solid ${p.color}22">${p.emoji}</div><div style="flex:1;min-width:0"><div class="sm-prod-name">${p.name}</div><div style="display:flex;align-items:center;gap:8px;margin-top:2px"><span class="sm-prod-price">$${p.price}</span><span style="color:var(--dim);font-size:10px;text-decoration:line-through;font-family:var(--mono)">$${p.was.toLocaleString()}</span></div></div><button class="prod-get" style="font-size:10px;padding:6px 12px">Get</button></div>`).join('')}</div>
+    </div>`;
+  document.getElementById('seller-modal').classList.add('open');
 }
-function filterProducts(cat,btn){
-  prodCat=cat;
-  document.querySelectorAll('.prod-cat').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderProducts();
-}
-function toggleWish(id){
-  if(wishlist.has(id))wishlist.delete(id);else wishlist.add(id);
-  renderProducts();
-}
+function closeSellerModal(){document.getElementById('seller-modal').classList.remove('open')}
+function toggleSellerFollow(id){if(following.has(id))following.delete(id);else following.add(id);const btn=document.getElementById('sm-fw');if(btn){btn.textContent=following.has(id)?'Unfollow':'Follow';btn.className='btn-follow'+(following.has(id)?' following':'')}}
 
-
-function renderCats(){
-  document.getElementById('cat-wrap').innerHTML=CATS.map(c=>`<button class="pill ${c===currentCat?'active':''}" onclick="setCat('${c}',this)">${c}</button>`).join('');
-}
-function setCat(cat,btn){currentCat=cat;document.querySelectorAll('.pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTasks()}
+function renderTaskCats(){document.getElementById('cat-wrap').innerHTML=TASK_CATS.map(c=>`<button class="pill ${c===currentTaskCat?'active':''}" onclick="setTaskCat('${c}',this)">${c}</button>`).join('')}
+function setTaskCat(cat,btn){currentTaskCat=cat;document.querySelectorAll('.pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTasks()}
 function renderTasks(){
   const q=(document.getElementById('task-search')?.value||'').toLowerCase();
-  const list=TASKS.filter(t=>(currentCat==='ALL'||t.cat===currentCat)&&(!q||t.title.toLowerCase().includes(q)||t.skills.some(s=>s.toLowerCase().includes(q))));
-  document.getElementById('tasks-container').innerHTML=list.map((t,i)=>`
-    <div class="card task-card fade-up" style="animation-delay:${i*50}ms">
-      <div class="task-card-top"><div><div class="task-title">${t.title}</div><div class="task-client">${t.client} · ${t.posted} ago</div></div><span class="tag ${t.status==='OPEN'?'tag-green':'tag-gold'}" style="flex-shrink:0">${t.status}</span></div>
-      <div class="task-skills"><span class="tag">${t.cat}</span>${t.skills.map(s=>`<span class="tag" style="background:transparent;color:var(--muted);border-color:var(--border)">${s}</span>`).join('')}</div>
-      <div class="task-foot"><div class="task-budget"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round"/></svg>${t.budget}</div><div class="task-right"><span class="task-bids">${t.bids} bids</span>${t.status==='OPEN'?`<button class="btn btn-xs" onclick="openBid(${t.id})">Bid</button>`:''}</div></div>
-    </div>
-  `).join()||'<div style="text-align:center;padding:36px;color:var(--muted)">No tasks match this filter.</div>';
+  const list=TASKS.filter(t=>(currentTaskCat==='ALL'||t.cat===currentTaskCat)&&(!q||t.title.toLowerCase().includes(q)||t.skills.some(s=>s.toLowerCase().includes(q))));
+  document.getElementById('tasks-container').innerHTML=list.map((t,i)=>`<div class="card task-card fade-up" style="animation-delay:${i*45}ms"><div class="task-card-top"><div><div class="task-title">${t.title}</div><div class="task-client">${t.client} · ${t.posted} ago</div></div><span class="tag ${t.status==='OPEN'?'tag-green':'tag-gold'}" style="flex-shrink:0">${t.status}</span></div><div class="task-skills"><span class="tag">${t.cat}</span>${t.skills.map(s=>`<span class="tag" style="background:transparent;color:var(--muted);border-color:var(--border)">${s}</span>`).join('')}</div><div class="task-foot"><div class="task-budget"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round"/></svg>${t.budget}</div><div style="display:flex;align-items:center;gap:10px"><span class="task-bids">${t.bids} bids</span>${t.status==='OPEN'?`<button class="btn btn-xs" onclick="openBid(${t.id})">Bid</button>`:''}</div></div></div>`).join('')||`<div style="text-align:center;padding:36px;color:var(--muted)">No tasks found.</div>`;
 }
-function openBid(tid){
-  const t=TASKS.find(x=>x.id===tid);
-  document.getElementById('bid-sheet').innerHTML=`<span class="sheet-handle"></span><div class="sheet-title">Place a Bid</div><div class="sheet-sub">${t.title}</div><div class="field"><label class="field-label">Bid Amount (USD)</label><input class="input" type="number" placeholder="e.g. 950"/><div class="field-hint">Budget: ${t.budget}</div></div><div class="field"><label class="field-label">Proposal</label><textarea class="input" rows="4" placeholder="Describe your approach, experience, and timeline…"></textarea></div><div class="sheet-btns"><button class="btn-ghost" onclick="closeModal('bid-modal')">Cancel</button><button class="btn" onclick="submitBid('${t.client}')">Submit · 1 Bid Used</button></div><div class="sheet-footer">420 bids remaining this month</div>`;
-  openModal('bid-modal');
-}
-function submitBid(client){document.getElementById('bid-sheet').innerHTML=`<div class="success-body"><div class="success-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2"><path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="success-title">Bid Submitted!</div><div class="success-sub">Your proposal was sent to ${client}.</div><button class="btn" onclick="closeModal('bid-modal')">Done</button></div>`}
+function openBid(tid){const t=TASKS.find(x=>x.id===tid);document.getElementById('bid-sheet').innerHTML=`<span class="sheet-handle"></span><div class="sheet-title">Place a Bid</div><div class="sheet-sub">${t.title}</div><div class="field"><label class="field-label">Bid Amount (USD)</label><input class="input" type="number" placeholder="e.g. 950"/><div class="field-hint">Client budget: ${t.budget}</div></div><div class="field"><label class="field-label">Proposal</label><textarea class="input" rows="4" placeholder="Describe your approach, experience, and timeline…"></textarea></div><div class="sheet-btns"><button class="btn-ghost" onclick="closeModal('bid-modal')">Cancel</button><button class="btn" onclick="submitBid('${t.client}')">Submit · 1 Bid Used</button></div><div class="sheet-footer">420 bids remaining this month</div>`;openModal('bid-modal')}
+function submitBid(c){document.getElementById('bid-sheet').innerHTML=`<div class="success-body"><div class="success-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2"><path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="success-title">Bid Submitted!</div><div class="success-sub">Your proposal was sent to ${c}.</div><button class="btn" onclick="closeModal('bid-modal')">Done</button></div>`}
 
 function switchAgentTab(id,btn){document.querySelectorAll('.agent-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.agent-tab').forEach(b=>b.classList.remove('active'));document.getElementById('agent-'+id).classList.add('active');btn.classList.add('active')}
 let scanTimer;
 function startScan(){
   if(scanTimer)return;
   const btn=document.getElementById('scan-btn'),empty=document.getElementById('scan-empty'),steps=document.getElementById('scan-steps'),list=document.getElementById('matched-list'),arc=document.getElementById('agent-arc'),core=document.getElementById('agent-core');
-  btn.disabled=true;btn.textContent='Scanning…';arc.classList.add('spin');core.classList.add('scanning');
-  empty.style.display='none';list.innerHTML='';steps.style.display='block';
-  const txt=["Extracting skill vectors…","Applying budget filters…","Scoring reputation match…","Ranking by compatibility…"];
-  steps.innerHTML=`<div class="scan-info">Scanning 2,847 open tasks…</div>`+txt.map((s,i)=>`<div class="scan-step" style="animation-delay:${i*300}ms"><div class="spin-sm"></div>${s}</div>`).join('');
+  btn.disabled=true;btn.textContent='Scanning…';arc.classList.add('spin');core.classList.add('scanning');empty.style.display='none';list.innerHTML='';steps.style.display='block';
+  const txt=['Extracting skill vectors…','Applying budget filters…','Scoring reputation match…','Ranking by compatibility…'];
+  steps.innerHTML=`<div class="scan-info">Scanning 2,847 open tasks…</div>`+txt.map((s,i)=>`<div class="scan-step" style="animation-delay:${i*320}ms"><div class="spin-sm"></div>${s}</div>`).join('');
   scanTimer=setTimeout(()=>{steps.style.display='none';arc.classList.remove('spin');core.classList.remove('scanning');btn.disabled=false;btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke-linecap="round"/></svg> Re-Scan`;scanDone=true;scanTimer=null;renderMatched()},2800);
 }
-function renderMatched(){document.getElementById('matched-list').innerHTML=AGENT_TASKS.map((t,i)=>`<div class="card match-card" style="animation-delay:${i*55}ms"><div class="match-ring" style="background:conic-gradient(var(--accent) ${t.match*3.6}deg,var(--border) 0)"><div class="match-inner">${t.match}%</div></div><div class="match-info"><div class="match-title">${t.title}</div><div class="match-meta"><span class="tag">${t.cat}</span><span class="match-budget">${t.budget}</span></div></div><div class="match-btns"><button class="btn-ghost btn-ghost-xs ${savedTasks.has(t.id)?'active-g':''}" onclick="toggleSave(${t.id})">${savedTasks.has(t.id)?'✓':'Save'}</button><button class="btn btn-xs" onclick="openBid(${(t.id%TASKS.length)+1})">Bid</button></div></div>`).join('')}
+function renderMatched(){document.getElementById('matched-list').innerHTML=AGENT_TASKS.map((t,i)=>`<div class="card match-card" style="animation-delay:${i*50}ms"><div class="match-ring" style="background:conic-gradient(var(--accent) ${t.match*3.6}deg,var(--border) 0)"><div class="match-inner">${t.match}%</div></div><div class="match-info"><div class="match-title">${t.title}</div><div class="match-meta"><span class="tag">${t.cat}</span><span class="match-budget">${t.budget}</span></div></div><div class="match-btns"><button class="btn-ghost btn-ghost-xs ${savedTasks.has(t.id)?'active-g':''}" onclick="toggleSave(${t.id})">${savedTasks.has(t.id)?'✓':'Save'}</button><button class="btn btn-xs" onclick="openBid(${(t.id%TASKS.length)+1})">Bid</button></div></div>`).join('')}
 function toggleSave(id){if(savedTasks.has(id))savedTasks.delete(id);else savedTasks.add(id);if(scanDone)renderMatched()}
 
 let chatHist=[];
-function initChat(){chatHist=[{role:'agent',text:"Hello! I'm your XWITE AI Agent. I've analyzed your profile and I'm ready to help you find the best opportunities and grow your career."}];renderChat();document.getElementById('chat-sugg').innerHTML=CHAT_SUGG.map(q=>`<button class="btn-ghost btn-ghost-xs" onclick="setQ('${q}')">${q}</button>`).join('')}
+function initChat(){chatHist=[{role:'agent',text:"Hello! I'm your XWITE AI Agent. I've analyzed your profile and I'm ready to help you find the best opportunities."}];renderChat();document.getElementById('chat-sugg').innerHTML=CHAT_SUGG.map(q=>`<button class="btn-ghost btn-ghost-xs" onclick="setQ('${q}')">${q}</button>`).join('')}
 function renderChat(){const c=document.getElementById('chat-msgs');c.innerHTML=chatHist.map(m=>`<div class="chat-msg ${m.role==='user'?'out':''}">${m.role==='agent'?`<div class="chat-ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg></div>`:''}<div class="bubble ${m.role==='user'?'bubble-out':'bubble-in'}">${m.text}</div></div>`).join('');c.scrollTop=c.scrollHeight}
 function setQ(q){document.getElementById('chat-input').value=q}
 async function sendChat(){
-  const inp=document.getElementById('chat-input'),msg=inp.value.trim();if(!msg)return;inp.value='';chatHist.push({role:'user',text:msg});renderChat();
+  const inp=document.getElementById('chat-input'),msg=inp.value.trim();if(!msg)return;
+  inp.value='';chatHist.push({role:'user',text:msg});renderChat();
   const c=document.getElementById('chat-msgs'),t=document.createElement('div');t.className='chat-msg';
   t.innerHTML=`<div class="chat-ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg></div><div class="bubble bubble-in"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
   c.appendChild(t);c.scrollTop=c.scrollHeight;
-  try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:"You are XWITE AI Agent, personal assistant for a Full Stack Developer (React, Node.js, TypeScript, MongoDB, 5 years) on XWITE — zero-commission freelance platform. Be concise. Max 2-3 sentences.",messages:chatHist.filter((m,idx)=>m.role!=='agent'||idx>0).map(m=>({role:m.role==='agent'?'assistant':'user',content:m.text}))})});const data=await res.json();const text=(data.content||[]).map(b=>b.text||'').join('')||"Connectivity issue, please retry.";t.remove();chatHist.push({role:'agent',text})}catch{t.remove();chatHist.push({role:'agent',text:"Connection error. Please try again."})}
+  try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:'You are XWITE AI Agent on a zero-commission freelance + product marketplace platform. Be concise and practical. Max 2-3 sentences.',messages:chatHist.filter((m,i)=>m.role!=='agent'||i>0).map(m=>({role:m.role==='agent'?'assistant':'user',content:m.text}))})});const data=await res.json();const text=(data.content||[]).map(b=>b.text||'').join('')||'Connectivity issue. Please retry.';t.remove();chatHist.push({role:'agent',text})}catch{t.remove();chatHist.push({role:'agent',text:'Connection error. Please try again.'})}
   renderChat();
 }
-function renderTools(){const svgs={briefcase:`<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 014 0v2M3 12h18" stroke-linecap="round"/>`,send:`<path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/>`,trending:`<path d="M23 6l-9.5 9.5-5-5L1 18M17 6h6v6" stroke-linecap="round" stroke-linejoin="round"/>`,users:`<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke-linecap="round"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-linecap="round"/>`,comment:`<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/>`,search:`<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/>`};document.getElementById('tools-grid').innerHTML=TOOLS.map((t,i)=>`<div class="card tool-card fade-up" style="animation-delay:${i*50}ms"><div class="tool-icon" style="background:${t.color}18;border:1px solid ${t.color}28"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${t.color}" stroke-width="1.8">${svgs[t.icon]}</svg></div><div class="tool-name">${t.name}</div><div class="tool-desc">${t.desc}</div></div>`).join('')}
+function renderTools(){const svgs={briefcase:`<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 014 0v2M3 12h18" stroke-linecap="round"/>`,send:`<path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/>`,trending:`<path d="M23 6l-9.5 9.5-5-5L1 18M17 6h6v6" stroke-linecap="round" stroke-linejoin="round"/>`,users:`<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke-linecap="round"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-linecap="round"/>`,comment:`<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/>`,search:`<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/>`};document.getElementById('tools-grid').innerHTML=TOOLS.map((t,i)=>`<div class="card tool-card fade-up" style="animation-delay:${i*45}ms"><div class="tool-icon" style="background:${t.color}18;border:1px solid ${t.color}28"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${t.color}" stroke-width="1.8">${svgs[t.icon]}</svg></div><div class="tool-name">${t.name}</div><div class="tool-desc">${t.desc}</div></div>`).join('')}
 
 function renderNetwork(){renderPeopleGrid(SUGGESTIONS,'suggestions-grid');renderPeopleGrid(CIRCLE,'circle-grid');renderCompanies()}
-function renderPeopleGrid(data,cid){document.getElementById(cid).innerHTML=data.map((p,i)=>`<div class="card person-card fade-up" style="animation-delay:${i*60}ms" onclick="openPersonProfile(${p.id})"><div class="person-avatar" style="background:${p.bg};color:${p.color}">${initials(p.name)}</div><div class="person-name">${p.name}</div><div class="person-role">${p.role}</div><div class="person-mutual">${p.mutual}</div><div onclick="event.stopPropagation()"><button class="btn-follow ${following.has(p.id)?'following':''}" onclick="toggleFollow(${p.id})">${following.has(p.id)?'Unfollow':'Follow'}</button></div></div>`).join('')}
+function renderPeopleGrid(data,cid){document.getElementById(cid).innerHTML=data.map((p,i)=>`<div class="card person-card fade-up" style="animation-delay:${i*55}ms"><div class="person-avatar" style="background:${p.bg};color:${p.color}">${initials(p.name)}</div><div class="person-name">${p.name}</div><div class="person-role">${p.role}</div><div class="person-mutual">${p.mutual}</div><button class="btn-follow ${following.has(p.id)?'following':''}" onclick="event.stopPropagation();toggleFollow(${p.id})">${following.has(p.id)?'Unfollow':'Follow'}</button></div>`).join('')}
 function toggleFollow(id){if(following.has(id))following.delete(id);else following.add(id);renderNetwork()}
-function renderCompanies(){document.getElementById('companies-list').innerHTML=COMPANIES.map((co,i)=>`<div class="company-item card fade-up" style="animation-delay:${i*65}ms"><div class="company-cover" style="background:${co.cover}"><div class="company-cover-logo">${co.logo}</div></div><div class="company-body"><div style="flex:1"><div class="company-name">${co.name}</div><div class="company-meta">${co.ind} · ${co.size} employees</div></div><div class="company-right">${co.hiring?`<span class="tag tag-green">${co.jobs} open</span>`:'<span class="tag tag-red">Closed</span>'}<button style="background:transparent;color:var(--muted);border:1px solid var(--border);padding:5px 10px;border-radius:6px;font-size:10px;font-family:'Urbanist',sans-serif;font-weight:700;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">Follow</button></div></div></div>`).join('')}
+function renderCompanies(){document.getElementById('companies-list').innerHTML=COMPANIES.map((co,i)=>`<div class="company-item card fade-up" style="animation-delay:${i*60}ms"><div class="company-cover" style="background:${co.cover}"><div class="company-cover-logo">${co.logo}</div></div><div class="company-body"><div style="flex:1"><div class="company-name">${co.name}</div><div class="company-meta">${co.ind} · ${co.size}</div></div><div class="company-right">${co.hiring?`<span class="tag tag-green">${co.jobs} open</span>`:'<span class="tag tag-red">Closed</span>'}<button class="btn-ghost btn-ghost-xs">Follow</button></div></div></div>`).join('')}
 
-const ALL_PEOPLE=[...SUGGESTIONS,...CIRCLE];
-function openPersonProfile(id){
-  const p=ALL_PEOPLE.find(x=>x.id===id);if(!p)return;
-  const isFw=following.has(id);
-  document.getElementById('pm-label').textContent=p.name;
-  document.getElementById('pm-content').innerHTML=`<div class="pm-cover" style="background:linear-gradient(135deg,${p.color}60,${p.color}20,transparent)"><div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(5,11,20,.5))"></div><button onclick="document.getElementById('cover-input').click()" style="position:absolute;bottom:10px;right:10px;z-index:2;background:rgba(5,11,20,.7);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(8px);border-radius:8px;padding:6px 10px;color:var(--text);font-size:10px;font-family:'Urbanist',sans-serif;font-weight:700;display:flex;align-items:center;gap:5px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21" stroke-linecap="round"/></svg>Edit Cover</button></div><div class="pm-body"><div class="pm-av-row"><div class="pm-avatar" style="background:${p.bg};color:${p.color}">${initials(p.name)}</div><div class="pm-ctas"><button class="btn btn-sm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/></svg>Message</button><button class="btn-follow ${isFw?'following':''}" id="pm-fw-${id}" onclick="toggleFollowModal(${id})">${isFw?'Unfollow':'Follow'}</button></div></div><div class="pm-name">${p.name}</div><div class="pm-role" style="color:${p.color}">${p.role}</div><div class="pm-bio">Experienced professional passionate about building great products and collaborating with talented teams. Open to new opportunities on XWITE.</div><div class="pm-badges">${p.skills.map(s=>`<span class="tag">${s}</span>`).join('')}<div class="star-row" style="font-size:12px">★★★★☆ <span style="color:var(--muted);font-size:11px;margin-left:3px">(32)</span></div></div><div class="pm-stats"><div class="pm-stat"><div class="pm-stat-val" style="color:var(--green)">42</div><div class="pm-stat-lbl">Tasks</div></div><div class="pm-stat"><div class="pm-stat-val" style="color:var(--gold)">$18K</div><div class="pm-stat-lbl">Earned</div></div><div class="pm-stat"><div class="pm-stat-val" style="color:var(--accent)">284</div><div class="pm-stat-lbl">Network</div></div><div class="pm-stat"><div class="pm-stat-val" style="color:var(--purple)">94%</div><div class="pm-stat-lbl">Match</div></div></div><div class="section-hd">Recent Activity</div><div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:13px;color:var(--muted)">Completed a task · <span style="color:var(--green)">$650</span></div><div style="font-size:12px;color:var(--dim);margin-top:3px">3 days ago</div></div><div class="card" style="padding:14px"><div style="font-size:13px;color:var(--muted)">Received 5-star review</div><div style="font-size:12px;color:var(--dim);margin-top:3px">1 week ago</div></div></div>`;
-  document.getElementById('profile-modal').classList.add('open');
-}
-function toggleFollowModal(id){if(following.has(id))following.delete(id);else following.add(id);const btn=document.getElementById('pm-fw-'+id);if(btn){const f=following.has(id);btn.textContent=f?'Unfollow':'Follow';btn.className='btn-follow'+(f?' following':'')}renderNetwork()}
-function closeProfileModal(){document.getElementById('profile-modal').classList.remove('open')}
-function handleCoverChange(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{const c=document.querySelector('.pm-cover');if(c){c.style.backgroundImage=`url(${ev.target.result})`;c.style.backgroundSize='cover';c.style.backgroundPosition='center'}};r.readAsDataURL(file)}
+function renderSkills(){document.getElementById('skills-list').innerHTML=SKILLS.map((s,i)=>`<div style="animation:fadeUp .35s ease ${i*35}ms both"><div class="skill-hd"><span class="skill-nm">${s.name}</span><span class="skill-pc">${s.pct}%</span></div><div class="prog-bar"><div class="prog-fill" data-pct="${s.pct}"></div></div></div>`).join('')}
+function animateSkills(){document.querySelectorAll('.prog-fill').forEach(b=>{b.style.width=b.dataset.pct+'%'})}
+function renderProjects(){document.getElementById('projects-list').innerHTML=PROJECTS.map(p=>`<div class="proj-item"><div class="proj-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2"><path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="proj-title">${p.title}</div><div class="proj-client">${p.client} · ${p.date}</div></div><div class="proj-right"><div class="proj-earned">${p.earned}</div><div class="stars-r">${'★'.repeat(Math.floor(p.rating))}<span style="opacity:.3">${'★'.repeat(5-Math.floor(p.rating))}</span></div></div></div>`).join('')}
 
 function openPeople(){document.getElementById('people-panel').classList.add('open');renderPeoplePanel()}
 function closePeople(){document.getElementById('people-panel').classList.remove('open')}
 function closePeopleIfBg(e){if(e.target===document.getElementById('people-panel'))closePeople()}
 function switchPP(id,btn){document.querySelectorAll('.pp-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.pp-tab').forEach(b=>b.classList.remove('active'));document.getElementById('pp-'+id).classList.add('active');btn.classList.add('active')}
-function renderPeoplePanel(filter=''){
-  ['followers','following','discover'].forEach(key=>{
-    const people=PEOPLE_DATA[key].filter(p=>!filter||p.name.toLowerCase().includes(filter)||p.role.toLowerCase().includes(filter));
-    document.getElementById('pp-'+key).innerHTML=people.length?people.map(p=>`<div class="${key==='discover'?'discover-card':'pp-person'}"><div class="pp-av" style="background:${p.bg};color:${p.color};width:${key==='discover'?'42px':'38px'};height:${key==='discover'?'42px':'38px'};border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:13px;font-weight:800">${initials(p.name)}</div><div class="pp-info"><div class="pp-name">${p.name}</div><div class="pp-role">${p.role}</div></div>${key==='discover'?`<button class="btn-follow" style="font-size:10px;padding:5px 10px">Follow</button>`:''}</div>`).join(''):'<div style="text-align:center;padding:20px;color:var(--dim);font-size:13px">No results</div>';
-  });
-}
+function renderPeoplePanel(filter=''){['followers','following','discover'].forEach(key=>{const people=PEOPLE_DATA[key].filter(p=>!filter||p.name.toLowerCase().includes(filter)||p.role.toLowerCase().includes(filter));document.getElementById('pp-'+key).innerHTML=people.length?people.map(p=>`<div class="${key==='discover'?'disc-card':'pp-person'}"><div class="pp-av" style="background:${p.bg};color:${p.color}">${initials(p.name)}</div><div class="pp-info"><div class="pp-name">${p.name}</div><div class="pp-role">${p.role}</div></div>${key==='discover'?`<button class="btn-follow" style="font-size:10px;padding:5px 10px">Follow</button>`:''}</div>`).join(''):`<div style="text-align:center;padding:20px;color:var(--dim);font-size:13px">No results</div>`})}
 function filterPeople(){renderPeoplePanel(document.getElementById('pp-search').value.toLowerCase())}
-
-function renderSkills(){document.getElementById('skills-list').innerHTML=SKILLS.map((s,i)=>`<div style="animation:fadeUp .35s ease ${i*40}ms both"><div class="skill-hd"><span class="skill-nm">${s.name}</span><span class="skill-pc">${s.pct}%</span></div><div class="prog-bar"><div class="prog-fill" data-pct="${s.pct}"></div></div></div>`).join('')}
-function animateSkills(){document.querySelectorAll('.prog-fill').forEach(b=>{b.style.width=b.dataset.pct+'%'})}
-function renderProjects(){document.getElementById('projects-list').innerHTML=PROJECTS.map(p=>`<div class="proj-item"><div class="proj-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2"><path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="proj-title">${p.title}</div><div class="proj-client">${p.client} · ${p.date}</div></div><div class="proj-right"><div class="proj-earned">${p.earned}</div><div class="stars-r">${'★'.repeat(Math.floor(p.rating))}<span style="color:var(--dim)">${'★'.repeat(5-Math.floor(p.rating))}</span></div></div></div>`).join('')}
-
-function initials(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
-
 </script>
 </body>
 </html>
