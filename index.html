@@ -259,6 +259,7 @@ select.input{cursor:pointer}
 .stars-r{display:flex;gap:2px;justify-content:flex-end;margin-top:3px;color:var(--gold);font-size:11px}
 
 /* SELLER MODAL */
+#product-detail-modal.open{display:block!important;animation:slideUp .3s ease both}
 #seller-modal{display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto}
 #seller-modal.open{display:block;animation:slideUp .28s ease both}
 .sm-header{position:sticky;top:0;z-index:10;padding:0 14px;height:50px;display:flex;align-items:center;gap:12px;background:rgba(5,11,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
@@ -450,6 +451,15 @@ select.input{cursor:pointer}
 <!-- SELLER MODAL -->
 <div id="seller-modal"><div class="sm-header"><button class="sm-back" onclick="closeSellerModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round"/></svg></button><span class="sm-back-label" id="sm-label">Seller Profile</span></div><div id="sm-content"></div></div>
 
+<!-- PRODUCT DETAIL MODAL -->
+<div id="product-detail-modal" style="display:none;position:fixed;inset:0;z-index:310;background:var(--bg);overflow-y:auto">
+  <div style="position:sticky;top:0;z-index:10;height:50px;display:flex;align-items:center;gap:12px;padding:0 14px;background:rgba(5,11,20,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)">
+    <button onclick="closeProductDetail()" style="width:34px;height:34px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <span style="font-family:'Urbanist',sans-serif;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.5px">Product Details</span>
+  </div>
+  <div id="pd-content" style="max-width:640px;margin:0 auto"></div>
+</div>
+
 <!-- PEOPLE PANEL -->
 <div id="people-panel" onclick="closePeopleIfBg(event)">
   <div class="pp-sheet">
@@ -599,12 +609,12 @@ function renderMarketplace(){
 function prodCard(p,i){
   const s=SELLERS[p.sellerId]||{name:'Unknown',role:'Seller',color:'#7B9BB8',bg:'rgba(123,155,184,.15)'};
   const saved=wishlist.has(p.id),pct=savePct(p.price,p.was);
-  return`<div class="card prod-card fade-up" style="animation-delay:${i*45}ms;border-color:${p.color}18;background:linear-gradient(170deg,var(--card) 65%,${p.color}07)">
+  return`<div class="card prod-card fade-up" style="animation-delay:${i*45}ms;border-color:${p.color}18;background:linear-gradient(170deg,var(--card) 65%,${p.color}07);cursor:pointer" onclick="openProductDetail(${p.id})">
     <div class="prod-card-top">
       <div class="prod-icon" style="background:${p.color}14;border:1.5px solid ${p.color}22">${p.emoji}</div>
       <div class="prod-info">
         <div class="prod-name">${p.name}</div>
-        <div class="prod-seller-row" onclick="openSellerModal('${p.sellerId}')" title="View ${s.name}'s profile">
+        <div class="prod-seller-row" onclick="event.stopPropagation();openSellerModal('${p.sellerId}')" title="View ${s.name}'s profile">
           <div class="prod-seller-av" style="background:${s.bg};color:${s.color}">${initials(s.name)}</div>
           <span class="prod-seller-name">by ${s.name}</span>
           <svg class="prod-seller-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -622,16 +632,91 @@ function prodCard(p,i){
         <span class="prod-save">-${pct}%</span>
       </div>
       <div class="prod-actions">
-        <button class="prod-wish ${saved?'saved':''}" onclick="toggleWish(${p.id})" title="${saved?'Remove':'Save'}">
+        <button class="prod-wish ${saved?'saved':''}" onclick="event.stopPropagation();toggleWish(${p.id})" title="${saved?'Remove':'Save'}">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
         </button>
-        <button class="prod-get">Get Product</button>
+        <button class="prod-get" onclick="event.stopPropagation();openProductDetail(${p.id})">View</button>
       </div>
     </div>
   </div>`;
 }
 
 function toggleWish(id){if(wishlist.has(id))wishlist.delete(id);else wishlist.add(id);renderMarketplace()}
+
+function openProductDetail(id){
+  const p=PRODUCTS.find(x=>x.id===id);if(!p)return;
+  const s=SELLERS[p.sellerId]||{name:'Unknown',role:'Seller',color:'#7B9BB8',bg:'rgba(123,155,184,.15)',bio:'',tags:[],rating:5,reviews:0,tasks:0,earned:'$0'};
+  const pct=savePct(p.price,p.was);
+  document.getElementById('pd-content').innerHTML=`
+    <div style="height:200px;background:linear-gradient(135deg,${p.color}30,${p.color}10);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative">
+      <div style="font-size:64px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.5))">${p.emoji}</div>
+      <span style="margin-top:10px;font-family:'Urbanist',sans-serif;font-size:9px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:${p.color};background:${p.color}15;border:1px solid ${p.color}28;border-radius:5px;padding:3px 10px">${p.cat}</span>
+    </div>
+    <div style="padding:20px 18px 32px">
+      <div style="font-family:'Urbanist',sans-serif;font-weight:900;font-size:22px;line-height:1.2;margin-bottom:10px">${p.name}</div>
+
+      <!-- Seller row — clickable → opens seller profile -->
+      <div onclick="closeProductDetail();openSellerModal('${p.sellerId}')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:16px;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(0,229,255,.3)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="width:40px;height:40px;border-radius:50%;background:${s.bg};color:${s.color};display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:14px;font-weight:900;flex-shrink:0">${initials(s.name)}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-family:'Urbanist',sans-serif;font-weight:800;font-size:13px">${s.name}</div>
+          <div style="color:var(--muted);font-size:11px;font-weight:400">${s.role}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+          <div style="color:var(--gold);font-size:11px">${starsHtml(s.rating)}</div>
+          <span style="font-size:9px;color:var(--dim)">${s.reviews||p.reviews} reviews</span>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round"/></svg>
+      </div>
+
+      <!-- Rating & stats row -->
+      <div style="display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px">
+        <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid var(--border)">
+          <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:var(--gold)">${starsHtml(p.rating)}</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">${p.rating} Rating</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid var(--border)">
+          <div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--accent)">${p.reviews}</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Reviews</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:12px 8px">
+          <div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--green)">-${pct}%</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">vs Custom</div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div style="font-family:'Urbanist',sans-serif;font-weight:700;font-size:11px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px">About This Product</div>
+      <div style="font-size:14px;line-height:1.72;color:#BDD6EE;font-weight:400;margin-bottom:18px">${p.desc}</div>
+
+      <!-- Tags -->
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:22px">${p.tags.map(t=>`<span class="tag" style="font-size:11px;padding:3px 10px">${t}</span>`).join('')}</div>
+
+      <!-- Custom dev comparison -->
+      <div style="background:rgba(0,255,157,.04);border:1px solid rgba(0,255,157,.14);border-radius:14px;padding:16px;margin-bottom:22px">
+        <div style="font-family:'Urbanist',sans-serif;font-size:11px;font-weight:800;color:var(--green);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px">💰 Why Buy Instead of Build?</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:13px;color:var(--muted)">Hire a developer</span>
+          <span style="font-family:var(--mono);font-size:13px;color:var(--red);text-decoration:line-through">$${p.was.toLocaleString()}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid rgba(0,255,157,.12)">
+          <span style="font-size:13px;color:var(--text);font-weight:700">Get this product</span>
+          <span style="font-family:var(--mono);font-size:15px;color:var(--green);font-weight:800">$${p.price}</span>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:var(--muted)">You save <strong style="color:var(--green)">$${(p.was-p.price).toLocaleString()}</strong> (${pct}% less than custom dev cost)</div>
+      </div>
+
+      <!-- CTA -->
+      <button class="btn" style="width:100%;padding:15px;font-size:13px;border-radius:14px;box-shadow:0 6px 28px rgba(0,229,255,.3)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        Get This Product — $${p.price}
+      </button>
+      <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--dim)">Instant delivery · No commission · Secure checkout</div>
+    </div>`;
+  document.getElementById('product-detail-modal').classList.add('open');
+}
+function closeProductDetail(){document.getElementById('product-detail-modal').classList.remove('open')}
+
 
 function submitProduct(){
   const name=document.getElementById('ap-name').value.trim(),cat=document.getElementById('ap-cat').value,emoji=document.getElementById('ap-emoji').value.trim()||'📦',price=parseFloat(document.getElementById('ap-price').value)||0,was=parseFloat(document.getElementById('ap-was').value)||0,desc=document.getElementById('ap-desc').value.trim(),tagsRaw=document.getElementById('ap-tags').value.trim();
@@ -716,8 +801,50 @@ async function sendChat(){
 function renderTools(){const svgs={briefcase:`<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 014 0v2M3 12h18" stroke-linecap="round"/>`,send:`<path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/>`,trending:`<path d="M23 6l-9.5 9.5-5-5L1 18M17 6h6v6" stroke-linecap="round" stroke-linejoin="round"/>`,users:`<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke-linecap="round"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-linecap="round"/>`,comment:`<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/>`,search:`<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/>`};document.getElementById('tools-grid').innerHTML=TOOLS.map((t,i)=>`<div class="card tool-card fade-up" style="animation-delay:${i*45}ms"><div class="tool-icon" style="background:${t.color}18;border:1px solid ${t.color}28"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${t.color}" stroke-width="1.8">${svgs[t.icon]}</svg></div><div class="tool-name">${t.name}</div><div class="tool-desc">${t.desc}</div></div>`).join('')}
 
 function renderNetwork(){renderPeopleGrid(SUGGESTIONS,'suggestions-grid');renderPeopleGrid(CIRCLE,'circle-grid');renderCompanies()}
-function renderPeopleGrid(data,cid){document.getElementById(cid).innerHTML=data.map((p,i)=>`<div class="card person-card fade-up" style="animation-delay:${i*55}ms"><div class="person-avatar" style="background:${p.bg};color:${p.color}">${initials(p.name)}</div><div class="person-name">${p.name}</div><div class="person-role">${p.role}</div><div class="person-mutual">${p.mutual}</div><button class="btn-follow ${following.has(p.id)?'following':''}" onclick="event.stopPropagation();toggleFollow(${p.id})">${following.has(p.id)?'Unfollow':'Follow'}</button></div>`).join('')}
+function renderPeopleGrid(data,cid){document.getElementById(cid).innerHTML=data.map((p,i)=>`<div class="card person-card fade-up" style="animation-delay:${i*55}ms;cursor:pointer" onclick="openPersonProfile(${JSON.stringify(p).replace(/"/g,'&quot;')})"><div class="person-avatar" style="background:${p.bg};color:${p.color}">${initials(p.name)}</div><div class="person-name">${p.name}</div><div class="person-role">${p.role}</div><div class="person-mutual">${p.mutual}</div><button class="btn-follow ${following.has(p.id)?'following':''}" onclick="event.stopPropagation();toggleFollow(${p.id})">${following.has(p.id)?'Unfollow':'Follow'}</button></div>`).join('')}
 function toggleFollow(id){if(following.has(id))following.delete(id);else following.add(id);renderNetwork()}
+
+function openPersonProfile(p){
+  if(typeof p==='string')p=JSON.parse(p);
+  const isFw=following.has(p.id);
+  document.getElementById('sm-label').textContent=p.name;
+  document.getElementById('sm-content').innerHTML=`
+    <div style="height:160px;background:linear-gradient(135deg,${p.color}50,${p.color}18,transparent);position:relative">
+      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(5,11,20,.5))"></div>
+    </div>
+    <div class="sm-body">
+      <div class="sm-av-row">
+        <div class="sm-avatar" style="background:${p.bg};color:${p.color};width:76px;height:76px;border-radius:50%;border:3px solid var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:26px;font-weight:900;margin-top:-38px">${initials(p.name)}</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+          <button class="btn btn-sm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/></svg>Message</button>
+          <button class="btn-follow ${isFw?'following':''}" id="npf-${p.id}" onclick="toggleNetworkFollow(${p.id})">${isFw?'Unfollow':'Follow'}</button>
+        </div>
+      </div>
+      <div style="font-family:'Urbanist',sans-serif;font-size:22px;font-weight:900;margin-bottom:2px">${p.name}</div>
+      <div style="font-size:13px;font-weight:700;color:${p.color};margin-bottom:8px">${p.role}</div>
+      <div style="color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:14px;font-weight:400">Experienced professional open to collaborations, freelance tasks, and new opportunities on XWITE.</div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px">
+        ${p.skills.map(s=>`<span class="tag">${s}</span>`).join('')}
+        <div style="display:flex;align-items:center;gap:3px;color:var(--gold);font-size:12px">★★★★☆ <span style="color:var(--muted);font-size:11px;margin-left:3px">(32)</span></div>
+      </div>
+      <div style="display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:22px">
+        <div style="flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border)"><div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--green)">42</div><div style="font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Tasks</div></div>
+        <div style="flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border)"><div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--gold)">$18K</div><div style="font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Earned</div></div>
+        <div style="flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border)"><div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--accent)">284</div><div style="font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Network</div></div>
+        <div style="flex:1;text-align:center;padding:14px 8px"><div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--purple)">94%</div><div style="font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Match</div></div>
+      </div>
+      <div class="section-hd">Recent Activity</div>
+      <div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:13px;color:var(--muted)">Completed a task · <span style="color:var(--green)">$650</span></div><div style="font-size:12px;color:var(--dim);margin-top:3px">3 days ago</div></div>
+      <div class="card" style="padding:14px"><div style="font-size:13px;color:var(--muted)">Received a 5-star review</div><div style="font-size:12px;color:var(--dim);margin-top:3px">1 week ago</div></div>
+    </div>`;
+  document.getElementById('seller-modal').classList.add('open');
+}
+function toggleNetworkFollow(id){
+  if(following.has(id))following.delete(id);else following.add(id);
+  const btn=document.getElementById('npf-'+id);
+  if(btn){btn.textContent=following.has(id)?'Unfollow':'Follow';btn.className='btn-follow'+(following.has(id)?' following':'')}
+  renderNetwork();
+}
 function renderCompanies(){document.getElementById('companies-list').innerHTML=COMPANIES.map((co,i)=>`<div class="company-item card fade-up" style="animation-delay:${i*60}ms"><div class="company-cover" style="background:${co.cover}"><div class="company-cover-logo">${co.logo}</div></div><div class="company-body"><div style="flex:1"><div class="company-name">${co.name}</div><div class="company-meta">${co.ind} · ${co.size}</div></div><div class="company-right">${co.hiring?`<span class="tag tag-green">${co.jobs} open</span>`:'<span class="tag tag-red">Closed</span>'}<button class="btn-ghost btn-ghost-xs">Follow</button></div></div></div>`).join('')}
 
 function renderSkills(){document.getElementById('skills-list').innerHTML=SKILLS.map((s,i)=>`<div style="animation:fadeUp .35s ease ${i*35}ms both"><div class="skill-hd"><span class="skill-nm">${s.name}</span><span class="skill-pc">${s.pct}%</span></div><div class="prog-bar"><div class="prog-fill" data-pct="${s.pct}"></div></div></div>`).join('')}
