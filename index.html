@@ -1,862 +1,2180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>XWITE</title>
-<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskHive — Work. Connect. Earn.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{-webkit-text-size-adjust:100%}
-body{background:#050B14;font-family:'Urbanist',sans-serif;color:#E8F4FD;min-height:100vh;overflow-x:hidden}
-input,button,textarea,select{font-family:inherit;outline:none}
-button{cursor:pointer}
-::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-track{background:#0A1628}::-webkit-scrollbar-thumb{background:#1A3A5C;border-radius:2px}
-:root{--bg:#050B14;--surface:#0A1628;--card:#0D1F35;--border:#1A3A5C;--accent:#00E5FF;--accentD:#0099BB;--glow:rgba(0,229,255,.12);--gold:#FFB800;--green:#00FF9D;--red:#FF4560;--purple:#9B5DE5;--pink:#FF6B9D;--text:#E8F4FD;--muted:#7B9BB8;--dim:#3D6080;--nav-h:64px;--top-h:54px;--mono:'Fira Code',monospace}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes slideUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}
-@keyframes slideRight{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes scanStep{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
-.fade-up{animation:fadeUp .35s ease both}
-#app{padding-bottom:calc(var(--nav-h)+10px);padding-top:var(--top-h)}
-.page{display:none;padding:16px 14px 0;max-width:640px;margin:0 auto}
-.page.active{display:block;animation:fadeUp .28s ease both}
-#topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--top-h);background:rgba(5,11,20,.96);backdrop-filter:blur(28px);border-bottom:1px solid rgba(26,58,92,.5)}
-.topbar-inner{max-width:640px;margin:0 auto;height:100%;padding:0 14px;display:flex;align-items:center;justify-content:space-between}
-.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
-.logo-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accentD));display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(0,229,255,.25)}
-.logo-mark svg{fill:var(--bg)}
-.logo-word{font-weight:900;font-size:18px;letter-spacing:3px;text-transform:uppercase}
-.page-label{font-weight:700;font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
-.topbar-actions{display:flex;align-items:center;gap:4px}
-.icon-btn{width:38px;height:38px;border-radius:10px;background:none;border:none;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s;position:relative}
-.icon-btn:hover{color:var(--accent);background:var(--glow)}
-.badge{position:absolute;top:5px;right:5px;width:13px;height:13px;border-radius:50%;background:var(--red);border:1.5px solid var(--bg);font-size:7px;font-weight:900;color:#fff;display:flex;align-items:center;justify-content:center}
-.badge.hidden{display:none}
-#bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(5,11,20,.97);backdrop-filter:blur(28px);border-top:1px solid rgba(26,58,92,.45);display:flex;justify-content:center;align-items:center;padding:0 8px 4px}
-.nav-inner{display:flex;gap:2px;width:100%;max-width:480px}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px 6px;border-radius:10px;border:1px solid transparent;background:none;color:var(--dim);font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;transition:all .2s}
-.nav-btn.active{color:var(--accent);border-color:rgba(0,229,255,.2);background:rgba(0,229,255,.07)}
-#fab{position:fixed;bottom:calc(var(--nav-h)+14px);right:16px;z-index:90;width:48px;height:48px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,229,255,.4);transition:all .2s}
-#fab:hover{transform:translateY(-2px)}
-#fab:active{transform:scale(.95)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;transition:border-color .2s}
-.card:hover{border-color:rgba(0,229,255,.18)}
-.btn{background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);border:none;padding:10px 20px;border-radius:9px;font-weight:800;font-size:11px;letter-spacing:.8px;text-transform:uppercase;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
-.btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,229,255,.35)}
-.btn:active{transform:scale(.97)}
-.btn:disabled{opacity:.45;pointer-events:none}
-.btn-sm{padding:7px 14px;font-size:10px;border-radius:8px}
-.btn-xs{padding:5px 10px;font-size:10px;border-radius:7px}
-.btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--border);padding:9px 18px;border-radius:9px;font-weight:700;font-size:11px;letter-spacing:.8px;text-transform:uppercase;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px}
-.btn-ghost:hover{border-color:var(--accent);background:var(--glow)}
-.btn-ghost.active-g{background:var(--glow);border-color:var(--accent)}
-.btn-ghost-sm{padding:6px 12px;font-size:10px;border-radius:7px}
-.btn-ghost-xs{padding:4px 10px;font-size:10px;border-radius:6px}
-.btn-follow{background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);border:none;padding:7px 16px;border-radius:8px;font-weight:800;font-size:10px;letter-spacing:.8px;text-transform:uppercase;transition:all .2s;white-space:nowrap}
-.btn-follow.following{background:transparent;color:var(--muted);border:1px solid var(--border)}
-.btn-follow.following:hover{border-color:var(--red);color:var(--red)}
-.tag{display:inline-block;background:rgba(0,229,255,.08);color:var(--accent);border:1px solid rgba(0,229,255,.2);border-radius:5px;padding:2px 8px;font-size:10px;font-family:var(--mono);font-weight:400}
-.tag-green{background:rgba(0,255,157,.08);color:var(--green);border-color:rgba(0,255,157,.2)}
-.tag-gold{background:rgba(255,184,0,.08);color:var(--gold);border-color:rgba(255,184,0,.2)}
-.tag-red{background:rgba(255,69,96,.08);color:var(--red);border-color:rgba(255,69,96,.2)}
-.input{background:var(--surface);border:1px solid var(--border);border-radius:11px;color:var(--text);padding:11px 14px;font-size:14px;font-weight:400;outline:none;transition:all .2s;width:100%}
-.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,229,255,.07)}
-.input::placeholder{color:var(--dim);font-weight:300}
-textarea.input{resize:none;line-height:1.6}
-select.input{cursor:pointer}
-.section-hd{font-weight:800;font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
-.section-hd::after{content:'';flex:1;height:1px;background:var(--border)}
-.stat-row{display:flex;gap:10px;margin-bottom:18px}
-.stat-c{flex:1;background:linear-gradient(135deg,var(--card),var(--surface));border:1px solid var(--border);border-radius:12px;padding:14px 12px;position:relative;overflow:hidden}
-.stat-c::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
-.stat-lbl{color:var(--muted);font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:6px}
-.stat-val{font-size:22px;font-weight:900;font-family:var(--mono);line-height:1}
-.stat-sub{font-family:var(--mono);font-size:9px;color:var(--green);margin-top:4px}
+:root {
+  --bg: #0a0c10;
+  --bg2: #111318;
+  --bg3: #181c24;
+  --card: #1a1f2e;
+  --card2: #1f2535;
+  --border: #252d40;
+  --border2: #2e3850;
+  --gold: #f5a623;
+  --gold2: #ffbd5a;
+  --gold-dim: rgba(245,166,35,0.12);
+  --blue: #4a90e2;
+  --blue2: #6aaff5;
+  --green: #27c47a;
+  --red: #e85858;
+  --purple: #8b5cf6;
+  --text: #e8eaf0;
+  --text2: #9aa3b8;
+  --text3: #5a6480;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  --glow: 0 0 30px rgba(245,166,35,0.15);
+}
 
-/* SEARCH */
-.feed-search-wrap{margin-bottom:14px}
-.feed-search-inner{display:flex;align-items:center;gap:13px;background:rgba(13,31,53,.9);border:1.5px solid rgba(0,229,255,.18);border-radius:18px;padding:15px 18px;transition:all .3s;box-shadow:0 2px 20px rgba(0,0,0,.25);backdrop-filter:blur(16px)}
-.feed-search-inner.focused{border-color:rgba(0,229,255,.55);box-shadow:0 4px 32px rgba(0,0,0,.35),0 0 0 4px rgba(0,229,255,.07)}
-.feed-s-icon{color:var(--accent);flex-shrink:0;transition:all .25s}
-.feed-search-inner.focused .feed-s-icon{color:#7DFCFF;transform:scale(1.1)}
-.feed-s-input{flex:1;background:none;border:none;color:var(--text);font-size:15px;font-weight:400;caret-color:var(--accent);min-width:0}
-.feed-s-input::placeholder{color:var(--dim);font-weight:300}
-.feed-s-kbd{font-family:var(--mono);font-size:9px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:5px;padding:3px 7px;flex-shrink:0}
-@media(max-width:400px){.feed-s-kbd{display:none}}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* MARKETPLACE */
-.mkt-top-row{display:flex;align-items:center;gap:8px;margin-bottom:16px}
-.mkt-cats-scroll{flex:1;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
-.mkt-cats-scroll::-webkit-scrollbar{display:none}
-.mkt-cat{flex-shrink:0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .18s;white-space:nowrap}
-.mkt-cat:hover{background:rgba(0,229,255,.07);border-color:rgba(0,229,255,.25);color:var(--accent)}
-.mkt-cat.active{background:rgba(0,229,255,.12);border-color:rgba(0,229,255,.4);color:var(--accent)}
+html { scroll-behavior: smooth; }
 
-/* FEATURED */
-.feat-scroll{display:flex;gap:12px;overflow-x:auto;margin-bottom:20px;-webkit-overflow-scrolling:touch;padding-bottom:2px}
-.feat-scroll::-webkit-scrollbar{display:none}
-.feat-card{flex-shrink:0;width:74vw;max-width:285px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:transform .2s,border-color .2s}
-.feat-card:hover{transform:translateY(-3px);border-color:rgba(0,229,255,.3)}
-.feat-cover{height:95px;display:flex;align-items:center;justify-content:center;position:relative}
-.feat-cover-emoji{font-size:40px;filter:drop-shadow(0 4px 14px rgba(0,0,0,.4));position:relative;z-index:1}
-.feat-badge{position:absolute;top:8px;left:10px;z-index:2;font-size:8px;font-weight:900;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(0,229,255,.18);color:var(--accent);border:1px solid rgba(0,229,255,.3)}
-.feat-body{padding:13px 14px 15px;background:var(--card)}
-.feat-cat{font-size:9px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
-.feat-name{font-weight:900;font-size:14px;margin-bottom:5px;line-height:1.3}
-.feat-desc{color:var(--muted);font-size:11px;line-height:1.5;margin-bottom:12px}
-.feat-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.feat-price{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--green)}
-.feat-was{font-family:var(--mono);font-size:10px;color:var(--dim);text-decoration:line-through;margin-left:4px}
-.mkt-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.mkt-hd-label{font-weight:800;font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
-.mkt-hd-count{font-family:var(--mono);font-size:11px;color:var(--dim)}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-/* PRODUCT CARD */
-.prod-card{margin-bottom:10px;border-radius:16px;overflow:hidden;transition:transform .2s,border-color .2s}
-.prod-card:hover{transform:translateY(-1px)}
-.prod-card-top{display:flex;gap:14px;padding:16px 16px 0;align-items:flex-start}
-.prod-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
-.prod-info{flex:1;min-width:0}
-.prod-name{font-weight:900;font-size:15px;margin-bottom:4px;line-height:1.25}
-.prod-seller-row{display:flex;align-items:center;gap:7px;margin-bottom:7px;cursor:pointer;width:fit-content;padding:3px 8px 3px 0;border-radius:6px;transition:background .15s}
-.prod-seller-row:hover{background:rgba(0,229,255,.06)}
-.prod-seller-row:hover .prod-seller-name{color:var(--accent)}
-.prod-seller-av{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;flex-shrink:0}
-.prod-seller-name{font-size:11px;color:var(--muted);font-weight:600;transition:color .15s}
-.prod-seller-arrow{color:var(--dim);transition:color .15s;flex-shrink:0}
-.prod-seller-row:hover .prod-seller-arrow{color:var(--accent)}
-.prod-stars{display:flex;align-items:center;gap:2px;color:var(--gold);font-size:11px}
-.prod-stars span{color:var(--muted);font-size:10px;margin-left:3px}
-.prod-desc{font-size:13px;line-height:1.65;color:var(--muted);font-weight:400;padding:10px 16px 12px}
-.prod-tags{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 14px}
-.prod-foot{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid rgba(255,255,255,.05);background:rgba(0,0,0,.18)}
-.prod-price-area{display:flex;align-items:baseline;gap:7px}
-.prod-price{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--green)}
-.prod-was{font-family:var(--mono);font-size:11px;color:var(--dim);text-decoration:line-through}
-.prod-save{font-size:9px;font-weight:900;padding:2px 7px;border-radius:4px;background:rgba(0,255,157,.1);color:var(--green);border:1px solid rgba(0,255,157,.2)}
-.prod-actions{display:flex;gap:8px;align-items:center}
-.prod-wish{width:34px;height:34px;border-radius:9px;background:transparent;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .18s}
-.prod-wish:hover{border-color:var(--red);color:var(--red)}
-.prod-wish.saved{border-color:var(--red);color:var(--red);background:rgba(255,69,96,.08)}
-.prod-get{background:linear-gradient(135deg,var(--accent),var(--accentD));color:var(--bg);border:none;padding:8px 18px;border-radius:9px;font-weight:800;font-size:11px;letter-spacing:.5px;text-transform:uppercase;transition:all .18s}
-.prod-get:hover{box-shadow:0 4px 18px rgba(0,229,255,.35);transform:translateY(-1px)}
+/* ─── LAYOUT ─── */
+.shell { display: flex; min-height: 100vh; }
 
-/* TASKS */
-.task-top-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.task-search-wrap{flex:1;position:relative;min-width:160px}
-.task-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--dim)}
-.task-search-wrap .input{padding-left:36px}
-.cat-wrap{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
-.cat-wrap::-webkit-scrollbar{display:none}
-.pill{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:20px;padding:5px 14px;white-space:nowrap;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;transition:all .15s;flex-shrink:0}
-.pill.active{background:rgba(0,229,255,.1);border-color:var(--accent);color:var(--accent)}
-.task-card{padding:16px;margin-bottom:10px}
-.task-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
-.task-title{font-weight:800;font-size:13px;line-height:1.45}
-.task-client{color:var(--muted);font-size:11px;margin-top:2px;font-weight:400}
-.task-skills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
-.task-foot{display:flex;justify-content:space-between;align-items:center}
-.task-budget{display:flex;align-items:center;gap:5px;color:var(--gold);font-weight:700;font-size:13px;font-family:var(--mono)}
-.task-bids{color:var(--muted);font-size:11px}
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 230px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
 
-/* AGENT */
-.agent-hero{padding:24px 18px;margin-bottom:18px;text-align:center;background:linear-gradient(135deg,rgba(0,229,255,.04),rgba(0,229,255,.01));border-color:rgba(0,229,255,.18)}
-.agent-ring{position:relative;width:88px;height:88px;margin:0 auto 16px}
-.agent-ring svg.ring-svg{position:absolute;inset:0;width:100%;height:100%}
-.ring-bg{fill:none;stroke:var(--border);stroke-width:2}
-.ring-arc{fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-dasharray:68 207;transform-origin:44px 44px}
-.ring-arc.spin{animation:rotate .9s linear infinite}
-.agent-core{position:absolute;inset:9px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.22);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:box-shadow .4s}
-.agent-core.scanning{box-shadow:0 0 28px rgba(0,229,255,.5);animation:pulse 1s ease-in-out infinite}
-.agent-name{font-weight:900;font-size:20px;margin-bottom:2px}
-.agent-lens{color:var(--muted);font-size:13px;margin-bottom:14px}
-.agent-lens span{color:var(--accent)}
-.a-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
-.agent-tabs{display:flex;gap:3px;margin-bottom:16px;background:var(--surface);padding:4px;border-radius:12px;border:1px solid var(--border)}
-.agent-tab{flex:1;padding:8px 0;background:transparent;border:1px solid transparent;border-radius:8px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;transition:all .15s}
-.agent-tab.active{background:var(--card);border-color:var(--border);color:var(--accent)}
-.agent-panel{display:none}
-.agent-panel.active{display:block}
-.scan-empty{text-align:center;padding:40px 20px;color:var(--muted)}
-.scan-empty p{margin-top:10px;font-size:13px;font-weight:400}
-.scan-steps{text-align:center;padding:32px 18px}
-.scan-info{color:var(--accent);font-family:var(--mono);font-size:13px;margin-bottom:18px}
-.scan-step{display:flex;align-items:center;gap:10px;justify-content:center;color:var(--muted);font-size:12px;margin-bottom:10px;opacity:0;animation:scanStep .4s ease both}
-.spin-sm{width:11px;height:11px;border:2px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:rotate .7s linear infinite;flex-shrink:0}
-.match-card{padding:13px 15px;margin-bottom:8px;display:flex;gap:12px;align-items:center;opacity:0;animation:fadeUp .35s ease both}
-.match-ring{width:48px;height:48px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.match-inner{width:36px;height:36px;border-radius:6px;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--accent);font-family:var(--mono)}
-.match-info{flex:1;min-width:0}
-.match-title{font-weight:800;font-size:13px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.match-meta{display:flex;gap:7px;align-items:center}
-.match-budget{color:var(--gold);font-size:11px;font-family:var(--mono)}
-.match-btns{display:flex;gap:5px;flex-shrink:0}
-.chat-wrap{border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--card)}
-.chat-msgs{height:300px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
-.chat-msg{display:flex;gap:8px;align-items:flex-end}
-.chat-msg.out{flex-direction:row-reverse}
-.chat-ico{width:26px;height:26px;border-radius:50%;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.bubble{padding:10px 14px;font-size:13px;line-height:1.5;max-width:78%;font-weight:400}
-.bubble-in{background:var(--surface);border:1px solid var(--border);border-radius:12px 12px 12px 2px}
-.bubble-out{background:linear-gradient(135deg,var(--accentD),var(--accent));color:var(--bg);font-weight:600;border-radius:12px 12px 2px 12px}
-.typing-dots{display:flex;gap:4px;align-items:center;padding:4px 0}
-.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1s ease-in-out infinite}
-.typing-dots span:nth-child(2){animation-delay:.2s}.typing-dots span:nth-child(3){animation-delay:.4s}
-.chat-input-row{border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:8px}
-.chat-input-row input{flex:1;padding:9px 13px;font-size:13px}
-.chat-sugg{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
-.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.tool-card{padding:18px;cursor:pointer}
-.tool-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:11px}
-.tool-name{font-weight:800;font-size:13px;margin-bottom:3px}
-.tool-desc{color:var(--muted);font-size:11px;line-height:1.5;font-weight:400}
+.logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--gold), #e07b00);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 4px 14px rgba(245,166,35,0.35);
+}
+.logo-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.5px;
+}
+.logo-text span { color: var(--gold); }
 
-/* NETWORK */
-.net-section{margin-bottom:28px}
-.people-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.person-card{padding:16px;cursor:pointer;transition:border-color .2s;text-align:center}
-.person-card:hover{border-color:rgba(0,229,255,.3)}
-.person-avatar{width:48px;height:48px;border-radius:50%;margin:0 auto 11px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800}
-.person-name{font-weight:800;font-size:13px;margin-bottom:2px}
-.person-role{color:var(--muted);font-size:11px;font-weight:400;margin-bottom:7px}
-.person-mutual{color:var(--dim);font-size:10px;margin-bottom:11px;font-weight:500}
-.company-item{margin-bottom:10px;overflow:hidden;cursor:pointer;border-radius:14px}
-.company-cover{height:80px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:10px;border-radius:12px 12px 0 0}
-.company-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(5,11,20,.6));pointer-events:none}
-.company-cover-logo{width:44px;height:44px;border-radius:10px;background:rgba(5,11,20,.6);border:2px solid rgba(255,255,255,.2);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;position:relative;z-index:1}
-.company-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 12px 12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.company-name{font-weight:800;font-size:14px;margin-bottom:2px}
-.company-meta{color:var(--muted);font-size:11px;font-weight:400}
-.company-right{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
+.nav { padding: 12px 12px; flex: 1; }
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 16px 10px 6px;
+}
 
-/* PROFILE */
-.profile-hero{background:linear-gradient(135deg,rgba(0,229,255,.07),rgba(0,229,255,.02));border:1px solid rgba(0,229,255,.2);border-radius:16px;padding:22px 18px;margin-bottom:18px}
-.profile-top{display:flex;gap:16px;align-items:flex-start}
-.profile-av{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,rgba(0,229,255,.2),rgba(0,229,255,.4));border:2px solid rgba(0,229,255,.4);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:var(--accent);flex-shrink:0;position:relative}
-.online-ind{position:absolute;bottom:2px;right:2px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2px solid var(--card)}
-.profile-name{font-size:21px;font-weight:900;margin-bottom:2px}
-.profile-role{color:var(--accent);font-size:13px;font-weight:700;margin-bottom:6px}
-.profile-bio{color:var(--muted);font-size:13px;margin-bottom:11px;line-height:1.55;font-weight:400}
-.profile-badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.star-row{display:flex;align-items:center;gap:3px;color:var(--gold);font-size:12px}
-.skills-list{display:flex;flex-direction:column;gap:12px}
-.skill-hd{display:flex;justify-content:space-between;margin-bottom:5px}
-.skill-nm{font-size:12px;font-weight:700}
-.skill-pc{font-family:var(--mono);font-size:11px;color:var(--accent)}
-.prog-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--accentD),var(--accent));border-radius:2px;width:0;transition:width 1.2s ease}
-.proj-item{display:flex;gap:11px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--border)}
-.proj-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.proj-icon{width:36px;height:36px;border-radius:8px;flex-shrink:0;background:rgba(0,255,157,.06);border:1px solid rgba(0,255,157,.15);display:flex;align-items:center;justify-content:center}
-.proj-title{font-weight:800;font-size:13px;margin-bottom:2px}
-.proj-client{color:var(--muted);font-size:11px;font-weight:400}
-.proj-right{text-align:right;margin-left:auto}
-.proj-earned{color:var(--gold);font-weight:800;font-size:13px;font-family:var(--mono)}
-.stars-r{display:flex;gap:2px;justify-content:flex-end;margin-top:3px;color:var(--gold);font-size:11px}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.18s;
+  margin-bottom: 2px;
+  position: relative;
+}
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active {
+  background: var(--gold-dim);
+  color: var(--gold);
+  border: 1px solid rgba(245,166,35,0.2);
+}
+.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.nav-badge {
+  margin-left: auto;
+  background: var(--gold);
+  color: #000;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50px;
+  padding: 1px 6px;
+  min-width: 18px;
+  text-align: center;
+}
 
-/* SELLER MODAL */
-#product-detail-modal.open{display:block!important;animation:slideUp .3s ease both}
-#seller-modal{display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto}
-#seller-modal.open{display:block;animation:slideUp .28s ease both}
-.sm-header{position:sticky;top:0;z-index:10;padding:0 14px;height:50px;display:flex;align-items:center;gap:12px;background:rgba(5,11,20,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.sm-back{width:34px;height:34px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;flex-shrink:0}
-.sm-back-label{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.5px}
-.sm-cover{height:160px;position:relative;overflow:hidden}
-.sm-body{padding:0 16px 30px;max-width:640px;margin:0 auto}
-.sm-av-row{display:flex;justify-content:space-between;align-items:flex-end;margin-top:-38px;margin-bottom:14px}
-.sm-avatar{width:76px;height:76px;border-radius:50%;border:3px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900}
-.sm-ctas{display:flex;gap:8px;align-items:center}
-.sm-name{font-size:22px;font-weight:900;margin-bottom:2px}
-.sm-role{font-size:13px;font-weight:700;margin-bottom:6px}
-.sm-bio{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:14px;font-weight:400}
-.sm-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
-.sm-stats{display:flex;margin-bottom:22px;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.sm-stat{flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border)}
-.sm-stat:last-child{border-right:none}
-.sm-stat-val{font-family:var(--mono);font-size:18px;font-weight:800;line-height:1}
-.sm-stat-lbl{font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
-.sm-prod-mini{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:8px}
-.sm-prod-emoji{font-size:22px;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sm-prod-name{font-weight:800;font-size:13px;margin-bottom:2px}
-.sm-prod-price{font-family:var(--mono);font-size:12px;color:var(--green)}
+.sidebar-user {
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.sidebar-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a90e2, #8b5cf6);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.sidebar-user-info { overflow: hidden; }
+.sidebar-user-name { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-user-role { color: var(--text3); font-size: 11px; }
+.agent-dot {
+  width: 8px; height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  margin-left: auto;
+  flex-shrink: 0;
+  animation: pulse-dot 2s infinite;
+  box-shadow: 0 0 0 0 rgba(39,196,122,0.4);
+}
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 rgba(39,196,122,0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(39,196,122,0); }
+  100% { box-shadow: 0 0 0 0 rgba(39,196,122,0); }
+}
 
-/* PEOPLE PANEL */
-#people-panel{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
-#people-panel.open{display:flex;animation:fadeIn .2s ease both}
-.pp-sheet{position:fixed;top:0;right:0;bottom:0;width:min(340px,95vw);background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;animation:slideRight .25s ease both}
-.pp-header{padding:14px 14px 0;border-bottom:1px solid var(--border)}
-.pp-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
-.pp-title{font-weight:900;font-size:17px}
-.pp-close{width:32px;height:32px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer}
-.pp-search-wrap{position:relative;margin-bottom:10px}
-.pp-search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--dim)}
-.pp-search-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:9px 12px 9px 34px;font-size:13px;font-weight:400;transition:border-color .2s}
-.pp-search-input:focus{border-color:rgba(0,229,255,.4);outline:none}
-.pp-search-input::placeholder{color:var(--dim);font-weight:300}
-.pp-tabs{display:flex}
-.pp-tab{flex:1;padding:9px 0;background:none;border:none;font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s}
-.pp-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-.pp-body{flex:1;overflow-y:auto;padding:12px}
-.pp-panel{display:none}
-.pp-panel.active{display:block}
-.pp-person{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:10px;transition:background .15s;margin-bottom:2px;cursor:pointer}
-.pp-person:hover{background:var(--card)}
-.pp-av{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
-.pp-info{flex:1;min-width:0}
-.pp-name{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pp-role{color:var(--muted);font-size:11px;font-weight:400}
-.disc-card{padding:11px;border-radius:10px;background:var(--card);border:1px solid var(--border);margin-bottom:8px;display:flex;gap:11px;align-items:center;cursor:pointer}
-.disc-card:hover{border-color:rgba(0,229,255,.25)}
+/* ─── MAIN ─── */
+.main {
+  margin-left: 230px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-/* MODALS */
-.overlay{display:none;position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center}
-@media(min-width:500px){.overlay{align-items:center}}
-.overlay.open{display:flex;animation:fadeIn .2s ease both}
-.sheet{background:var(--card);border:1px solid var(--border);border-radius:18px 18px 0 0;padding:22px;width:100%;animation:slideUp .25s ease both;max-height:90vh;overflow-y:auto}
-@media(min-width:500px){.sheet{border-radius:18px;max-width:480px;animation:fadeUp .25s ease both}}
-.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--border);margin:0 auto 18px;display:block}
-@media(min-width:500px){.sheet-handle{display:none}}
-.sheet-title{font-size:19px;font-weight:900;margin-bottom:4px}
-.sheet-sub{color:var(--muted);font-size:12px;margin-bottom:20px;font-weight:400;line-height:1.5}
-.field{margin-bottom:14px}
-.field-label{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block}
-.field-hint{font-size:10px;color:var(--dim);margin-top:3px}
-.sheet-btns{display:flex;gap:10px;margin-top:20px}
-.sheet-btns .btn-ghost{flex:1}
-.sheet-btns .btn{flex:2}
-.sheet-footer{text-align:center;color:var(--dim);font-size:10px;margin-top:8px}
-.success-body{text-align:center;padding:14px 0}
-.success-ico{width:54px;height:54px;border-radius:50%;background:rgba(0,255,157,.1);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
-.success-title{font-size:18px;font-weight:900;margin-bottom:7px}
-.success-sub{color:var(--muted);font-size:13px;margin-bottom:18px;font-weight:400}
-.page-pad{height:24px}
-#cover-input{display:none}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* ─── TOPBAR ─── */
+.topbar {
+  height: 60px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,12,16,0.85);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+.search-bar {
+  flex: 1;
+  max-width: 440px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+  height: 36px;
+  transition: border-color 0.2s;
+}
+.search-bar:focus-within { border-color: var(--gold); }
+.search-bar input {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  width: 100%;
+}
+.search-bar input::placeholder { color: var(--text3); }
+.search-icon { color: var(--text3); font-size: 15px; }
+
+.topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.18s;
+  position: relative;
+  color: var(--text2);
+}
+.icon-btn:hover { background: var(--border); color: var(--text); }
+.icon-btn .badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 16px; height: 16px;
+  background: var(--red);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--bg);
+}
+
+.btn {
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+}
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), #e08e1a);
+  color: #000;
+  box-shadow: 0 4px 14px rgba(245,166,35,0.3);
+}
+.btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,166,35,0.4); }
+.btn-outline {
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border2);
+}
+.btn-outline:hover { background: var(--bg3); color: var(--text); border-color: var(--text3); }
+.btn-ghost {
+  background: var(--bg3);
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { color: var(--text); border-color: var(--border2); }
+.btn-blue {
+  background: var(--blue);
+  color: #fff;
+}
+.btn-green {
+  background: var(--green);
+  color: #000;
+  font-weight: 700;
+}
+.btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 7px; }
+
+/* ─── CONTENT ─── */
+.content { padding: 28px 28px; flex: 1; }
+
+/* ─── SECTION VIEWS ─── */
+.section-view { display: none; animation: fadeSlide 0.3s ease; }
+.section-view.active { display: block; }
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── PAGE HEADER ─── */
+.page-header { margin-bottom: 24px; }
+.page-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+.page-title span { color: var(--gold); }
+.page-sub { color: var(--text2); margin-top: 4px; font-size: 13px; }
+
+/* ─── STATS STRIP ─── */
+.stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 26px; }
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: border-color 0.2s;
+}
+.stat-card:hover { border-color: var(--border2); }
+.stat-icon {
+  width: 42px; height: 42px;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px;
+}
+.stat-icon.gold { background: var(--gold-dim); }
+.stat-icon.blue { background: rgba(74,144,226,0.12); }
+.stat-icon.green { background: rgba(39,196,122,0.12); }
+.stat-icon.purple { background: rgba(139,92,246,0.12); }
+.stat-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+.stat-label { color: var(--text2); font-size: 12px; margin-top: 1px; }
+
+/* ─── TASK GRID ─── */
+.section-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.section-label { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+.filter-chips { display: flex; gap: 7px; flex-wrap: wrap; margin-left: 2px; }
+.chip {
+  padding: 5px 13px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.chip.active { background: var(--gold-dim); border-color: rgba(245,166,35,0.35); color: var(--gold); }
+.chip:hover:not(.active) { background: var(--bg3); color: var(--text); }
+
+.task-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+.task-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.task-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.task-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: var(--shadow); }
+.task-card:hover::before { opacity: 1; }
+
+.task-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.task-category-badge {
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-design { background: rgba(139,92,246,0.15); color: #a78bfa; }
+.badge-dev { background: rgba(74,144,226,0.15); color: #6aaff5; }
+.badge-marketing { background: rgba(245,166,35,0.15); color: var(--gold); }
+.badge-writing { background: rgba(39,196,122,0.15); color: #5dd89a; }
+.badge-video { background: rgba(232,88,88,0.15); color: #f07070; }
+.badge-network { background: rgba(245,166,35,0.15); color: var(--gold); }
+
+.task-title { font-family: 'Syne', sans-serif; font-size: 14.5px; font-weight: 700; line-height: 1.35; }
+.task-desc { color: var(--text2); font-size: 12.5px; line-height: 1.5; }
+
+.task-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.task-poster { display: flex; align-items: center; gap: 8px; }
+.mini-avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.task-poster-name { font-size: 12px; color: var(--text2); }
+.task-budget {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--gold);
+}
+.task-budget small { font-size: 10px; color: var(--text3); font-family: 'DM Sans', sans-serif; font-weight: 400; display: block; text-align: right; }
+
+.task-meta { display: flex; gap: 10px; flex-wrap: wrap; }
+.task-meta span {
+  font-size: 11px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ─── NETWORK SECTION ─── */
+.net-layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+.company-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.company-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.company-card:hover { border-color: var(--gold); box-shadow: var(--glow); }
+.company-banner {
+  height: 72px;
+  position: relative;
+  overflow: hidden;
+}
+.company-body { padding: 12px 16px 16px; }
+.company-logo {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  border: 3px solid var(--bg2);
+  position: absolute;
+  bottom: -20px;
+  left: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.company-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; margin-top: 26px; }
+.company-industry { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.company-stats-row { display: flex; gap: 14px; margin-top: 10px; }
+.company-stat { font-size: 11px; color: var(--text3); }
+.company-stat strong { color: var(--text2); font-size: 12px; }
+.company-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+.people-grid { display: flex; flex-direction: column; gap: 10px; }
+.person-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.person-card:hover { border-color: var(--border2); }
+.person-info { flex: 1; overflow: hidden; }
+.person-name { font-weight: 600; font-size: 13px; }
+.person-title { color: var(--text3); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.person-mutual { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.connect-btn {
+  padding: 5px 14px;
+  border-radius: 50px;
+  background: transparent;
+  border: 1px solid var(--blue);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.connect-btn:hover { background: var(--blue); color: #fff; }
+.connect-btn.pending { border-color: var(--text3); color: var(--text3); }
+.connect-btn.connected { border-color: var(--green); color: var(--green); }
+
+/* Sidebar panels */
+.side-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 14px;
+}
+.side-panel-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; margin-bottom: 14px; color: var(--text); }
+
+/* ─── PROFILE SECTION ─── */
+.profile-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+.profile-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.profile-banner-bg {
+  height: 100px;
+  background: linear-gradient(135deg, #1a2340, #2d1a40, #1a2340);
+  position: relative;
+}
+.profile-avatar-wrap {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.profile-avatar {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a90e2, #8b5cf6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  border: 3px solid var(--card);
+}
+.profile-info { padding: 44px 20px 20px; text-align: center; }
+.profile-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; }
+.profile-tagline { color: var(--text2); font-size: 12.5px; margin-top: 4px; }
+.profile-rating { display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 10px; color: var(--gold); font-size: 13px; font-weight: 600; }
+.profile-stats { display: flex; border-top: 1px solid var(--border); margin-top: 14px; }
+.profile-stat { flex: 1; padding: 12px; text-align: center; border-right: 1px solid var(--border); }
+.profile-stat:last-child { border-right: none; }
+.profile-stat .val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; }
+.profile-stat .lbl { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+.skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.skill-tag {
+  padding: 4px 11px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  font-size: 11.5px;
+  color: var(--text2);
+}
+
+/* ─── AI AGENT ─── */
+.agent-card {
+  background: linear-gradient(135deg, #0f1929, #1a1030);
+  border: 1px solid rgba(139,92,246,0.3);
+  border-radius: var(--radius);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.agent-card::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 60%);
+}
+.agent-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.agent-orb {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  animation: orbit-glow 3s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(139,92,246,0.4);
+}
+@keyframes orbit-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(139,92,246,0.4); }
+  50% { box-shadow: 0 0 35px rgba(139,92,246,0.7); }
+}
+.agent-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
+.agent-status { font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 5px; }
+.agent-activity {
+  background: rgba(0,0,0,0.3);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+.agent-activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.agent-activity-item:last-child { border-bottom: none; }
+.agent-dot2 {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--purple);
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+/* ─── MESSAGES ─── */
+.msg-layout { display: grid; grid-template-columns: 280px 1fr; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; height: calc(100vh - 200px); }
+.msg-list {
+  border-right: 1px solid var(--border);
+  background: var(--card);
+  overflow-y: auto;
+}
+.msg-list-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+.msg-conv {
+  padding: 14px 16px;
+  display: flex;
+  gap: 11px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.msg-conv:hover { background: var(--card2); }
+.msg-conv.active { background: var(--gold-dim); border-left: 2px solid var(--gold); }
+.msg-conv-info { flex: 1; overflow: hidden; }
+.msg-conv-name { font-weight: 600; font-size: 13px; display: flex; justify-content: space-between; }
+.msg-conv-time { font-size: 10px; color: var(--text3); font-weight: 400; }
+.msg-conv-preview { font-size: 12px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+.msg-conv-badge { width: 18px; height: 18px; background: var(--gold); color: #000; font-size: 9px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+
+.msg-area { display: flex; flex-direction: column; background: var(--bg2); }
+.msg-area-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+}
+.msg-area-body { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.msg-bubble-wrap { display: flex; gap: 10px; }
+.msg-bubble-wrap.own { flex-direction: row-reverse; }
+.msg-bubble {
+  max-width: 65%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.msg-bubble-wrap:not(.own) .msg-bubble { background: var(--card2); border-bottom-left-radius: 4px; }
+.msg-bubble-wrap.own .msg-bubble { background: linear-gradient(135deg, rgba(245,166,35,0.2), rgba(245,166,35,0.1)); border-bottom-right-radius: 4px; border: 1px solid rgba(245,166,35,0.2); }
+.msg-time { font-size: 10px; color: var(--text3); margin-top: 4px; text-align: right; }
+.msg-input-bar {
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--card);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.msg-input {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  resize: none;
+  height: 38px;
+}
+.msg-input:focus { border-color: var(--gold); }
+
+/* ─── PAYMENT MODAL ─── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+.modal-overlay.open { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  padding: 28px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  animation: slideUp 0.25s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-lg { max-width: 720px; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 14px;
+  transition: all 0.15s;
+}
+.modal-close:hover { background: var(--border); color: var(--text); }
+.modal-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; margin-bottom: 6px; }
+.modal-sub { color: var(--text2); font-size: 13px; margin-bottom: 22px; }
+
+/* Payment */
+.payment-pkg-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.pkg-card {
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: center;
+}
+.pkg-card:hover, .pkg-card.selected { border-color: var(--gold); background: var(--gold-dim); }
+.pkg-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; }
+.pkg-price { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: var(--gold); margin: 8px 0; }
+.pkg-delivery { font-size: 11px; color: var(--text3); }
+.pkg-features { font-size: 11.5px; color: var(--text2); margin-top: 8px; line-height: 1.6; text-align: left; }
+
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-input, .form-select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-select:focus { border-color: var(--gold); }
+.form-select option { background: var(--bg2); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.payment-summary {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 18px;
+}
+.pay-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 13px; }
+.pay-row.total { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 12px; font-weight: 700; font-size: 15px; }
+.pay-row.total .amount { color: var(--gold); }
+
+/* Company profile modal */
+.cmp-cover { height: 130px; border-radius: 12px; margin-bottom: 0; overflow: hidden; }
+.cmp-header { padding: 0 24px 20px; position: relative; margin-top: -30px; }
+.cmp-logo-big {
+  width: 68px; height: 68px;
+  border-radius: 16px;
+  border: 3px solid var(--bg2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+.cmp-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin: 16px 0; }
+.cmp-tab {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  margin-bottom: -1px;
+}
+.cmp-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.cmp-tab-content { display: none; }
+.cmp-tab-content.active { display: block; }
+
+/* Notification panel */
+.notif-list { display: flex; flex-direction: column; gap: 6px; }
+.notif-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.notif-item:hover { border-color: var(--border2); }
+.notif-item.unread { border-left: 3px solid var(--gold); }
+.notif-icon-wrap {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.notif-text { font-size: 13px; line-height: 1.4; }
+.notif-text strong { color: var(--text); }
+.notif-time { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+/* Wallet section */
+.wallet-top { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.wallet-card {
+  background: linear-gradient(135deg, #1a2340, #0f1929);
+  border: 1px solid rgba(74,144,226,0.2);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+.wallet-label { font-size: 12px; color: var(--text3); }
+.wallet-amount { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 30px; margin: 8px 0 2px; }
+.wallet-amount.gold { color: var(--gold); }
+.wallet-pending { font-size: 12px; color: var(--text3); }
+
+.tx-list { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.tx-header { padding: 14px 18px; border-bottom: 1px solid var(--border); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; }
+.tx-item { display: flex; align-items: center; gap: 14px; padding: 13px 18px; border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.15s; cursor: pointer; }
+.tx-item:hover { background: rgba(255,255,255,0.02); }
+.tx-item:last-child { border-bottom: none; }
+.tx-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.tx-info { flex: 1; }
+.tx-name { font-size: 13px; font-weight: 500; }
+.tx-date { font-size: 11px; color: var(--text3); }
+.tx-amount { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; }
+.tx-amount.credit { color: var(--green); }
+.tx-amount.debit { color: var(--red); }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* ─── MISC ─── */
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+.avatar-lg {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.tag-gold { background: var(--gold-dim); color: var(--gold); }
+.tag-green { background: rgba(39,196,122,0.12); color: var(--green); }
+.tag-blue { background: rgba(74,144,226,0.12); color: var(--blue2); }
+.tag-red { background: rgba(232,88,88,0.12); color: #f07070; }
+.tag-purple { background: rgba(139,92,246,0.12); color: #a78bfa; }
+
+.empty-state { text-align: center; padding: 50px 20px; color: var(--text3); }
+.empty-state .icon { font-size: 42px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+
+/* Toast */
+.toast-container { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
+.toast {
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  box-shadow: var(--shadow);
+  animation: toastIn 0.3s ease;
+  max-width: 300px;
+}
+.toast.success { border-left: 3px solid var(--green); }
+.toast.info { border-left: 3px solid var(--blue); }
+.toast.warning { border-left: 3px solid var(--gold); }
+@keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Agent chat widget */
+.agent-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 400;
+}
+.agent-fab {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(139,92,246,0.5);
+  animation: orbit-glow 3s ease-in-out infinite;
+  border: none;
+}
+.agent-popup {
+  position: absolute;
+  bottom: 64px;
+  right: 0;
+  width: 320px;
+  background: var(--bg2);
+  border: 1px solid rgba(139,92,246,0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  display: none;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+}
+.agent-popup.open { display: block; animation: slideUp 0.2s ease; }
+.agent-popup-header {
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(99,102,241,0.1));
+  border-bottom: 1px solid rgba(139,92,246,0.15);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.agent-chat-body { padding: 14px; height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.agent-msg { font-size: 12.5px; line-height: 1.5; }
+.agent-msg.bot { background: rgba(139,92,246,0.1); border-radius: 10px; padding: 9px 12px; border: 1px solid rgba(139,92,246,0.15); color: var(--text2); }
+.agent-msg.user { background: var(--bg3); border-radius: 10px; padding: 9px 12px; text-align: right; }
+.agent-input-row { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+.agent-input {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--text);
+  font-family: inherit;
+  outline: none;
+}
+.agent-send { padding: 0 12px; height: 34px; border-radius: 8px; background: var(--purple); border: none; color: #fff; cursor: pointer; font-size: 14px; }
+
+/* RESPONSIVE SIMPLIFICATION (keeps it working on smaller viewports) */
+@media (max-width: 1100px) {
+  .task-grid { grid-template-columns: 1fr 1fr; }
+  .stats-strip { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
 
-<div id="topbar">
-  <div class="topbar-inner">
-    <a class="logo" href="#"><div class="logo-mark"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><span class="logo-word">XWITE</span></a>
-    <span class="page-label" id="page-label">Marketplace</span>
-    <div class="topbar-actions">
-      <button class="icon-btn" onclick="clearNotif()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 10a6 6 0 0112 0v4l2 2H4l2-2v-4z"/><path d="M10 18a2 2 0 004 0" stroke-linecap="round"/></svg><span class="badge" id="notif-badge">3</span></button>
-      <button class="icon-btn" onclick="openPeople()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke-linecap="round"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-linecap="round"/></svg></button>
-    </div>
-  </div>
-</div>
+<div class="shell">
 
-<div id="app">
-  <!-- HOME / MARKETPLACE -->
-  <div id="page-home" class="page active">
-    <div class="feed-search-wrap fade-up">
-      <div class="feed-search-inner" id="fsh-box">
-        <svg class="feed-s-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/></svg>
-        <input class="feed-s-input" id="mkt-search" placeholder="Search products, tools, creators…" onfocus="document.getElementById('fsh-box').classList.add('focused')" onblur="document.getElementById('fsh-box').classList.remove('focused')" oninput="filterProducts()"/>
-        <kbd class="feed-s-kbd">⌘K</kbd>
-      </div>
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">🐝</div>
+    <div class="logo-text">Task<span>Hive</span></div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-section-label">Main</div>
+    <div class="nav-item active" onclick="showSection('home',this)">
+      <span class="nav-icon">🏠</span> Home
     </div>
-    <div class="mkt-top-row fade-up" style="animation-delay:50ms">
-      <div class="mkt-cats-scroll" id="mkt-cats"></div>
-      <button class="btn btn-sm" style="flex-shrink:0" onclick="openModal('add-product-modal')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
-        Sell
+    <div class="nav-item" onclick="showSection('tasks',this)">
+      <span class="nav-icon">📋</span> Browse Tasks
+      <span class="nav-badge">24</span>
+    </div>
+    <div class="nav-item" onclick="showSection('products',this)">
+      <span class="nav-icon">📦</span> Products
+    </div>
+
+    <div class="nav-section-label">Network</div>
+    <div class="nav-item" onclick="showSection('network',this)">
+      <span class="nav-icon">🌐</span> Network
+    </div>
+    <div class="nav-item" onclick="showSection('messages',this)">
+      <span class="nav-icon">💬</span> Messages
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item" onclick="showSection('notifications',this)">
+      <span class="nav-icon">🔔</span> Notifications
+      <span class="nav-badge">7</span>
+    </div>
+
+    <div class="nav-section-label">Account</div>
+    <div class="nav-item" onclick="showSection('profile',this)">
+      <span class="nav-icon">👤</span> My Profile
+    </div>
+    <div class="nav-item" onclick="showSection('wallet',this)">
+      <span class="nav-icon">💳</span> Wallet
+    </div>
+    <div class="nav-item" onclick="showSection('agent',this)">
+      <span class="nav-icon">🤖</span> My AI Agent
+    </div>
+  </nav>
+
+  <div class="sidebar-user" onclick="showSection('profile', document.querySelector('[onclick*=profile]'))">
+    <div class="sidebar-avatar">AK</div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-user-name">Arjun Kumar</div>
+      <div class="sidebar-user-role">Full-Stack Dev</div>
+    </div>
+    <div class="agent-dot" title="AI Agent Active"></div>
+  </div>
+</aside>
+
+<!-- ═══ MAIN AREA ═══ -->
+<div class="main">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search tasks, companies, people…">
+    </div>
+    <div class="topbar-actions">
+      <div class="icon-btn" onclick="showSection('notifications', document.querySelectorAll('.nav-item')[6])" title="Notifications">
+        🔔
+        <span class="badge">7</span>
+      </div>
+      <div class="icon-btn" onclick="showSection('messages', document.querySelectorAll('.nav-item')[5])" title="Messages">
+        💬
+        <span class="badge">3</span>
+      </div>
+      <button class="btn btn-gold" onclick="openModal('postTaskModal')">
+        ＋ Post Task
       </button>
     </div>
-    <div class="feat-scroll fade-up" id="feat-scroll" style="animation-delay:80ms"></div>
-    <div class="mkt-hd fade-up" style="animation-delay:100ms">
-      <span class="mkt-hd-label">All Products</span>
-      <span class="mkt-hd-count" id="mkt-count"></span>
-    </div>
-    <div id="products-container"></div>
-    <div class="page-pad"></div>
   </div>
 
-  <!-- TASKS -->
-  <div id="page-task" class="page">
-    <div class="task-top-row">
-      <div class="task-search-wrap"><svg class="task-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/></svg><input class="input" type="text" placeholder="Search tasks, skills…" id="task-search" oninput="renderTasks()"/></div>
-      <button class="btn btn-sm" onclick="openModal('list-task-modal')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>List Task</button>
-    </div>
-    <div class="cat-wrap" id="cat-wrap"></div>
-    <div class="stat-row">
-      <div class="stat-c"><div class="stat-lbl">Open</div><div class="stat-val" style="color:var(--green)">2,847</div><div class="stat-sub">↑12%</div></div>
-      <div class="stat-c"><div class="stat-lbl">Bids</div><div class="stat-val" style="color:var(--accent)">9,441</div></div>
-      <div class="stat-c"><div class="stat-lbl">Avg</div><div class="stat-val" style="color:var(--gold)">$780</div></div>
-    </div>
-    <div id="tasks-container"></div><div class="page-pad"></div>
-  </div>
+  <!-- Content -->
+  <div class="content">
 
-  <!-- AGENT -->
-  <div id="page-agent" class="page">
-    <div class="card agent-hero">
-      <div class="agent-ring"><svg class="ring-svg" viewBox="0 0 88 88"><circle class="ring-bg" cx="44" cy="44" r="40"/><circle class="ring-arc" id="agent-arc" cx="44" cy="44" r="40"/></svg><div class="agent-core" id="agent-core"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" stroke-linecap="round"/></svg></div></div>
-      <div class="agent-name">XWITE AI Agent</div>
-      <div class="agent-lens">Cognitive Lens: <span>Analytical · Technical</span></div>
-      <div style="display:flex;justify-content:center;gap:12px;margin-bottom:16px;align-items:center"><div class="a-dot"></div><span style="color:var(--green);font-size:10px;font-weight:800;letter-spacing:.8px">PREMIUM ACTIVE</span><span style="color:var(--dim)">·</span><span style="color:var(--muted);font-size:11px">Next: 6h 24m</span></div>
-      <button class="btn" id="scan-btn" onclick="startScan()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke-linecap="round"/></svg>Run Daily Scan</button>
-    </div>
-    <div class="agent-tabs"><button class="agent-tab active" onclick="switchAgentTab('tasks',this)">Matched</button><button class="agent-tab" onclick="switchAgentTab('chat',this)">AI Chat</button><button class="agent-tab" onclick="switchAgentTab('tools',this)">Tools</button></div>
-    <div class="agent-panel active" id="agent-tasks"><div id="scan-empty" class="scan-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--dim)" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" stroke-linecap="round"/></svg><p>Run your daily scan to receive 7 AI-matched tasks</p></div><div id="scan-steps" class="scan-steps" style="display:none"></div><div id="matched-list"></div></div>
-    <div class="agent-panel" id="agent-chat"><div class="chat-wrap"><div class="chat-msgs" id="chat-msgs"></div><div class="chat-input-row"><input class="input" type="text" id="chat-input" placeholder="Ask your agent…" onkeydown="if(event.key==='Enter')sendChat()"/><button class="btn" style="padding:10px 13px" onclick="sendChat()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/></svg></button></div></div><div class="chat-sugg" id="chat-sugg"></div></div>
-    <div class="agent-panel" id="agent-tools"><div class="tools-grid" id="tools-grid"></div></div>
-    <div class="page-pad"></div>
-  </div>
-
-  <!-- NETWORK -->
-  <div id="page-network" class="page">
-    <div class="net-section"><div class="section-hd">For You</div><div class="people-grid" id="suggestions-grid"></div></div>
-    <div class="net-section"><div class="section-hd">My Circle</div><div class="people-grid" id="circle-grid"></div></div>
-    <div class="net-section"><div class="section-hd">Companies</div><div id="companies-list"></div></div>
-    <div class="page-pad"></div>
-  </div>
-
-  <!-- PROFILE -->
-  <div id="page-profile" class="page">
-    <div class="profile-hero">
-      <div class="profile-top">
-        <div class="profile-av" style="position:relative">DU<div class="online-ind"></div></div>
-        <div style="flex:1"><div class="profile-name">Dev User</div><div class="profile-role">Full Stack Developer · 5 Yrs</div><div class="profile-bio">Building scalable web apps. Passionate about clean code, DX, and AI-powered tools.</div><div class="profile-badges"><span class="tag tag-green">PREMIUM</span><span class="tag">Analytical</span><span class="tag">Technical</span><div class="star-row">★★★★★<span style="color:var(--muted);font-size:11px;margin-left:2px">(147)</span></div></div></div>
-        <button class="btn-ghost btn-ghost-sm" style="flex-shrink:0">Edit</button>
+    <!-- ══ HOME ══ -->
+    <div class="section-view active" id="sec-home">
+      <div class="page-header">
+        <div class="page-title">Good morning, <span>Arjun</span> 👋</div>
+        <div class="page-sub">Your AI Agent found 6 new matching tasks today</div>
       </div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-c"><div class="stat-lbl">Done</div><div class="stat-val" style="color:var(--green)">94</div><div class="stat-sub">tasks</div></div>
-      <div class="stat-c"><div class="stat-lbl">Earned</div><div class="stat-val" style="color:var(--gold)">$28K</div></div>
-      <div class="stat-c"><div class="stat-lbl">Repeat</div><div class="stat-val" style="color:var(--accent)">67%</div></div>
-    </div>
-    <div class="card" style="padding:20px;margin-bottom:14px"><div class="section-hd" style="margin-bottom:14px">Skills</div><div class="skills-list" id="skills-list"></div></div>
-    <div class="card" style="padding:20px"><div class="section-hd" style="margin-bottom:14px">Recent Projects</div><div id="projects-list"></div></div>
-    <div class="page-pad"></div>
-  </div>
-</div>
 
-<button id="fab" onclick="openModal('add-product-modal')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></button>
-
-<nav id="bottomnav">
-  <div class="nav-inner">
-    <button class="nav-btn active" onclick="goPage('home',this,'Marketplace')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
-    <button class="nav-btn" onclick="goPage('network',this,'Network')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4M12 11L5 17M12 11l7 6"/></svg>Network</button>
-    <button class="nav-btn" onclick="goPage('task',this,'Tasks')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4" stroke-linecap="round"/></svg>Tasks</button>
-    <button class="nav-btn" onclick="goPage('agent',this,'AI Agent')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" stroke-linecap="round"/></svg>Agent</button>
-    <button class="nav-btn" onclick="goPage('profile',this,'Profile')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke-linecap="round"/></svg>Profile</button>
-  </div>
-</nav>
-
-<!-- SELLER MODAL -->
-<div id="seller-modal"><div class="sm-header"><button class="sm-back" onclick="closeSellerModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round"/></svg></button><span class="sm-back-label" id="sm-label">Seller Profile</span></div><div id="sm-content"></div></div>
-
-<!-- PRODUCT DETAIL MODAL -->
-<div id="product-detail-modal" style="display:none;position:fixed;inset:0;z-index:310;background:var(--bg);overflow-y:auto">
-  <div style="position:sticky;top:0;z-index:10;height:50px;display:flex;align-items:center;gap:12px;padding:0 14px;background:rgba(5,11,20,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)">
-    <button onclick="closeProductDetail()" style="width:34px;height:34px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <span style="font-family:'Urbanist',sans-serif;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.5px">Product Details</span>
-  </div>
-  <div id="pd-content" style="max-width:640px;margin:0 auto"></div>
-</div>
-
-<!-- PEOPLE PANEL -->
-<div id="people-panel" onclick="closePeopleIfBg(event)">
-  <div class="pp-sheet">
-    <div class="pp-header">
-      <div class="pp-title-row"><div class="pp-title">People</div><button class="pp-close" onclick="closePeople()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg></button></div>
-      <div class="pp-search-wrap"><svg class="pp-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/></svg><input class="pp-search-input" id="pp-search" placeholder="Search people…" oninput="filterPeople()"/></div>
-      <div class="pp-tabs"><button class="pp-tab active" onclick="switchPP('followers',this)">Followers</button><button class="pp-tab" onclick="switchPP('following',this)">Following</button><button class="pp-tab" onclick="switchPP('discover',this)">Discover</button></div>
-    </div>
-    <div class="pp-body"><div class="pp-panel active" id="pp-followers"></div><div class="pp-panel" id="pp-following"></div><div class="pp-panel" id="pp-discover"></div></div>
-  </div>
-</div>
-
-<!-- ADD PRODUCT MODAL -->
-<div class="overlay" id="add-product-modal" onclick="closeIfBg(event,'add-product-modal')">
-  <div class="sheet">
-    <span class="sheet-handle"></span>
-    <div class="sheet-title">🚀 List Your Product</div>
-    <div class="sheet-sub">Sell your software or digital tool to 14,000+ buyers — zero commission, keep 100%</div>
-    <div class="field"><label class="field-label">Product Name</label><input class="input" type="text" id="ap-name" placeholder="e.g. FlowBot — AI Chatbot Builder"/></div>
-    <div class="field"><label class="field-label">Category</label><select class="input" id="ap-cat"><option value="">Select category…</option><option>Chatbot</option><option>Automation</option><option>SaaS Tool</option><option>AI Tool</option><option>Analytics</option><option>Web App</option><option>Mobile App</option><option>API / Backend</option><option>Design System</option><option>Other</option></select></div>
-    <div class="field"><label class="field-label">Emoji Icon</label><input class="input" type="text" id="ap-emoji" placeholder="🤖" maxlength="2" style="font-size:22px;text-align:center;letter-spacing:4px"/></div>
-    <div class="two-col">
-      <div class="field"><label class="field-label">Your Price ($)</label><input class="input" type="number" id="ap-price" placeholder="e.g. 99"/></div>
-      <div class="field"><label class="field-label">Custom Dev Cost ($)</label><input class="input" type="number" id="ap-was" placeholder="e.g. 8000"/><div class="field-hint">What a dev would charge to build this from scratch</div></div>
-    </div>
-    <div class="field"><label class="field-label">Description</label><textarea class="input" rows="3" id="ap-desc" placeholder="What does it do? What problem does it solve? Who is it for?"></textarea></div>
-    <div class="field"><label class="field-label">Tags (comma separated)</label><input class="input" type="text" id="ap-tags" placeholder="e.g. AI, No-Code, SaaS"/></div>
-    <div class="sheet-btns"><button class="btn-ghost" onclick="closeModal('add-product-modal')">Cancel</button><button class="btn" onclick="submitProduct()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/></svg>Publish Product</button></div>
-  </div>
-</div>
-
-<!-- BID MODAL -->
-<div class="overlay" id="bid-modal" onclick="closeIfBg(event,'bid-modal')"><div class="sheet" id="bid-sheet"></div></div>
-
-<!-- LIST TASK MODAL -->
-<div class="overlay" id="list-task-modal" onclick="closeIfBg(event,'list-task-modal')">
-  <div class="sheet">
-    <span class="sheet-handle"></span>
-    <div class="sheet-title">List a Task</div>
-    <div class="sheet-sub">Post your task to 14,000+ skilled Jobbers</div>
-    <div class="field"><label class="field-label">Task Title</label><input class="input" type="text" placeholder="e.g. Build a React Dashboard…"/></div>
-    <div class="field"><label class="field-label">Category</label><select class="input"><option>Frontend</option><option>Backend</option><option>Design</option><option>AI/ML</option><option>Blockchain</option><option>Full Stack</option></select></div>
-    <div class="field"><label class="field-label">Budget (USD)</label><input class="input" type="text" placeholder="e.g. $500 – $1,000"/></div>
-    <div class="field"><label class="field-label">Description</label><textarea class="input" rows="3" placeholder="Describe the task, skills needed, timeline…"></textarea></div>
-    <div class="sheet-btns"><button class="btn-ghost" onclick="closeModal('list-task-modal')">Cancel</button><button class="btn" onclick="closeModal('list-task-modal')">List Task</button></div>
-  </div>
-</div>
-
-<input type="file" id="cover-input" accept="image/*"/>
-
-<script>
-const SELLERS={
-  arjun:{id:'arjun',name:'Arjun Mehta',role:'Full Stack Developer',color:'#00E5FF',bg:'rgba(0,229,255,.15)',bio:'Building AI-powered products and tools. XWITE Premium seller with 4.9★ rating across 312 reviews.',tags:['React','Node.js','AI'],rating:4.9,reviews:312,earned:'$48K',tasks:94,products:2},
-  sofia:{id:'sofia',name:'Sofia Chen',role:'UX / UI Designer',color:'#FFB800',bg:'rgba(255,184,0,.15)',bio:'Designing beautiful SaaS products. Obsessed with dark mode and micro-interactions that delight users.',tags:['Figma','SaaS','Design'],rating:4.8,reviews:189,earned:'$31K',tasks:67,products:1},
-  marcus:{id:'marcus',name:'Marcus Webb',role:'Blockchain Engineer',color:'#00FF9D',bg:'rgba(0,255,157,.15)',bio:'Web3 developer and security auditor. Building trustless tools for the decentralized economy.',tags:['Solidity','DeFi','Security'],rating:4.7,reviews:94,earned:'$62K',tasks:110,products:2},
-  priya:{id:'priya',name:'Priya Sharma',role:'Data Scientist',color:'#FF6B9D',bg:'rgba(255,107,157,.15)',bio:'Turning data into insights. Building analytics tools that are actually intuitive to use.',tags:['Python','Analytics','ML'],rating:4.6,reviews:227,earned:'$29K',tasks:53,products:1},
-  lucas:{id:'lucas',name:'Lucas Oliveira',role:'DevOps Engineer',color:'#00FF9D',bg:'rgba(0,255,157,.15)',bio:'Cloud architect and automation expert. Helping teams ship faster with less friction and zero downtime.',tags:['AWS','Docker','CI/CD'],rating:4.9,reviews:78,earned:'$37K',tasks:44,products:1},
-  kevin:{id:'kevin',name:'Kevin Zhang',role:'ML Engineer',color:'#9B5DE5',bg:'rgba(155,93,229,.15)',bio:'LLM researcher turned product builder. Turning complex AI research into tools anyone can use.',tags:['LLM','Python','AI'],rating:4.8,reviews:143,earned:'$55K',tasks:82,products:1},
-  riya:{id:'riya',name:'Riya Menon',role:'Frontend Developer',color:'#00E5FF',bg:'rgba(0,229,255,.15)',bio:'React and TypeScript specialist. Building fast, beautiful frontends for high-growth SaaS products.',tags:['React','TypeScript','Email'],rating:4.5,reviews:204,earned:'$22K',tasks:61,products:1},
-  dev:{id:'dev',name:'Dev Anand',role:'Backend Engineer',color:'#FFB800',bg:'rgba(255,184,0,.15)',bio:'Auth, APIs, and scalable architecture. Providing drop-in backend solutions for indie makers worldwide.',tags:['Go','Auth','Security'],rating:4.7,reviews:156,earned:'$41K',tasks:88,products:1},
-};
-
-let PRODUCTS=[
-  {id:1,emoji:'🤖',name:'FlowBot — AI Customer Support',cat:'Chatbot',sellerId:'arjun',desc:'Plug-and-play AI chatbot trained on your own docs. Handles 80% of support tickets automatically. Embeds in any website in under 10 minutes. Custom dev would cost $8,000+.',price:99,was:8000,rating:4.9,reviews:312,tags:['AI','Support','GPT-4'],color:'#00E5FF',featured:true},
-  {id:2,emoji:'⚡',name:'Zapify — No-Code Automation Suite',cat:'Automation',sellerId:'sofia',desc:'50+ pre-built automation workflows for Notion, Gmail, Slack, and Sheets. Connect any tool in minutes without writing a single line of code. Saves 10+ hours per week.',price:49,was:3500,rating:4.8,reviews:189,tags:['No-Code','Workflows','Zapier-alt'],color:'#FFB800',featured:true},
-  {id:3,emoji:'📊',name:'InsightDash — Analytics Dashboard',cat:'Analytics',sellerId:'marcus',desc:'Real-time business analytics with AI-generated weekly summaries. Connects to Stripe, GA4, Shopify, and 20+ sources instantly. No SQL needed.',price:79,was:5000,rating:4.7,reviews:94,tags:['Analytics','Dashboard','BI'],color:'#9B5DE5',featured:false},
-  {id:4,emoji:'🌐',name:'SiteForge — AI Website Builder',cat:'Web App',sellerId:'priya',desc:'Generate a full-stack website from a single prompt. Includes SEO, hosting-ready export, dark/light mode, and a built-in CMS. No developer needed.',price:59,was:4200,rating:4.6,reviews:227,tags:['AI','Website','Builder'],color:'#FF6B9D',featured:false},
-  {id:5,emoji:'📱',name:'AppShell — Mobile Starter Kit',cat:'Mobile App',sellerId:'lucas',desc:'React Native starter with auth, Stripe payments, push notifications, and dark mode baked in. Skip 3 weeks of boilerplate setup and start building features on day one.',price:129,was:6000,rating:4.9,reviews:78,tags:['React Native','Mobile','Boilerplate'],color:'#00FF9D',featured:false},
-  {id:6,emoji:'✦',name:'PromptOS — AI Workflow Engine',cat:'AI Tool',sellerId:'kevin',desc:'Chain LLM calls, web scraping, and API calls into powerful AI pipelines visually. No Python needed. Deploy in one click to production.',price:89,was:7500,rating:4.8,reviews:143,tags:['AI','LLM','Pipelines'],color:'#9B5DE5',featured:false},
-  {id:7,emoji:'📧',name:'MailFlow — Cold Email Automator',cat:'SaaS Tool',sellerId:'riya',desc:'AI-personalized cold email sequences with automatic follow-up. Integrates with Apollo, HubSpot, and any SMTP. Boosts reply rates by 3x.',price:39,was:2500,rating:4.5,reviews:204,tags:['Email','Outreach','SaaS'],color:'#00E5FF',featured:false},
-  {id:8,emoji:'🔐',name:'VaultAuth — Auth & User System',cat:'API / Backend',sellerId:'dev',desc:'Drop-in auth system: OAuth, magic links, MFA, and role-based access control. Includes a full API plus React UI kit. Saves 2 weeks of backend work instantly.',price:69,was:4800,rating:4.7,reviews:156,tags:['Auth','Backend','Security'],color:'#FFB800',featured:false},
-];
-
-let prodCat='ALL',prodSearch='',nextId=9;
-const wishlist=new Set(),following=new Set();
-
-const TASKS=[
-  {id:1,title:'Build React Dashboard with Real-time Analytics',budget:'$800–1,200',cat:'Frontend',skills:['React','TypeScript','D3.js'],bids:12,status:'OPEN',posted:'3h',client:'NovaTech Labs'},
-  {id:2,title:'Node.js REST API for E-commerce Platform',budget:'$600–900',cat:'Backend',skills:['Node.js','MongoDB','Redis'],bids:8,status:'OPEN',posted:'5h',client:'ShopFlow Inc'},
-  {id:3,title:'Mobile App UI/UX Design — 12 Screens',budget:'$400–700',cat:'Design',skills:['Figma','Prototyping','UI'],bids:19,status:'OPEN',posted:'1h',client:'Pulse Digital'},
-  {id:4,title:'Python ML Pipeline for Sentiment Analysis',budget:'$1,000–1,500',cat:'AI/ML',skills:['Python','TensorFlow','NLP'],bids:5,status:'OPEN',posted:'30m',client:'DataMind Co'},
-  {id:5,title:'WordPress to Next.js Migration',budget:'$500–800',cat:'Full Stack',skills:['Next.js','WordPress','SEO'],bids:14,status:'ASSIGNED',posted:'1d',client:'MediaBlast'},
-  {id:6,title:'Smart Contract Audit — ERC-20 Token',budget:'$1,200–2,000',cat:'Blockchain',skills:['Solidity','Security','Web3'],bids:3,status:'OPEN',posted:'2h',client:'ChainVault'},
-];
-const TASK_CATS=['ALL','Frontend','Backend','Design','AI/ML','Blockchain','Full Stack'];
-let currentTaskCat='ALL';
-const AGENT_TASKS=[{id:1,title:'Build GraphQL API with Auth',match:97,budget:'$900',cat:'Backend'},{id:2,title:'React Native Fintech App',match:94,budget:'$1,400',cat:'Mobile'},{id:3,title:'PostgreSQL Performance Tuning',match:91,budget:'$600',cat:'Database'},{id:4,title:'Next.js SEO Optimization',match:89,budget:'$450',cat:'Frontend'},{id:5,title:'AWS Lambda Microservices',match:86,budget:'$1,100',cat:'DevOps'},{id:6,title:'TypeScript Codebase Refactor',match:83,budget:'$700',cat:'Full Stack'},{id:7,title:'Docker + Kubernetes Deployment',match:80,budget:'$850',cat:'DevOps'}];
-const savedTasks=new Set();let scanDone=false;
-const SUGGESTIONS=[{id:1,name:'Priya Sharma',role:'Data Scientist',mutual:'12 mutual',color:'#FFB800',bg:'rgba(255,184,0,.15)',skills:['Python','TensorFlow']},{id:2,name:'Lucas Oliveira',role:'DevOps Engineer',mutual:'8 mutual',color:'#00FF9D',bg:'rgba(0,255,157,.15)',skills:['AWS','Docker']},{id:3,name:'Aisha Patel',role:'Product Manager',mutual:'15 mutual',color:'#FF6B9D',bg:'rgba(255,107,157,.15)',skills:['Strategy','Agile']},{id:4,name:'Kevin Zhang',role:'ML Engineer',mutual:'6 mutual',color:'#9B5DE5',bg:'rgba(155,93,229,.15)',skills:['PyTorch','NLP']}];
-const CIRCLE=[{id:5,name:'Riya Menon',role:'Frontend Dev',mutual:'Same niche',color:'#00E5FF',bg:'rgba(0,229,255,.15)',skills:['React','Vue']},{id:6,name:'Sam Torres',role:'Full Stack Dev',mutual:'Same niche',color:'#FFB800',bg:'rgba(255,184,0,.15)',skills:['Node.js','React']},{id:7,name:'Nina Park',role:'TypeScript Dev',mutual:'Same niche',color:'#00FF9D',bg:'rgba(0,255,157,.15)',skills:['TS','GraphQL']},{id:8,name:'Dev Anand',role:'Backend Engineer',mutual:'Same niche',color:'#9B5DE5',bg:'rgba(155,93,229,.15)',skills:['Go','Postgres']}];
-const COMPANIES=[{name:'NovaTech Labs',ind:'SaaS / Fintech',size:'50–200',jobs:7,hiring:true,cover:'linear-gradient(135deg,#0099BB,#00E5FF,#005580)',logo:'N'},{name:'DataMind Co',ind:'AI / Machine Learning',size:'20–50',jobs:3,hiring:true,cover:'linear-gradient(135deg,#9B5DE5,#7B2FBE,#5A0FA0)',logo:'D'},{name:'ChainVault',ind:'Web3 / Blockchain',size:'10–20',jobs:0,hiring:false,cover:'linear-gradient(135deg,#FFB800,#FF8C00,#FF4560)',logo:'C'},{name:'Pulse Digital',ind:'Product Design',size:'100–500',jobs:12,hiring:true,cover:'linear-gradient(135deg,#00FF9D,#00CC7A,#008855)',logo:'P'}];
-const PEOPLE_DATA={followers:[{name:'Zara Ahmed',role:'UX Designer',color:'#FF6B9D',bg:'rgba(255,107,157,.15)'},{name:'Tom Blake',role:'Backend Dev',color:'#00E5FF',bg:'rgba(0,229,255,.15)'},{name:'Mia Russo',role:'Data Analyst',color:'#FFB800',bg:'rgba(255,184,0,.15)'},{name:'Jake Morris',role:'React Developer',color:'#00FF9D',bg:'rgba(0,255,157,.15)'}],following:[{name:'Arjun Mehta',role:'Full Stack Dev',color:'#00E5FF',bg:'rgba(0,229,255,.15)'},{name:'Sofia Chen',role:'UI Designer',color:'#FFB800',bg:'rgba(255,184,0,.15)'},{name:'Marcus Webb',role:'Blockchain Eng',color:'#00FF9D',bg:'rgba(0,255,157,.15)'}],discover:[{name:'Carlos Reyes',role:'DevOps Engineer',color:'#00FF9D',bg:'rgba(0,255,157,.15)'},{name:'Yuki Tanaka',role:'ML Researcher',color:'#9B5DE5',bg:'rgba(155,93,229,.15)'},{name:'Ana Ferreira',role:'Product Lead',color:'#FF6B9D',bg:'rgba(255,107,157,.15)'},{name:'Ali Hassan',role:'Blockchain Dev',color:'#FFB800',bg:'rgba(255,184,0,.15)'},{name:'Sara Kim',role:'Data Engineer',color:'#00E5FF',bg:'rgba(0,229,255,.15)'}]};
-const SKILLS=[{name:'React',pct:95},{name:'Node.js',pct:88},{name:'TypeScript',pct:92},{name:'MongoDB',pct:84},{name:'GraphQL',pct:78},{name:'Redis',pct:72},{name:'AWS',pct:80},{name:'Docker',pct:70}];
-const PROJECTS=[{title:'E-commerce Dashboard',client:'ShopFlow Inc',earned:'$950',rating:5,date:'Feb 2026'},{title:'API Gateway Architecture',client:'DataMind Co',earned:'$1,200',rating:5,date:'Jan 2026'},{title:'Mobile App Backend',client:'Pulse Digital',earned:'$800',rating:4.8,date:'Dec 2025'}];
-const TOOLS=[{icon:'briefcase',name:'Resume Builder',desc:'AI-generated resume from your profile',color:'#00E5FF'},{icon:'send',name:'Proposal Writer',desc:'Auto-write winning client proposals',color:'#FFB800'},{icon:'trending',name:'Market Insights',desc:'Trending skills & rates in your niche',color:'#00FF9D'},{icon:'users',name:'Network Scout',desc:'AI-recommended people to connect',color:'#9B5DE5'},{icon:'comment',name:'Message Polish',desc:'Improve tone & clarity of messages',color:'#FF6B9D'},{icon:'search',name:'Skill Gap Finder',desc:'Find skills to boost your earnings',color:'#0099BB'}];
-const CHAT_SUGG=['Find React tasks','Write a proposal','Boost my rate','Add skills'];
-
-window.addEventListener('DOMContentLoaded',()=>{
-  renderMarketplace();renderMktCats();renderTaskCats();renderTasks();
-  renderNetwork();renderSkills();renderProjects();renderTools();initChat();renderPeoplePanel();
-});
-
-function goPage(id,btn,label){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');btn.classList.add('active');document.getElementById('page-label').textContent=label;if(id==='profile')setTimeout(animateSkills,120)}
-function clearNotif(){document.getElementById('notif-badge').classList.add('hidden')}
-function openModal(id){document.getElementById(id).classList.add('open')}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
-function closeIfBg(e,id){if(e.target===document.getElementById(id))closeModal(id)}
-function initials(n){return(n||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
-function savePct(p,w){return Math.round((1-p/w)*100)}
-function starsHtml(r){return'★'.repeat(Math.round(r))+'☆'.repeat(5-Math.round(r))}
-
-const MKT_CATS=['ALL','Chatbot','Automation','SaaS Tool','AI Tool','Analytics','Web App','Mobile App','API / Backend'];
-function renderMktCats(){document.getElementById('mkt-cats').innerHTML=MKT_CATS.map(c=>`<button class="mkt-cat ${c===prodCat?'active':''}" onclick="setCat('${c}',this)">${c==='ALL'?'✦ All':c}</button>`).join('')}
-function setCat(cat,btn){prodCat=cat;document.querySelectorAll('.mkt-cat').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderMarketplace()}
-function filterProducts(){prodSearch=document.getElementById('mkt-search').value.toLowerCase();renderMarketplace()}
-function getFiltered(){return PRODUCTS.filter(p=>{const catOk=prodCat==='ALL'||p.cat===prodCat;const srchOk=!prodSearch||p.name.toLowerCase().includes(prodSearch)||p.desc.toLowerCase().includes(prodSearch)||p.tags.some(t=>t.toLowerCase().includes(prodSearch));return catOk&&srchOk})}
-
-function renderMarketplace(){
-  const all=getFiltered(),feat=all.filter(p=>p.featured),list=all.filter(p=>!p.featured);
-  const featEl=document.getElementById('feat-scroll');
-  if(feat.length){
-    featEl.style.display='flex';
-    featEl.innerHTML=feat.map(p=>{
-      const s=SELLERS[p.sellerId]||{};
-      return`<div class="feat-card" onclick="openSellerModal('${p.sellerId}')">
-        <div class="feat-cover" style="background:linear-gradient(135deg,${p.color}2A,${p.color}0D)">
-          <span class="feat-badge">✦ FEATURED</span>
-          <span class="feat-cover-emoji">${p.emoji}</span>
-        </div>
-        <div class="feat-body">
-          <div class="feat-cat" style="color:${p.color}">${p.cat}</div>
-          <div class="feat-name">${p.name}</div>
-          <div class="feat-desc">${p.desc.substring(0,70)}…</div>
-          <div class="feat-foot">
-            <div><span class="feat-price">$${p.price}</span><span class="feat-was">$${p.was.toLocaleString()}</span></div>
-            <button class="btn btn-xs" onclick="event.stopPropagation()">Get Now</button>
+      <!-- Stats -->
+      <div class="stats-strip">
+        <div class="stat-card">
+          <div class="stat-icon gold">💰</div>
+          <div>
+            <div class="stat-val">₹48,200</div>
+            <div class="stat-label">Total Earned</div>
           </div>
         </div>
-      </div>`;
-    }).join('');
-  }else{featEl.style.display='none';featEl.innerHTML=''}
-  document.getElementById('mkt-count').textContent=`${all.length} product${all.length!==1?'s':''}`;
-  const toRender=list.length?list:feat;
-  document.getElementById('products-container').innerHTML=toRender.length?toRender.map((p,i)=>prodCard(p,i)).join(''):`<div style="text-align:center;padding:40px 20px;color:var(--muted)"><div style="font-size:32px;margin-bottom:12px">🔍</div><div>No products match your search.</div></div>`;
-}
-
-function prodCard(p,i){
-  const s=SELLERS[p.sellerId]||{name:'Unknown',role:'Seller',color:'#7B9BB8',bg:'rgba(123,155,184,.15)'};
-  const saved=wishlist.has(p.id),pct=savePct(p.price,p.was);
-  return`<div class="card prod-card fade-up" style="animation-delay:${i*45}ms;border-color:${p.color}18;background:linear-gradient(170deg,var(--card) 65%,${p.color}07);cursor:pointer" onclick="openProductDetail(${p.id})">
-    <div class="prod-card-top">
-      <div class="prod-icon" style="background:${p.color}14;border:1.5px solid ${p.color}22">${p.emoji}</div>
-      <div class="prod-info">
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-seller-row" onclick="event.stopPropagation();openSellerModal('${p.sellerId}')" title="View ${s.name}'s profile">
-          <div class="prod-seller-av" style="background:${s.bg};color:${s.color}">${initials(s.name)}</div>
-          <span class="prod-seller-name">by ${s.name}</span>
-          <svg class="prod-seller-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="stat-card">
+          <div class="stat-icon blue">📋</div>
+          <div>
+            <div class="stat-val">12</div>
+            <div class="stat-label">Active Tasks</div>
+          </div>
         </div>
-        <div class="prod-stars">${starsHtml(p.rating)}<span>(${p.reviews})</span></div>
+        <div class="stat-card">
+          <div class="stat-icon green">✅</div>
+          <div>
+            <div class="stat-val">47</div>
+            <div class="stat-label">Completed</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">🌐</div>
+          <div>
+            <div class="stat-val">138</div>
+            <div class="stat-label">Connections</div>
+          </div>
+        </div>
       </div>
-      <span class="tag" style="font-size:9px;padding:2px 7px;background:${p.color}0F;color:${p.color};border-color:${p.color}22;flex-shrink:0">${p.cat}</span>
+
+      <!-- Agent alert -->
+      <div class="agent-card" style="margin-bottom:22px;">
+        <div class="agent-header">
+          <div class="agent-orb">🤖</div>
+          <div>
+            <div class="agent-name">Hive Agent — Arjun</div>
+            <div class="agent-status"><span style="width:7px;height:7px;background:var(--green);border-radius:50%;display:inline-block;"></span> Active · Scanning for matches</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="showSection('agent',null)" style="margin-left:auto;">View Agent →</button>
+        </div>
+        <div class="agent-activity">
+          <div class="agent-activity-item"><div class="agent-dot2"></div>Found 6 tasks matching your React + Node.js profile — highest budget: ₹25,000</div>
+          <div class="agent-activity-item"><div class="agent-dot2"></div>Nexacore Pvt Ltd viewed your profile 3 times — consider reaching out</div>
+          <div class="agent-activity-item"><div class="agent-dot2"></div>Auto-applied to "E-commerce Dashboard Design" within your saved criteria</div>
+        </div>
+      </div>
+
+      <!-- Recommended Tasks -->
+      <div class="section-toolbar">
+        <div class="section-label">🔥 Recommended Tasks</div>
+        <div class="filter-chips">
+          <button class="chip active" onclick="filterChip(this)">All</button>
+          <button class="chip" onclick="filterChip(this)">Design</button>
+          <button class="chip" onclick="filterChip(this)">Dev</button>
+          <button class="chip" onclick="filterChip(this)">Marketing</button>
+          <button class="chip" onclick="filterChip(this)">Writing</button>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="showSection('tasks', document.querySelectorAll('.nav-item')[1])" style="margin-left:auto;">See All →</button>
+      </div>
+
+      <div class="task-grid">
+        <!-- Task cards -->
+        <div class="task-card" onclick="openModal('payModal')">
+          <div class="task-card-top">
+            <span class="task-category-badge badge-dev">Development</span>
+            <span class="tag tag-green">🤖 Agent Match</span>
+          </div>
+          <div class="task-title">React Dashboard for SaaS Analytics Platform</div>
+          <div class="task-desc">Need an experienced React dev to build interactive charts, filters, and export features for our analytics portal.</div>
+          <div class="task-meta">
+            <span>⏰ 7 days</span>
+            <span>📍 Remote</span>
+            <span>🔵 5 proposals</span>
+          </div>
+          <div class="task-footer">
+            <div class="task-poster">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f)">NX</div>
+              <span class="task-poster-name">Nexacore Inc.</span>
+            </div>
+            <div class="task-budget">₹25,000<small>Fixed Price</small></div>
+          </div>
+        </div>
+
+        <div class="task-card" onclick="openModal('payModal')">
+          <div class="task-card-top">
+            <span class="task-category-badge badge-design">Design</span>
+            <span class="tag tag-gold">⭐ Urgent</span>
+          </div>
+          <div class="task-title">Brand Identity & Logo Design for Fintech Startup</div>
+          <div class="task-desc">Looking for a creative designer to craft a complete brand kit: logo, color palette, typography & guidelines.</div>
+          <div class="task-meta">
+            <span>⏰ 3 days</span>
+            <span>📍 Remote</span>
+            <span>🔵 12 proposals</span>
+          </div>
+          <div class="task-footer">
+            <div class="task-poster">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#f5a623,#a06010)">FP</div>
+              <span class="task-poster-name">FinPulse Labs</span>
+            </div>
+            <div class="task-budget">₹18,500<small>Fixed Price</small></div>
+          </div>
+        </div>
+
+        <div class="task-card" onclick="openModal('payModal')">
+          <div class="task-card-top">
+            <span class="task-category-badge badge-writing">Writing</span>
+          </div>
+          <div class="task-title">Technical Blog Content — 10 Articles on AI/ML</div>
+          <div class="task-desc">We need a skilled technical writer to produce 10 in-depth blog posts on AI, ML, and data science topics.</div>
+          <div class="task-meta">
+            <span>⏰ 14 days</span>
+            <span>📍 Remote</span>
+            <span>🔵 8 proposals</span>
+          </div>
+          <div class="task-footer">
+            <div class="task-poster">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#27c47a,#0a6640)">BT</div>
+              <span class="task-poster-name">ByteTrend Media</span>
+            </div>
+            <div class="task-budget">₹12,000<small>Fixed Price</small></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="prod-desc">${p.desc}</div>
-    <div class="prod-tags">${p.tags.map(t=>`<span class="tag" style="background:transparent;color:var(--muted);border-color:var(--border)">${t}</span>`).join('')}</div>
-    <div class="prod-foot">
-      <div class="prod-price-area">
-        <span class="prod-price">$${p.price}</span>
-        <span class="prod-was">$${p.was.toLocaleString()}</span>
-        <span class="prod-save">-${pct}%</span>
+
+    <!-- ══ TASKS ══ -->
+    <div class="section-view" id="sec-tasks">
+      <div class="page-header">
+        <div class="page-title">Browse <span>Tasks</span></div>
+        <div class="page-sub">Find work that matches your skills</div>
       </div>
-      <div class="prod-actions">
-        <button class="prod-wish ${saved?'saved':''}" onclick="event.stopPropagation();toggleWish(${p.id})" title="${saved?'Remove':'Save'}">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        </button>
-        <button class="prod-get" onclick="event.stopPropagation();openProductDetail(${p.id})">View</button>
+      <div class="section-toolbar">
+        <div class="filter-chips">
+          <button class="chip active" onclick="filterChip(this)">All</button>
+          <button class="chip" onclick="filterChip(this)">Design</button>
+          <button class="chip" onclick="filterChip(this)">Development</button>
+          <button class="chip" onclick="filterChip(this)">Marketing</button>
+          <button class="chip" onclick="filterChip(this)">Video</button>
+          <button class="chip" onclick="filterChip(this)">Writing</button>
+        </div>
+        <button class="btn btn-gold" onclick="openModal('postTaskModal')" style="margin-left:auto;">＋ Post Task</button>
+      </div>
+      <div class="task-grid">
+        <div class="task-card" onclick="openModal('payModal')">
+          <div class="task-card-top"><span class="task-category-badge badge-dev">Development</span><span class="tag tag-green">🤖 Agent Match</span></div>
+          <div class="task-title">React Dashboard for SaaS Analytics Platform</div>
+          <div class="task-desc">Need an experienced React dev to build interactive charts and export features.</div>
+          <div class="task-meta"><span>⏰ 7 days</span><span>📍 Remote</span><span>🔵 5 proposals</span></div>
+          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f)">NX</div><span class="task-poster-name">Nexacore Inc.</span></div><div class="task-budget">₹25,000<small>Fixed Price</small></div></div>
+        </div>
+        <div class="task-card" onclick="openModal('payModal')">
+          <div class="task-card-top"><span class="task-category-badge badge-design">Design</span><span class="tag tag-gold">⭐ Urgent</span></div>
+          <div class="task-title">Brand Identity & Logo Design</div>
+          <div class="task-desc">Complete brand kit: logo, color palette, typography and brand guidelines document.</div>
+          <div class="task-meta"><span>⏰ 3 days</span><span>📍 Remote</span><span>🔵 12 proposals</span></div>
+          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#f5a623,#a06010)">FP</div><span class="task-poster-name">FinPulse Labs</span></div><div class="task-budget">₹18,500<small>Fixed Price</small></div></div>
+        </div>
+        <div class="task-card" onclick="openModal('payModal')">
+          <div class="task-card-top"><span class="task-category-badge badge-marketing">Marketing</span></div>
+          <div class="task-title">Social Media Campaign — Product Launch</div>
+          <div class="task-desc">Plan and execute a 30-day social media campaign for our new product launch across Instagram & LinkedIn.</div>
+          <div class="task-meta"><span>⏰ 30 days</span><span>📍 Remote</span><span>🔵 3 proposals</span></div>
+          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#8b5cf6,#4c1d95)">GX</div><span class="task-poster-name">Growthex</span></div><div class="task-budget">₹9,000<small>Fixed Price</small></div></div>
+        </div>
+        <div class="task-card" onclick="openModal('payModal')">
+          <div class="task-card-top"><span class="task-category-badge badge-video">Video</span></div>
+          <div class="task-title">Product Demo Video Editing (3–5 min)</div>
+          <div class="task-desc">Edit and polish a raw recorded product demo with captions, animations and music.</div>
+          <div class="task-meta"><span>⏰ 5 days</span><span>📍 Remote</span><span>🔵 7 proposals</span></div>
+          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#e85858,#7a1a1a)">VS</div><span class="task-poster-name">Veedstudio</span></div><div class="task-budget">₹7,500<small>Fixed Price</small></div></div>
+        </div>
+        <div class="task-card" onclick="openModal('payModal')">
+          <div class="task-card-top"><span class="task-category-badge badge-writing">Writing</span></div>
+          <div class="task-title">Technical Blog Content — 10 Articles on AI/ML</div>
+          <div class="task-desc">10 in-depth blog posts on AI, ML, and data science topics — SEO-optimized.</div>
+          <div class="task-meta"><span>⏰ 14 days</span><span>📍 Remote</span><span>🔵 8 proposals</span></div>
+          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#27c47a,#0a6640)">BT</div><span class="task-poster-name">ByteTrend Media</span></div><div class="task-budget">₹12,000<small>Fixed Price</small></div></div>
+        </div>
+        <div class="task-card" onclick="openModal('payModal')">
+          <div class="task-card-top"><span class="task-category-badge badge-dev">Development</span><span class="tag tag-blue">💎 Premium</span></div>
+          <div class="task-title">Full-Stack E-commerce Platform with Payments</div>
+          <div class="task-desc">Build a complete e-commerce site using Next.js + Razorpay. Responsive, fast, SEO-ready.</div>
+          <div class="task-meta"><span>⏰ 21 days</span><span>📍 Remote</span><span>🔵 2 proposals</span></div>
+          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6)">SR</div><span class="task-poster-name">ShopRocket</span></div><div class="task-budget">₹55,000<small>Fixed Price</small></div></div>
+        </div>
       </div>
     </div>
-  </div>`;
-}
 
-function toggleWish(id){if(wishlist.has(id))wishlist.delete(id);else wishlist.add(id);renderMarketplace()}
-
-function openProductDetail(id){
-  const p=PRODUCTS.find(x=>x.id===id);if(!p)return;
-  const s=SELLERS[p.sellerId]||{name:'Unknown',role:'Seller',color:'#7B9BB8',bg:'rgba(123,155,184,.15)',bio:'',tags:[],rating:5,reviews:0,tasks:0,earned:'$0'};
-  const pct=savePct(p.price,p.was);
-  document.getElementById('pd-content').innerHTML=`
-    <div style="height:200px;background:linear-gradient(135deg,${p.color}30,${p.color}10);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative">
-      <div style="font-size:64px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.5))">${p.emoji}</div>
-      <span style="margin-top:10px;font-family:'Urbanist',sans-serif;font-size:9px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:${p.color};background:${p.color}15;border:1px solid ${p.color}28;border-radius:5px;padding:3px 10px">${p.cat}</span>
+    <!-- ══ PRODUCTS ══ -->
+    <div class="section-view" id="sec-products">
+      <div class="page-header">
+        <div class="page-title">My <span>Products</span></div>
+        <div class="page-sub">Services you offer to the marketplace</div>
+      </div>
+      <div class="section-toolbar">
+        <div class="section-label">Active Listings</div>
+        <button class="btn btn-gold" style="margin-left:auto;" onclick="openModal('postTaskModal')">＋ Add Service</button>
+      </div>
+      <div class="task-grid">
+        <div class="task-card">
+          <div class="task-card-top"><span class="task-category-badge badge-dev">Development</span><span class="tag tag-green">✅ Active</span></div>
+          <div class="task-title">Full-Stack Web App Development (React + Node)</div>
+          <div class="task-desc">I build scalable, modern web applications with clean architecture and full API integration.</div>
+          <div class="task-meta"><span>⭐ 4.9 (32 reviews)</span><span>🔵 8 orders</span></div>
+          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6)">AK</div><span class="task-poster-name">You</span></div><div class="task-budget">₹15,000<small>Starting from</small></div></div>
+        </div>
+        <div class="task-card">
+          <div class="task-card-top"><span class="task-category-badge badge-dev">Development</span><span class="tag tag-green">✅ Active</span></div>
+          <div class="task-title">REST API Development & Integration</div>
+          <div class="task-desc">Design and build RESTful APIs with auth, rate limiting, and comprehensive documentation.</div>
+          <div class="task-meta"><span>⭐ 5.0 (14 reviews)</span><span>🔵 3 orders</span></div>
+          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6)">AK</div><span class="task-poster-name">You</span></div><div class="task-budget">₹8,000<small>Starting from</small></div></div>
+        </div>
+        <div class="task-card" style="border-style:dashed;cursor:pointer;" onclick="openModal('postTaskModal')">
+          <div style="text-align:center;padding:30px 0;color:var(--text3);">
+            <div style="font-size:36px;margin-bottom:12px;">＋</div>
+            <div style="font-weight:600;">Add New Service</div>
+            <div style="font-size:12px;margin-top:6px;">Reach thousands of clients</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div style="padding:20px 18px 32px">
-      <div style="font-family:'Urbanist',sans-serif;font-weight:900;font-size:22px;line-height:1.2;margin-bottom:10px">${p.name}</div>
 
-      <!-- Seller row — clickable → opens seller profile -->
-      <div onclick="closeProductDetail();openSellerModal('${p.sellerId}')" style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);margin-bottom:16px;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(0,229,255,.3)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="width:40px;height:40px;border-radius:50%;background:${s.bg};color:${s.color};display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:14px;font-weight:900;flex-shrink:0">${initials(s.name)}</div>
-        <div style="flex:1;min-width:0">
-          <div style="font-family:'Urbanist',sans-serif;font-weight:800;font-size:13px">${s.name}</div>
-          <div style="color:var(--muted);font-size:11px;font-weight:400">${s.role}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
-          <div style="color:var(--gold);font-size:11px">${starsHtml(s.rating)}</div>
-          <span style="font-size:9px;color:var(--dim)">${s.reviews||p.reviews} reviews</span>
-        </div>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round"/></svg>
+    <!-- ══ NETWORK ══ -->
+    <div class="section-view" id="sec-network">
+      <div class="page-header">
+        <div class="page-title">Your <span>Network</span></div>
+        <div class="page-sub">Companies, professionals & connections</div>
       </div>
+      <div class="net-layout">
+        <div>
+          <!-- Companies -->
+          <div class="section-label" style="margin-bottom:14px;">🏢 Companies to Follow</div>
+          <div class="company-grid" style="margin-bottom:24px;">
+            <div class="company-card" onclick="openModal('companyModal')">
+              <div class="company-banner" style="background:linear-gradient(135deg,#0f2040,#1a4080);">
+                <div class="company-logo" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f);">🚀</div>
+              </div>
+              <div class="company-body">
+                <div class="company-name">Nexacore Technologies</div>
+                <div class="company-industry">SaaS · 500–1000 employees</div>
+                <div class="company-stats-row">
+                  <div class="company-stat"><strong>12.4K</strong><br>Followers</div>
+                  <div class="company-stat"><strong>28</strong><br>Open Tasks</div>
+                  <div class="company-stat"><strong>4.8 ⭐</strong><br>Rating</div>
+                </div>
+                <div class="company-actions">
+                  <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();followCompany(this)">＋ Follow</button>
+                  <button class="btn btn-gold btn-sm">View →</button>
+                </div>
+              </div>
+            </div>
 
-      <!-- Rating & stats row -->
-      <div style="display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px">
-        <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid var(--border)">
-          <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:var(--gold)">${starsHtml(p.rating)}</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">${p.rating} Rating</div>
+            <div class="company-card" onclick="openModal('companyModal')">
+              <div class="company-banner" style="background:linear-gradient(135deg,#1a0f30,#3d1a7a);">
+                <div class="company-logo" style="background:linear-gradient(135deg,#8b5cf6,#4c1d95);">💡</div>
+              </div>
+              <div class="company-body">
+                <div class="company-name">FinPulse Labs</div>
+                <div class="company-industry">Fintech · 50–200 employees</div>
+                <div class="company-stats-row">
+                  <div class="company-stat"><strong>3.1K</strong><br>Followers</div>
+                  <div class="company-stat"><strong>9</strong><br>Open Tasks</div>
+                  <div class="company-stat"><strong>4.6 ⭐</strong><br>Rating</div>
+                </div>
+                <div class="company-actions">
+                  <button class="btn btn-ghost btn-sm followed" onclick="event.stopPropagation();followCompany(this)" style="color:var(--green);border-color:var(--green);">✓ Following</button>
+                  <button class="btn btn-gold btn-sm">View →</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="company-card" onclick="openModal('companyModal')">
+              <div class="company-banner" style="background:linear-gradient(135deg,#0f2a1a,#1a5530);">
+                <div class="company-logo" style="background:linear-gradient(135deg,#27c47a,#0a6640);">📊</div>
+              </div>
+              <div class="company-body">
+                <div class="company-name">ByteTrend Media</div>
+                <div class="company-industry">Digital Media · 10–50 employees</div>
+                <div class="company-stats-row">
+                  <div class="company-stat"><strong>892</strong><br>Followers</div>
+                  <div class="company-stat"><strong>5</strong><br>Open Tasks</div>
+                  <div class="company-stat"><strong>4.7 ⭐</strong><br>Rating</div>
+                </div>
+                <div class="company-actions">
+                  <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();followCompany(this)">＋ Follow</button>
+                  <button class="btn btn-gold btn-sm">View →</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="company-card" onclick="openModal('companyModal')">
+              <div class="company-banner" style="background:linear-gradient(135deg,#2a0f0f,#6b1a1a);">
+                <div class="company-logo" style="background:linear-gradient(135deg,#e85858,#7a1a1a);">🎬</div>
+              </div>
+              <div class="company-body">
+                <div class="company-name">Veedstudio Creative</div>
+                <div class="company-industry">Creative Agency · 10–50 employees</div>
+                <div class="company-stats-row">
+                  <div class="company-stat"><strong>2.4K</strong><br>Followers</div>
+                  <div class="company-stat"><strong>7</strong><br>Open Tasks</div>
+                  <div class="company-stat"><strong>4.9 ⭐</strong><br>Rating</div>
+                </div>
+                <div class="company-actions">
+                  <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();followCompany(this)">＋ Follow</button>
+                  <button class="btn btn-gold btn-sm">View →</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- People -->
+          <div class="section-label" style="margin-bottom:14px;">👥 People You May Know</div>
+          <div class="people-grid">
+            <div class="person-card">
+              <div class="avatar-lg" style="background:linear-gradient(135deg,#e85858,#7a1a1a)">PR</div>
+              <div class="person-info">
+                <div class="person-name">Priya Rajesh</div>
+                <div class="person-title">UI/UX Designer · Bengaluru</div>
+                <div class="person-mutual">3 mutual connections</div>
+              </div>
+              <button class="connect-btn" onclick="sendConnect(this)">Connect</button>
+            </div>
+            <div class="person-card">
+              <div class="avatar-lg" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f)">MS</div>
+              <div class="person-info">
+                <div class="person-name">Manish Sharma</div>
+                <div class="person-title">Product Manager · Mumbai</div>
+                <div class="person-mutual">7 mutual connections</div>
+              </div>
+              <button class="connect-btn pending" onclick="sendConnect(this)">Pending</button>
+            </div>
+            <div class="person-card">
+              <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640)">RA</div>
+              <div class="person-info">
+                <div class="person-name">Ritu Agarwal</div>
+                <div class="person-title">Marketing Lead · Delhi</div>
+                <div class="person-mutual">12 mutual connections</div>
+              </div>
+              <button class="connect-btn connected">✓ Connected</button>
+            </div>
+            <div class="person-card">
+              <div class="avatar-lg" style="background:linear-gradient(135deg,#8b5cf6,#4c1d95)">KV</div>
+              <div class="person-info">
+                <div class="person-name">Kiran Verma</div>
+                <div class="person-title">Data Scientist · Hyderabad</div>
+                <div class="person-mutual">2 mutual connections</div>
+              </div>
+              <button class="connect-btn" onclick="sendConnect(this)">Connect</button>
+            </div>
+          </div>
         </div>
-        <div style="flex:1;text-align:center;padding:12px 8px;border-right:1px solid var(--border)">
-          <div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--accent)">${p.reviews}</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Reviews</div>
-        </div>
-        <div style="flex:1;text-align:center;padding:12px 8px">
-          <div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--green)">-${pct}%</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">vs Custom</div>
+
+        <!-- Side panel -->
+        <div>
+          <div class="side-panel">
+            <div class="side-panel-title">📥 Connection Requests</div>
+            <div class="people-grid">
+              <div class="person-card" style="flex-direction:column;align-items:flex-start;gap:10px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="avatar-lg" style="background:linear-gradient(135deg,#f5a623,#a06010);width:36px;height:36px;font-size:14px;">NK</div>
+                  <div class="person-info">
+                    <div class="person-name">Nikhil Kapoor</div>
+                    <div class="person-title">Backend Engineer</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;width:100%;">
+                  <button class="btn btn-green btn-sm" style="flex:1;" onclick="acceptConnect(this)">Accept</button>
+                  <button class="btn btn-ghost btn-sm" style="flex:1;">Decline</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="side-panel">
+            <div class="side-panel-title">📈 Network Stats</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Profile views</span><strong>42 this week</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Search appearances</span><strong>187</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">New followers</span><strong>+16</strong></div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- Description -->
-      <div style="font-family:'Urbanist',sans-serif;font-weight:700;font-size:11px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px">About This Product</div>
-      <div style="font-size:14px;line-height:1.72;color:#BDD6EE;font-weight:400;margin-bottom:18px">${p.desc}</div>
-
-      <!-- Tags -->
-      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:22px">${p.tags.map(t=>`<span class="tag" style="font-size:11px;padding:3px 10px">${t}</span>`).join('')}</div>
-
-      <!-- Custom dev comparison -->
-      <div style="background:rgba(0,255,157,.04);border:1px solid rgba(0,255,157,.14);border-radius:14px;padding:16px;margin-bottom:22px">
-        <div style="font-family:'Urbanist',sans-serif;font-size:11px;font-weight:800;color:var(--green);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px">💰 Why Buy Instead of Build?</div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-          <span style="font-size:13px;color:var(--muted)">Hire a developer</span>
-          <span style="font-family:var(--mono);font-size:13px;color:var(--red);text-decoration:line-through">$${p.was.toLocaleString()}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid rgba(0,255,157,.12)">
-          <span style="font-size:13px;color:var(--text);font-weight:700">Get this product</span>
-          <span style="font-family:var(--mono);font-size:15px;color:var(--green);font-weight:800">$${p.price}</span>
-        </div>
-        <div style="margin-top:8px;font-size:12px;color:var(--muted)">You save <strong style="color:var(--green)">$${(p.was-p.price).toLocaleString()}</strong> (${pct}% less than custom dev cost)</div>
-      </div>
-
-      <!-- CTA -->
-      <button class="btn" style="width:100%;padding:15px;font-size:13px;border-radius:14px;box-shadow:0 6px 28px rgba(0,229,255,.3)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-        Get This Product — $${p.price}
-      </button>
-      <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--dim)">Instant delivery · No commission · Secure checkout</div>
-    </div>`;
-  document.getElementById('product-detail-modal').classList.add('open');
-}
-function closeProductDetail(){document.getElementById('product-detail-modal').classList.remove('open')}
-
-
-function submitProduct(){
-  const name=document.getElementById('ap-name').value.trim(),cat=document.getElementById('ap-cat').value,emoji=document.getElementById('ap-emoji').value.trim()||'📦',price=parseFloat(document.getElementById('ap-price').value)||0,was=parseFloat(document.getElementById('ap-was').value)||0,desc=document.getElementById('ap-desc').value.trim(),tagsRaw=document.getElementById('ap-tags').value.trim();
-  if(!name||!cat||!price||!desc){alert('Please fill in name, category, price, and description.');return}
-  const tags=tagsRaw?tagsRaw.split(',').map(t=>t.trim()).filter(Boolean):['Product'];
-  const colors=['#00E5FF','#FFB800','#00FF9D','#9B5DE5','#FF6B9D','#0099BB'];
-  PRODUCTS.push({id:nextId++,emoji,name,cat,sellerId:'arjun',desc,price,was:was||price*20,rating:5.0,reviews:0,tags,color:colors[nextId%colors.length],featured:false});
-  ['ap-name','ap-emoji','ap-price','ap-was','ap-desc','ap-tags'].forEach(id=>{document.getElementById(id).value=''});
-  document.getElementById('ap-cat').selectedIndex=0;
-  closeModal('add-product-modal');renderMarketplace();
-  const f=document.createElement('div');f.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#00E5FF,#0099BB);color:#050B14;font-weight:800;font-size:12px;letter-spacing:.5px;padding:10px 22px;border-radius:20px;z-index:999;box-shadow:0 4px 20px rgba(0,229,255,.4)';f.textContent='✓ Product Published!';document.body.appendChild(f);setTimeout(()=>f.remove(),2400);
-}
-
-function openSellerModal(sellerId){
-  const s=SELLERS[sellerId];if(!s)return;
-  const sellerProds=PRODUCTS.filter(p=>p.sellerId===sellerId);
-  document.getElementById('sm-label').textContent=s.name;
-  document.getElementById('sm-content').innerHTML=`
-    <div class="sm-cover" style="background:linear-gradient(135deg,${s.color}50,${s.color}15,transparent)"><div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(5,11,20,.55))"></div></div>
-    <div class="sm-body">
-      <div class="sm-av-row">
-        <div class="sm-avatar" style="background:${s.bg};color:${s.color}">${initials(s.name)}</div>
-        <div class="sm-ctas">
-          <button class="btn btn-sm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/></svg>Message</button>
-          <button class="btn-follow ${following.has(sellerId)?'following':''}" id="sm-fw" onclick="toggleSellerFollow('${sellerId}')">${following.has(sellerId)?'Unfollow':'Follow'}</button>
-        </div>
-      </div>
-      <div class="sm-name">${s.name}</div>
-      <div class="sm-role" style="color:${s.color}">${s.role}</div>
-      <div class="sm-bio">${s.bio}</div>
-      <div class="sm-badges">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}<span class="tag tag-green">★ ${s.rating}</span><span class="tag tag-gold">${s.reviews} reviews</span></div>
-      <div class="sm-stats">
-        <div class="sm-stat"><div class="sm-stat-val" style="color:var(--green)">${s.tasks}</div><div class="sm-stat-lbl">Tasks</div></div>
-        <div class="sm-stat"><div class="sm-stat-val" style="color:var(--gold)">${s.earned}</div><div class="sm-stat-lbl">Earned</div></div>
-        <div class="sm-stat"><div class="sm-stat-val" style="color:var(--accent)">${sellerProds.length}</div><div class="sm-stat-lbl">Products</div></div>
-        <div class="sm-stat"><div class="sm-stat-val" style="color:var(--purple)">${s.rating}★</div><div class="sm-stat-lbl">Rating</div></div>
-      </div>
-      <div class="section-hd" style="margin-bottom:12px">Products by ${s.name.split(' ')[0]}</div>
-      <div>${sellerProds.map(p=>`<div class="sm-prod-mini"><div class="sm-prod-emoji" style="background:${p.color}14;border:1px solid ${p.color}22">${p.emoji}</div><div style="flex:1;min-width:0"><div class="sm-prod-name">${p.name}</div><div style="display:flex;align-items:center;gap:8px;margin-top:2px"><span class="sm-prod-price">$${p.price}</span><span style="color:var(--dim);font-size:10px;text-decoration:line-through;font-family:var(--mono)">$${p.was.toLocaleString()}</span></div></div><button class="prod-get" style="font-size:10px;padding:6px 12px">Get</button></div>`).join('')}</div>
-    </div>`;
-  document.getElementById('seller-modal').classList.add('open');
-}
-function closeSellerModal(){document.getElementById('seller-modal').classList.remove('open')}
-function toggleSellerFollow(id){if(following.has(id))following.delete(id);else following.add(id);const btn=document.getElementById('sm-fw');if(btn){btn.textContent=following.has(id)?'Unfollow':'Follow';btn.className='btn-follow'+(following.has(id)?' following':'')}}
-
-function renderTaskCats(){document.getElementById('cat-wrap').innerHTML=TASK_CATS.map(c=>`<button class="pill ${c===currentTaskCat?'active':''}" onclick="setTaskCat('${c}',this)">${c}</button>`).join('')}
-function setTaskCat(cat,btn){currentTaskCat=cat;document.querySelectorAll('.pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTasks()}
-function renderTasks(){
-  const q=(document.getElementById('task-search')?.value||'').toLowerCase();
-  const list=TASKS.filter(t=>(currentTaskCat==='ALL'||t.cat===currentTaskCat)&&(!q||t.title.toLowerCase().includes(q)||t.skills.some(s=>s.toLowerCase().includes(q))));
-  document.getElementById('tasks-container').innerHTML=list.map((t,i)=>`<div class="card task-card fade-up" style="animation-delay:${i*45}ms"><div class="task-card-top"><div><div class="task-title">${t.title}</div><div class="task-client">${t.client} · ${t.posted} ago</div></div><span class="tag ${t.status==='OPEN'?'tag-green':'tag-gold'}" style="flex-shrink:0">${t.status}</span></div><div class="task-skills"><span class="tag">${t.cat}</span>${t.skills.map(s=>`<span class="tag" style="background:transparent;color:var(--muted);border-color:var(--border)">${s}</span>`).join('')}</div><div class="task-foot"><div class="task-budget"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round"/></svg>${t.budget}</div><div style="display:flex;align-items:center;gap:10px"><span class="task-bids">${t.bids} bids</span>${t.status==='OPEN'?`<button class="btn btn-xs" onclick="openBid(${t.id})">Bid</button>`:''}</div></div></div>`).join('')||`<div style="text-align:center;padding:36px;color:var(--muted)">No tasks found.</div>`;
-}
-function openBid(tid){const t=TASKS.find(x=>x.id===tid);document.getElementById('bid-sheet').innerHTML=`<span class="sheet-handle"></span><div class="sheet-title">Place a Bid</div><div class="sheet-sub">${t.title}</div><div class="field"><label class="field-label">Bid Amount (USD)</label><input class="input" type="number" placeholder="e.g. 950"/><div class="field-hint">Client budget: ${t.budget}</div></div><div class="field"><label class="field-label">Proposal</label><textarea class="input" rows="4" placeholder="Describe your approach, experience, and timeline…"></textarea></div><div class="sheet-btns"><button class="btn-ghost" onclick="closeModal('bid-modal')">Cancel</button><button class="btn" onclick="submitBid('${t.client}')">Submit · 1 Bid Used</button></div><div class="sheet-footer">420 bids remaining this month</div>`;openModal('bid-modal')}
-function submitBid(c){document.getElementById('bid-sheet').innerHTML=`<div class="success-body"><div class="success-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2"><path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="success-title">Bid Submitted!</div><div class="success-sub">Your proposal was sent to ${c}.</div><button class="btn" onclick="closeModal('bid-modal')">Done</button></div>`}
-
-function switchAgentTab(id,btn){document.querySelectorAll('.agent-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.agent-tab').forEach(b=>b.classList.remove('active'));document.getElementById('agent-'+id).classList.add('active');btn.classList.add('active')}
-let scanTimer;
-function startScan(){
-  if(scanTimer)return;
-  const btn=document.getElementById('scan-btn'),empty=document.getElementById('scan-empty'),steps=document.getElementById('scan-steps'),list=document.getElementById('matched-list'),arc=document.getElementById('agent-arc'),core=document.getElementById('agent-core');
-  btn.disabled=true;btn.textContent='Scanning…';arc.classList.add('spin');core.classList.add('scanning');empty.style.display='none';list.innerHTML='';steps.style.display='block';
-  const txt=['Extracting skill vectors…','Applying budget filters…','Scoring reputation match…','Ranking by compatibility…'];
-  steps.innerHTML=`<div class="scan-info">Scanning 2,847 open tasks…</div>`+txt.map((s,i)=>`<div class="scan-step" style="animation-delay:${i*320}ms"><div class="spin-sm"></div>${s}</div>`).join('');
-  scanTimer=setTimeout(()=>{steps.style.display='none';arc.classList.remove('spin');core.classList.remove('scanning');btn.disabled=false;btn.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke-linecap="round"/></svg> Re-Scan`;scanDone=true;scanTimer=null;renderMatched()},2800);
-}
-function renderMatched(){document.getElementById('matched-list').innerHTML=AGENT_TASKS.map((t,i)=>`<div class="card match-card" style="animation-delay:${i*50}ms"><div class="match-ring" style="background:conic-gradient(var(--accent) ${t.match*3.6}deg,var(--border) 0)"><div class="match-inner">${t.match}%</div></div><div class="match-info"><div class="match-title">${t.title}</div><div class="match-meta"><span class="tag">${t.cat}</span><span class="match-budget">${t.budget}</span></div></div><div class="match-btns"><button class="btn-ghost btn-ghost-xs ${savedTasks.has(t.id)?'active-g':''}" onclick="toggleSave(${t.id})">${savedTasks.has(t.id)?'✓':'Save'}</button><button class="btn btn-xs" onclick="openBid(${(t.id%TASKS.length)+1})">Bid</button></div></div>`).join('')}
-function toggleSave(id){if(savedTasks.has(id))savedTasks.delete(id);else savedTasks.add(id);if(scanDone)renderMatched()}
-
-let chatHist=[];
-function initChat(){chatHist=[{role:'agent',text:"Hello! I'm your XWITE AI Agent. I've analyzed your profile and I'm ready to help you find the best opportunities."}];renderChat();document.getElementById('chat-sugg').innerHTML=CHAT_SUGG.map(q=>`<button class="btn-ghost btn-ghost-xs" onclick="setQ('${q}')">${q}</button>`).join('')}
-function renderChat(){const c=document.getElementById('chat-msgs');c.innerHTML=chatHist.map(m=>`<div class="chat-msg ${m.role==='user'?'out':''}">${m.role==='agent'?`<div class="chat-ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg></div>`:''}<div class="bubble ${m.role==='user'?'bubble-out':'bubble-in'}">${m.text}</div></div>`).join('');c.scrollTop=c.scrollHeight}
-function setQ(q){document.getElementById('chat-input').value=q}
-async function sendChat(){
-  const inp=document.getElementById('chat-input'),msg=inp.value.trim();if(!msg)return;
-  inp.value='';chatHist.push({role:'user',text:msg});renderChat();
-  const c=document.getElementById('chat-msgs'),t=document.createElement('div');t.className='chat-msg';
-  t.innerHTML=`<div class="chat-ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg></div><div class="bubble bubble-in"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
-  c.appendChild(t);c.scrollTop=c.scrollHeight;
-  try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:'You are XWITE AI Agent on a zero-commission freelance + product marketplace platform. Be concise and practical. Max 2-3 sentences.',messages:chatHist.filter((m,i)=>m.role!=='agent'||i>0).map(m=>({role:m.role==='agent'?'assistant':'user',content:m.text}))})});const data=await res.json();const text=(data.content||[]).map(b=>b.text||'').join('')||'Connectivity issue. Please retry.';t.remove();chatHist.push({role:'agent',text})}catch{t.remove();chatHist.push({role:'agent',text:'Connection error. Please try again.'})}
-  renderChat();
-}
-function renderTools(){const svgs={briefcase:`<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 014 0v2M3 12h18" stroke-linecap="round"/>`,send:`<path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linejoin="round"/>`,trending:`<path d="M23 6l-9.5 9.5-5-5L1 18M17 6h6v6" stroke-linecap="round" stroke-linejoin="round"/>`,users:`<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke-linecap="round"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-linecap="round"/>`,comment:`<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/>`,search:`<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21" stroke-linecap="round"/>`};document.getElementById('tools-grid').innerHTML=TOOLS.map((t,i)=>`<div class="card tool-card fade-up" style="animation-delay:${i*45}ms"><div class="tool-icon" style="background:${t.color}18;border:1px solid ${t.color}28"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="${t.color}" stroke-width="1.8">${svgs[t.icon]}</svg></div><div class="tool-name">${t.name}</div><div class="tool-desc">${t.desc}</div></div>`).join('')}
-
-function renderNetwork(){renderPeopleGrid(SUGGESTIONS,'suggestions-grid');renderPeopleGrid(CIRCLE,'circle-grid');renderCompanies()}
-function renderPeopleGrid(data,cid){document.getElementById(cid).innerHTML=data.map((p,i)=>`<div class="card person-card fade-up" style="animation-delay:${i*55}ms;cursor:pointer" onclick="openPersonProfile(${JSON.stringify(p).replace(/"/g,'&quot;')})"><div class="person-avatar" style="background:${p.bg};color:${p.color}">${initials(p.name)}</div><div class="person-name">${p.name}</div><div class="person-role">${p.role}</div><div class="person-mutual">${p.mutual}</div><button class="btn-follow ${following.has(p.id)?'following':''}" onclick="event.stopPropagation();toggleFollow(${p.id})">${following.has(p.id)?'Unfollow':'Follow'}</button></div>`).join('')}
-function toggleFollow(id){if(following.has(id))following.delete(id);else following.add(id);renderNetwork()}
-
-function openPersonProfile(p){
-  if(typeof p==='string')p=JSON.parse(p);
-  const isFw=following.has(p.id);
-  document.getElementById('sm-label').textContent=p.name;
-  document.getElementById('sm-content').innerHTML=`
-    <div style="height:160px;background:linear-gradient(135deg,${p.color}50,${p.color}18,transparent);position:relative">
-      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(5,11,20,.5))"></div>
     </div>
-    <div class="sm-body">
-      <div class="sm-av-row">
-        <div class="sm-avatar" style="background:${p.bg};color:${p.color};width:76px;height:76px;border-radius:50%;border:3px solid var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-size:26px;font-weight:900;margin-top:-38px">${initials(p.name)}</div>
-        <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-          <button class="btn btn-sm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/></svg>Message</button>
-          <button class="btn-follow ${isFw?'following':''}" id="npf-${p.id}" onclick="toggleNetworkFollow(${p.id})">${isFw?'Unfollow':'Follow'}</button>
+
+    <!-- ══ MESSAGES ══ -->
+    <div class="section-view" id="sec-messages">
+      <div class="page-header">
+        <div class="page-title">💬 <span>Messages</span></div>
+        <div class="page-sub">Chat with connected users</div>
+      </div>
+      <div class="msg-layout">
+        <div class="msg-list">
+          <div class="msg-list-header">Conversations</div>
+          <div class="msg-conv active" onclick="setConv(this, 'Ritu Agarwal')">
+            <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640);width:40px;height:40px;font-size:15px;">RA</div>
+            <div class="msg-conv-info">
+              <div class="msg-conv-name">Ritu Agarwal <span class="msg-conv-time">2m</span></div>
+              <div class="msg-conv-preview">Can you share the deliverable files?</div>
+            </div>
+            <div class="msg-conv-badge">2</div>
+          </div>
+          <div class="msg-conv" onclick="setConv(this, 'Nexacore Inc.')">
+            <div class="avatar-lg" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f);width:40px;height:40px;font-size:13px;border-radius:10px;">NX</div>
+            <div class="msg-conv-info">
+              <div class="msg-conv-name">Nexacore Inc. <span class="msg-conv-time">1h</span></div>
+              <div class="msg-conv-preview">Thanks! We'll review and get back.</div>
+            </div>
+            <div class="msg-conv-badge">1</div>
+          </div>
+          <div class="msg-conv" onclick="setConv(this, 'Kiran Verma')">
+            <div class="avatar-lg" style="background:linear-gradient(135deg,#8b5cf6,#4c1d95);width:40px;height:40px;font-size:15px;">KV</div>
+            <div class="msg-conv-info">
+              <div class="msg-conv-name">Kiran Verma <span class="msg-conv-time">3h</span></div>
+              <div class="msg-conv-preview">Sure, let's collaborate on this!</div>
+            </div>
+          </div>
+          <div style="padding:50px 20px;text-align:center;color:var(--text3);font-size:12px;">Only connected users can message each other</div>
+        </div>
+        <div class="msg-area">
+          <div class="msg-area-header">
+            <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640);width:38px;height:38px;font-size:14px;" id="msgHeaderAvatar">RA</div>
+            <div>
+              <div style="font-weight:600;font-size:13px;" id="msgHeaderName">Ritu Agarwal</div>
+              <div style="font-size:11px;color:var(--green);">● Online</div>
+            </div>
+            <button class="btn btn-gold btn-sm" style="margin-left:auto;" onclick="openModal('payModal')">💳 Payment</button>
+          </div>
+          <div class="msg-area-body" id="msgBody">
+            <div class="msg-bubble-wrap">
+              <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640);width:30px;height:30px;font-size:11px;flex-shrink:0;">RA</div>
+              <div>
+                <div class="msg-bubble">Hey Arjun! Your proposal looks great. When can you start on the marketing copy?</div>
+                <div class="msg-time">10:23 AM</div>
+              </div>
+            </div>
+            <div class="msg-bubble-wrap own">
+              <div class="avatar-lg" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6);width:30px;height:30px;font-size:11px;flex-shrink:0;">AK</div>
+              <div>
+                <div class="msg-bubble">Hi Ritu! I can start tomorrow. I've reviewed the brief and have some initial ideas ready.</div>
+                <div class="msg-time">10:26 AM</div>
+              </div>
+            </div>
+            <div class="msg-bubble-wrap">
+              <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640);width:30px;height:30px;font-size:11px;flex-shrink:0;">RA</div>
+              <div>
+                <div class="msg-bubble">Perfect! Can you share the deliverable files once you have the first draft?</div>
+                <div class="msg-time">10:31 AM</div>
+              </div>
+            </div>
+          </div>
+          <div class="msg-input-bar">
+            <textarea class="msg-input" id="msgInput" placeholder="Type a message…" onkeydown="sendMsg(event)" rows="1"></textarea>
+            <button class="btn btn-gold btn-sm" onclick="sendMsgBtn()">Send ➤</button>
+          </div>
         </div>
       </div>
-      <div style="font-family:'Urbanist',sans-serif;font-size:22px;font-weight:900;margin-bottom:2px">${p.name}</div>
-      <div style="font-size:13px;font-weight:700;color:${p.color};margin-bottom:8px">${p.role}</div>
-      <div style="color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:14px;font-weight:400">Experienced professional open to collaborations, freelance tasks, and new opportunities on XWITE.</div>
-      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px">
-        ${p.skills.map(s=>`<span class="tag">${s}</span>`).join('')}
-        <div style="display:flex;align-items:center;gap:3px;color:var(--gold);font-size:12px">★★★★☆ <span style="color:var(--muted);font-size:11px;margin-left:3px">(32)</span></div>
-      </div>
-      <div style="display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:22px">
-        <div style="flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border)"><div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--green)">42</div><div style="font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Tasks</div></div>
-        <div style="flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border)"><div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--gold)">$18K</div><div style="font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Earned</div></div>
-        <div style="flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border)"><div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--accent)">284</div><div style="font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Network</div></div>
-        <div style="flex:1;text-align:center;padding:14px 8px"><div style="font-family:var(--mono);font-size:18px;font-weight:800;color:var(--purple)">94%</div><div style="font-size:10px;color:var(--muted);margin-top:3px;font-weight:700;letter-spacing:.5px;text-transform:uppercase">Match</div></div>
-      </div>
-      <div class="section-hd">Recent Activity</div>
-      <div class="card" style="padding:14px;margin-bottom:8px"><div style="font-size:13px;color:var(--muted)">Completed a task · <span style="color:var(--green)">$650</span></div><div style="font-size:12px;color:var(--dim);margin-top:3px">3 days ago</div></div>
-      <div class="card" style="padding:14px"><div style="font-size:13px;color:var(--muted)">Received a 5-star review</div><div style="font-size:12px;color:var(--dim);margin-top:3px">1 week ago</div></div>
-    </div>`;
-  document.getElementById('seller-modal').classList.add('open');
-}
-function toggleNetworkFollow(id){
-  if(following.has(id))following.delete(id);else following.add(id);
-  const btn=document.getElementById('npf-'+id);
-  if(btn){btn.textContent=following.has(id)?'Unfollow':'Follow';btn.className='btn-follow'+(following.has(id)?' following':'')}
-  renderNetwork();
-}
-function renderCompanies(){document.getElementById('companies-list').innerHTML=COMPANIES.map((co,i)=>`<div class="company-item card fade-up" style="animation-delay:${i*60}ms"><div class="company-cover" style="background:${co.cover}"><div class="company-cover-logo">${co.logo}</div></div><div class="company-body"><div style="flex:1"><div class="company-name">${co.name}</div><div class="company-meta">${co.ind} · ${co.size}</div></div><div class="company-right">${co.hiring?`<span class="tag tag-green">${co.jobs} open</span>`:'<span class="tag tag-red">Closed</span>'}<button class="btn-ghost btn-ghost-xs">Follow</button></div></div></div>`).join('')}
+    </div>
 
-function renderSkills(){document.getElementById('skills-list').innerHTML=SKILLS.map((s,i)=>`<div style="animation:fadeUp .35s ease ${i*35}ms both"><div class="skill-hd"><span class="skill-nm">${s.name}</span><span class="skill-pc">${s.pct}%</span></div><div class="prog-bar"><div class="prog-fill" data-pct="${s.pct}"></div></div></div>`).join('')}
-function animateSkills(){document.querySelectorAll('.prog-fill').forEach(b=>{b.style.width=b.dataset.pct+'%'})}
-function renderProjects(){document.getElementById('projects-list').innerHTML=PROJECTS.map(p=>`<div class="proj-item"><div class="proj-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2"><path d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="proj-title">${p.title}</div><div class="proj-client">${p.client} · ${p.date}</div></div><div class="proj-right"><div class="proj-earned">${p.earned}</div><div class="stars-r">${'★'.repeat(Math.floor(p.rating))}<span style="opacity:.3">${'★'.repeat(5-Math.floor(p.rating))}</span></div></div></div>`).join('')}
+    <!-- ══ NOTIFICATIONS ══ -->
+    <div class="section-view" id="sec-notifications">
+      <div class="page-header">
+        <div class="page-title">🔔 <span>Notifications</span></div>
+        <div class="page-sub">Stay updated on your activity</div>
+      </div>
+      <div class="notif-list">
+        <div class="notif-item unread">
+          <div class="notif-icon-wrap" style="background:rgba(39,196,122,0.12)">✅</div>
+          <div>
+            <div class="notif-text"><strong>Ritu Agarwal</strong> accepted your connection request — you can now message each other</div>
+            <div class="notif-time">2 minutes ago</div>
+          </div>
+        </div>
+        <div class="notif-item unread">
+          <div class="notif-icon-wrap" style="background:rgba(245,166,35,0.12)">💰</div>
+          <div>
+            <div class="notif-text"><strong>₹8,500</strong> payment released by Nexacore Inc. for "API Integration Task"</div>
+            <div class="notif-time">1 hour ago</div>
+          </div>
+        </div>
+        <div class="notif-item unread">
+          <div class="notif-icon-wrap" style="background:rgba(139,92,246,0.12)">🤖</div>
+          <div>
+            <div class="notif-text">Your <strong>AI Agent</strong> found 6 new tasks matching your profile — React, Node.js, TypeScript</div>
+            <div class="notif-time">3 hours ago</div>
+          </div>
+        </div>
+        <div class="notif-item unread">
+          <div class="notif-icon-wrap" style="background:rgba(74,144,226,0.12)">👤</div>
+          <div>
+            <div class="notif-text"><strong>Nexacore Technologies</strong> viewed your profile</div>
+            <div class="notif-time">5 hours ago</div>
+          </div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon-wrap" style="background:rgba(245,166,35,0.12)">📋</div>
+          <div>
+            <div class="notif-text">New task posted: <strong>"E-commerce Platform Development"</strong> matching your skills — ₹55,000</div>
+            <div class="notif-time">Yesterday</div>
+          </div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon-wrap" style="background:rgba(232,88,88,0.12)">⭐</div>
+          <div>
+            <div class="notif-text"><strong>ByteTrend Media</strong> left you a 5-star review on your last project</div>
+            <div class="notif-time">2 days ago</div>
+          </div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon-wrap" style="background:rgba(74,144,226,0.12)">🤝</div>
+          <div>
+            <div class="notif-text"><strong>Nikhil Kapoor</strong> sent you a connection request</div>
+            <div class="notif-time">2 days ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-function openPeople(){document.getElementById('people-panel').classList.add('open');renderPeoplePanel()}
-function closePeople(){document.getElementById('people-panel').classList.remove('open')}
-function closePeopleIfBg(e){if(e.target===document.getElementById('people-panel'))closePeople()}
-function switchPP(id,btn){document.querySelectorAll('.pp-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.pp-tab').forEach(b=>b.classList.remove('active'));document.getElementById('pp-'+id).classList.add('active');btn.classList.add('active')}
-function renderPeoplePanel(filter=''){['followers','following','discover'].forEach(key=>{const people=PEOPLE_DATA[key].filter(p=>!filter||p.name.toLowerCase().includes(filter)||p.role.toLowerCase().includes(filter));document.getElementById('pp-'+key).innerHTML=people.length?people.map(p=>`<div class="${key==='discover'?'disc-card':'pp-person'}"><div class="pp-av" style="background:${p.bg};color:${p.color}">${initials(p.name)}</div><div class="pp-info"><div class="pp-name">${p.name}</div><div class="pp-role">${p.role}</div></div>${key==='discover'?`<button class="btn-follow" style="font-size:10px;padding:5px 10px">Follow</button>`:''}</div>`).join(''):`<div style="text-align:center;padding:20px;color:var(--dim);font-size:13px">No results</div>`})}
-function filterPeople(){renderPeoplePanel(document.getElementById('pp-search').value.toLowerCase())}
+    <!-- ══ PROFILE ══ -->
+    <div class="section-view" id="sec-profile">
+      <div class="page-header">
+        <div class="page-title">My <span>Profile</span></div>
+        <div class="page-sub">How others see you on TaskHive</div>
+      </div>
+      <div class="profile-layout">
+        <div>
+          <div class="profile-card" style="margin-bottom:14px;">
+            <div class="profile-banner-bg">
+              <div class="profile-avatar-wrap"><div class="profile-avatar">AK</div></div>
+            </div>
+            <div class="profile-info">
+              <div class="profile-name">Arjun Kumar</div>
+              <div class="profile-tagline">Full-Stack Developer · React · Node.js · TypeScript</div>
+              <div class="profile-rating">★★★★★ <span style="color:var(--text2);font-weight:400;">4.9 (46 reviews)</span></div>
+              <div style="margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+                <span class="tag tag-green">🟢 Available</span>
+                <span class="tag tag-blue">💎 Level 2</span>
+              </div>
+              <div class="profile-stats">
+                <div class="profile-stat"><div class="val">47</div><div class="lbl">Completed</div></div>
+                <div class="profile-stat"><div class="val">138</div><div class="lbl">Connections</div></div>
+                <div class="profile-stat"><div class="val">₹48K</div><div class="lbl">Earned</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="side-panel">
+            <div class="side-panel-title">🛠 Skills</div>
+            <div class="skill-tags">
+              <span class="skill-tag">React</span>
+              <span class="skill-tag">Node.js</span>
+              <span class="skill-tag">TypeScript</span>
+              <span class="skill-tag">PostgreSQL</span>
+              <span class="skill-tag">Docker</span>
+              <span class="skill-tag">GraphQL</span>
+              <span class="skill-tag">Next.js</span>
+              <span class="skill-tag">Redis</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="profile-card" style="padding:22px;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:12px;">About Me</div>
+            <div style="color:var(--text2);font-size:13.5px;line-height:1.7;">
+              Full-stack developer with 5+ years building scalable web applications for startups and enterprises. I specialize in React ecosystems and Node.js backends, with a focus on performance, clean code, and great user experience. Open to remote tasks, part-time consulting, and long-term partnerships.
+            </div>
+            <div class="divider"></div>
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:14px;">Portfolio</div>
+            <div class="task-grid" style="grid-template-columns:1fr 1fr;">
+              <div class="task-card" style="padding:14px;">
+                <div class="task-category-badge badge-dev" style="display:inline-block;margin-bottom:8px;">Dev</div>
+                <div style="font-weight:600;font-size:13px;">SaaS Dashboard Platform</div>
+                <div style="font-size:12px;color:var(--text3);margin-top:4px;">React, TypeScript, Charts</div>
+              </div>
+              <div class="task-card" style="padding:14px;">
+                <div class="task-category-badge badge-dev" style="display:inline-block;margin-bottom:8px;">Dev</div>
+                <div style="font-weight:600;font-size:13px;">E-commerce API System</div>
+                <div style="font-size:12px;color:var(--text3);margin-top:4px;">Node.js, Postgres, Redis</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ WALLET ══ -->
+    <div class="section-view" id="sec-wallet">
+      <div class="page-header">
+        <div class="page-title">💳 <span>Wallet</span></div>
+        <div class="page-sub">Manage your earnings and payments</div>
+      </div>
+      <div class="wallet-top">
+        <div class="wallet-card">
+          <div class="wallet-label">Available Balance</div>
+          <div class="wallet-amount gold">₹18,450</div>
+          <div class="wallet-pending">₹6,200 pending clearance</div>
+          <div style="display:flex;gap:8px;margin-top:16px;">
+            <button class="btn btn-gold btn-sm">Withdraw</button>
+            <button class="btn btn-ghost btn-sm">Add Funds</button>
+          </div>
+        </div>
+        <div class="wallet-card">
+          <div class="wallet-label">In Escrow (Protected)</div>
+          <div class="wallet-amount" style="color:var(--blue2);">₹12,000</div>
+          <div class="wallet-pending">Secured for active tasks</div>
+          <div style="margin-top:16px;font-size:12px;color:var(--text3);line-height:1.5;">Funds released automatically upon task completion & approval</div>
+        </div>
+      </div>
+      <div class="tx-list">
+        <div class="tx-header">Transaction History</div>
+        <div class="tx-item">
+          <div class="tx-icon" style="background:rgba(39,196,122,0.12)">💸</div>
+          <div class="tx-info"><div class="tx-name">Payment Received — React Dashboard</div><div class="tx-date">Mar 22, 2026 · Nexacore Inc.</div></div>
+          <div class="tx-amount credit">+₹25,000</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-icon" style="background:rgba(232,88,88,0.12)">🛒</div>
+          <div class="tx-info"><div class="tx-name">Service Fee — Platform Commission</div><div class="tx-date">Mar 22, 2026 · TaskHive</div></div>
+          <div class="tx-amount debit">−₹2,500</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-icon" style="background:rgba(39,196,122,0.12)">💸</div>
+          <div class="tx-info"><div class="tx-name">Payment Received — API Integration</div><div class="tx-date">Mar 18, 2026 · FinPulse Labs</div></div>
+          <div class="tx-amount credit">+₹8,500</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-icon" style="background:rgba(74,144,226,0.12)">🔒</div>
+          <div class="tx-info"><div class="tx-name">Escrow — E-commerce Platform</div><div class="tx-date">Mar 25, 2026 · ShopRocket</div></div>
+          <div class="tx-amount" style="color:var(--blue2);">₹12,000 🔒</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-icon" style="background:rgba(245,166,35,0.12)">🏦</div>
+          <div class="tx-info"><div class="tx-name">Withdrawal to Bank Account</div><div class="tx-date">Mar 15, 2026 · HDFC ••••4821</div></div>
+          <div class="tx-amount debit">−₹15,000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ AI AGENT ══ -->
+    <div class="section-view" id="sec-agent">
+      <div class="page-header">
+        <div class="page-title">🤖 My <span>AI Agent</span></div>
+        <div class="page-sub">Your personal assistant — always working, always learning</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:20px;">
+        <div>
+          <div class="agent-card" style="margin-bottom:16px;">
+            <div class="agent-header">
+              <div class="agent-orb">🤖</div>
+              <div>
+                <div class="agent-name">Hive Agent — Arjun</div>
+                <div class="agent-status"><span style="width:7px;height:7px;background:var(--green);border-radius:50%;display:inline-block;"></span> Active since 08:00 AM</div>
+              </div>
+            </div>
+            <div class="agent-activity">
+              <div class="agent-activity-item"><div class="agent-dot2"></div><strong style="color:var(--text);">Task Scanning:</strong> Found 6 new matching tasks (React, Node.js, TypeScript). Top match: ₹25,000 React Dashboard at Nexacore — 97% compatibility.</div>
+              <div class="agent-activity-item"><div class="agent-dot2"></div><strong style="color:var(--text);">Auto-Applied:</strong> Submitted proposal to "E-commerce Dashboard Design" within your saved criteria. Proposal tailored to client brief.</div>
+              <div class="agent-activity-item"><div class="agent-dot2"></div><strong style="color:var(--text);">Profile Insight:</strong> Nexacore Technologies viewed your profile 3 times this week. Suggested action: Follow up.</div>
+              <div class="agent-activity-item"><div class="agent-dot2"></div><strong style="color:var(--text);">Network:</strong> 2 new connection requests match your industry. Recommend accepting Nikhil Kapoor (Backend Engineer).</div>
+              <div class="agent-activity-item"><div class="agent-dot2"></div><strong style="color:var(--text);">Earnings Alert:</strong> ₹6,200 pending payment clears in 2 days. Next payout projected: ₹18,450.</div>
+            </div>
+          </div>
+
+          <div class="profile-card" style="padding:20px;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:16px;">⚙️ Agent Preferences</div>
+            <div class="form-group">
+              <label class="form-label">Task Categories to Monitor</label>
+              <div class="filter-chips" style="margin-top:0;">
+                <button class="chip active" onclick="filterChip(this)">Development</button>
+                <button class="chip active" onclick="filterChip(this)">API</button>
+                <button class="chip" onclick="filterChip(this)">Design</button>
+                <button class="chip" onclick="filterChip(this)">Consulting</button>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Minimum Budget</label>
+                <input class="form-input" type="number" value="5000" placeholder="₹5,000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Auto-Apply Threshold</label>
+                <select class="form-select">
+                  <option>95%+ match</option>
+                  <option selected>90%+ match</option>
+                  <option>80%+ match</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-gold">Save Preferences</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="side-panel" style="background:linear-gradient(135deg,#0f1929,#1a1030);border-color:rgba(139,92,246,0.25);">
+            <div class="side-panel-title" style="color:#a78bfa;">💬 Chat with Agent</div>
+            <div id="agentChatMain" style="height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:12px;">
+              <div class="agent-msg bot">Hi Arjun! I'm actively scanning 1,200+ tasks right now. Found 6 that match your React + Node.js profile. Want me to send proposals?</div>
+              <div class="agent-msg user">Yes, apply to the top 3 over ₹15,000</div>
+              <div class="agent-msg bot">Done ✅ Submitted tailored proposals to: Nexacore Dashboard (₹25K), ShopRocket Platform (₹55K), and FinPulse API (₹18K). I'll notify you when they respond.</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <input class="agent-input" id="agentMainInput" placeholder="Ask your agent…" onkeydown="agentChat(event)">
+              <button class="agent-send" onclick="agentChatSend()">➤</button>
+            </div>
+          </div>
+          <div class="side-panel">
+            <div class="side-panel-title">📊 Agent Activity (Today)</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Tasks scanned</span><strong>1,247</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Matches found</span><strong style="color:var(--gold)">6</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Proposals sent</span><strong>3</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Profile views triggered</span><strong>4</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Notifications sent</span><strong>7</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- ═══ TOAST CONTAINER ═══ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ═══ FLOATING AGENT ═══ -->
+<div class="agent-widget">
+  <div class="agent-popup" id="agentPopup">
+    <div class="agent-popup-header">
+      <div class="agent-orb" style="width:34px;height:34px;font-size:16px;">🤖</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">Hive Agent</div>
+        <div style="font-size:10px;color:var(--green);">● Active</div>
+      </div>
+      <div style="margin-left:auto;cursor:pointer;color:var(--text3);font-size:16px;" onclick="toggleAgent()">×</div>
+    </div>
+    <div class="agent-chat-body" id="agentChatBody">
+      <div class="agent-msg bot">👋 Hi! I found 6 new tasks matching your skills today. Want me to apply?</div>
+    </div>
+    <div class="agent-input-row">
+      <input class="agent-input" id="floatAgentInput" placeholder="Ask anything…" onkeydown="floatAgentChat(event)">
+      <button class="agent-send" onclick="floatAgentSend()">➤</button>
+    </div>
+  </div>
+  <button class="agent-fab" onclick="toggleAgent()" title="AI Agent">🤖</button>
+</div>
+
+<!-- ═══ MODAL: PAY ═══ -->
+<div class="modal-overlay" id="payModal">
+  <div class="modal">
+    <div class="modal-close" onclick="closeModal('payModal')">✕</div>
+    <div class="modal-title">Place an Order</div>
+    <div class="modal-sub">React Dashboard for SaaS Analytics Platform · Nexacore Inc.</div>
+
+    <div class="payment-pkg-row">
+      <div class="pkg-card" onclick="selectPkg(this)">
+        <div class="pkg-name">Basic</div>
+        <div class="pkg-price">₹8,000</div>
+        <div class="pkg-delivery">⏰ 7 days</div>
+        <div class="pkg-features">• 3 chart components<br>• Responsive layout<br>• 1 revision</div>
+      </div>
+      <div class="pkg-card selected" onclick="selectPkg(this)">
+        <div class="pkg-name">Standard ⭐</div>
+        <div class="pkg-price">₹18,000</div>
+        <div class="pkg-delivery">⏰ 5 days</div>
+        <div class="pkg-features">• 8 chart components<br>• Filters & export<br>• 3 revisions</div>
+      </div>
+      <div class="pkg-card" onclick="selectPkg(this)">
+        <div class="pkg-name">Premium</div>
+        <div class="pkg-price">₹28,000</div>
+        <div class="pkg-delivery">⏰ 3 days</div>
+        <div class="pkg-features">• Unlimited components<br>• Full feature suite<br>• Unlimited revisions</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Additional Requirements</label>
+      <textarea class="form-input" rows="3" placeholder="Describe any specific requirements or customizations…"></textarea>
+    </div>
+
+    <div class="payment-summary">
+      <div class="pay-row"><span>Service price</span><span>₹18,000</span></div>
+      <div class="pay-row"><span>Service fee (5%)</span><span>₹900</span></div>
+      <div class="pay-row total"><span>Total (Escrow)</span><span class="amount">₹18,900</span></div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Payment Method</label>
+      <select class="form-select">
+        <option>💳 Credit/Debit Card</option>
+        <option>🏦 Net Banking</option>
+        <option>📱 UPI / GPay</option>
+        <option>💰 Wallet Balance (₹18,450)</option>
+      </select>
+    </div>
+
+    <div style="background:rgba(39,196,122,0.08);border:1px solid rgba(39,196,122,0.2);border-radius:var(--radius-sm);padding:12px;font-size:12px;color:var(--text2);margin-bottom:16px;">
+      🔒 <strong style="color:var(--green);">Escrow Protection:</strong> Your payment is held securely and only released when you approve the delivery. 100% refund guarantee.
+    </div>
+
+    <button class="btn btn-green" style="width:100%;justify-content:center;padding:12px;" onclick="processPayment()">
+      🔒 Confirm & Pay — ₹18,900
+    </button>
+  </div>
+</div>
+
+<!-- ═══ MODAL: COMPANY ═══ -->
+<div class="modal-overlay" id="companyModal">
+  <div class="modal modal-lg">
+    <div class="modal-close" onclick="closeModal('companyModal')">✕</div>
+    <div class="cmp-cover" style="background:linear-gradient(135deg,#0f2040,#1a4080,#0f2040);">
+      <div style="padding:20px;font-size:30px;opacity:0.15;letter-spacing:10px;">🚀🚀🚀🚀</div>
+    </div>
+    <div class="cmp-header">
+      <div class="cmp-logo-big" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f);">🚀</div>
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;">Nexacore Technologies</div>
+          <div style="color:var(--text2);font-size:13px;margin-top:3px;">SaaS & Cloud Infrastructure · Bengaluru, India</div>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+            <span class="tag tag-blue">🏢 500–1000 emp</span>
+            <span class="tag tag-gold">⭐ 4.8 Rating</span>
+            <span class="tag tag-green">✅ Verified</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline" onclick="followCompany(this)">＋ Follow</button>
+          <button class="btn btn-gold" onclick="closeModal('companyModal');showSection('messages',null)">💬 Message</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:0 24px;">
+      <div class="cmp-tabs">
+        <div class="cmp-tab active" onclick="cmpTab(this,'about')">About</div>
+        <div class="cmp-tab" onclick="cmpTab(this,'tasks')">Open Tasks (28)</div>
+        <div class="cmp-tab" onclick="cmpTab(this,'reviews')">Reviews</div>
+        <div class="cmp-tab" onclick="cmpTab(this,'people')">People</div>
+      </div>
+
+      <div class="cmp-tab-content active" id="cmp-about">
+        <p style="color:var(--text2);font-size:13.5px;line-height:1.7;margin-bottom:16px;">Nexacore Technologies is a leading SaaS company building next-generation cloud infrastructure and business intelligence tools. Founded in 2018, we've helped 3,000+ businesses automate and scale their operations. We regularly hire top freelance talent through TaskHive.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+          <div style="background:var(--bg3);border-radius:var(--radius);padding:16px;text-align:center;"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--gold);">12.4K</div><div style="font-size:12px;color:var(--text3);">Followers</div></div>
+          <div style="background:var(--bg3);border-radius:var(--radius);padding:16px;text-align:center;"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--gold);">480+</div><div style="font-size:12px;color:var(--text3);">Tasks Completed</div></div>
+          <div style="background:var(--bg3);border-radius:var(--radius);padding:16px;text-align:center;"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--gold);">₹2.4Cr</div><div style="font-size:12px;color:var(--text3);">Paid Out</div></div>
+        </div>
+      </div>
+
+      <div class="cmp-tab-content" id="cmp-tasks">
+        <div class="task-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="task-card" onclick="closeModal('companyModal');openModal('payModal')">
+            <div class="task-category-badge badge-dev" style="display:inline-block;margin-bottom:8px;">Dev</div>
+            <div class="task-title">React Dashboard</div>
+            <div class="task-budget">₹25,000</div>
+          </div>
+          <div class="task-card" onclick="closeModal('companyModal');openModal('payModal')">
+            <div class="task-category-badge badge-dev" style="display:inline-block;margin-bottom:8px;">Dev</div>
+            <div class="task-title">Node.js Microservices</div>
+            <div class="task-budget">₹40,000</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cmp-tab-content" id="cmp-reviews">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:var(--bg3);border-radius:var(--radius);padding:14px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6);">RK</div>
+              <div><div style="font-weight:600;font-size:13px;">Rahul K.</div><div style="color:var(--gold);font-size:12px;">★★★★★</div></div>
+              <div style="margin-left:auto;color:var(--text3);font-size:11px;">2 weeks ago</div>
+            </div>
+            <div style="font-size:13px;color:var(--text2);">Great client! Clear requirements, prompt feedback, and payment released on time. Highly recommended.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cmp-tab-content" id="cmp-people">
+        <div class="people-grid">
+          <div class="person-card">
+            <div class="avatar-lg" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f)">VP</div>
+            <div class="person-info"><div class="person-name">Vikram Patel</div><div class="person-title">CTO · Nexacore</div></div>
+            <button class="connect-btn" onclick="sendConnect(this)">Connect</button>
+          </div>
+          <div class="person-card">
+            <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640)">SA</div>
+            <div class="person-info"><div class="person-name">Sneha Anand</div><div class="person-title">HR Lead · Nexacore</div></div>
+            <button class="connect-btn" onclick="sendConnect(this)">Connect</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:20px;"></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: POST TASK ═══ -->
+<div class="modal-overlay" id="postTaskModal">
+  <div class="modal">
+    <div class="modal-close" onclick="closeModal('postTaskModal')">✕</div>
+    <div class="modal-title">Post a Task</div>
+    <div class="modal-sub">Find the perfect freelancer for your project</div>
+    <div class="form-group">
+      <label class="form-label">Task Title</label>
+      <input class="form-input" placeholder="e.g., Build a landing page for my SaaS product">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Category</label>
+      <select class="form-select">
+        <option>Development</option>
+        <option>Design</option>
+        <option>Marketing</option>
+        <option>Writing</option>
+        <option>Video</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea class="form-input" rows="4" placeholder="Describe the task in detail…"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Budget (₹)</label>
+        <input class="form-input" type="number" placeholder="e.g., 15000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Deadline</label>
+        <input class="form-input" type="number" placeholder="Days to complete">
+      </div>
+    </div>
+    <button class="btn btn-gold" style="width:100%;justify-content:center;padding:12px;" onclick="closeModal('postTaskModal');showToast('Task posted! AI agents will match freelancers.','success')">
+      🚀 Post Task
+    </button>
+  </div>
+</div>
+
+<script>
+// ─── NAVIGATION ───
+function showSection(id, navEl) {
+  document.querySelectorAll('.section-view').forEach(s => s.classList.remove('active'));
+  const sec = document.getElementById('sec-' + id);
+  if (sec) sec.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+}
+
+// ─── MODALS ───
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// ─── FILTER CHIPS ───
+function filterChip(el) {
+  const parent = el.parentElement;
+  parent.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─── FOLLOW COMPANY ───
+function followCompany(btn) {
+  if (btn.classList.contains('followed')) {
+    btn.textContent = '＋ Follow';
+    btn.classList.remove('followed');
+    btn.style.color = ''; btn.style.borderColor = '';
+    showToast('Unfollowed company', 'info');
+  } else {
+    btn.textContent = '✓ Following';
+    btn.classList.add('followed');
+    btn.style.color = 'var(--green)'; btn.style.borderColor = 'var(--green)';
+    showToast('Now following! You\'ll get task alerts from this company.', 'success');
+  }
+}
+
+// ─── CONNECT ───
+function sendConnect(btn) {
+  if (btn.classList.contains('pending')) return;
+  if (btn.classList.contains('connected')) return;
+  btn.textContent = 'Pending';
+  btn.classList.add('pending');
+  btn.style.borderColor = 'var(--text3)'; btn.style.color = 'var(--text3)';
+  showToast('Connection request sent!', 'success');
+}
+function acceptConnect(btn) {
+  const card = btn.closest('.person-card');
+  if (card) {
+    card.innerHTML = '<div style="color:var(--green);font-size:13px;font-weight:600;padding:4px 0;">✅ Connected! You can now message each other.</div>';
+    showToast('Connection accepted! You can now message Nikhil.', 'success');
+  }
+}
+
+// ─── COMPANY TABS ───
+function cmpTab(el, id) {
+  document.querySelectorAll('.cmp-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.cmp-tab-content').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const content = document.getElementById('cmp-' + id);
+  if (content) content.classList.add('active');
+}
+
+// ─── MESSAGES ───
+function setConv(el, name) {
+  document.querySelectorAll('.msg-conv').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('msgHeaderName').textContent = name;
+  document.getElementById('msgHeaderAvatar').textContent = initials;
+}
+function sendMsg(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsgBtn(); } }
+function sendMsgBtn() {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const body = document.getElementById('msgBody');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg-bubble-wrap own';
+  wrap.innerHTML = `<div class="avatar-lg" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6);width:30px;height:30px;font-size:11px;flex-shrink:0;">AK</div><div><div class="msg-bubble">${text}</div><div class="msg-time">Just now</div></div>`;
+  body.appendChild(wrap);
+  input.value = '';
+  body.scrollTop = body.scrollHeight;
+}
+
+// ─── PAYMENT ───
+function selectPkg(el) {
+  el.closest('.payment-pkg-row').querySelectorAll('.pkg-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function processPayment() {
+  closeModal('payModal');
+  showToast('🔒 Payment secured in escrow! Task started.', 'success');
+}
+
+// ─── AGENT ───
+function toggleAgent() {
+  document.getElementById('agentPopup').classList.toggle('open');
+}
+const agentReplies = [
+  "I've scanned 1,247 tasks and found 6 that match your skills. Shall I apply to the top matches?",
+  "Your profile has been viewed 42 times this week. Nexacore Technologies viewed it 3 times — I recommend following up.",
+  "I've already submitted proposals to the top 3 tasks matching your criteria. Awaiting responses.",
+  "Based on your past earnings, I recommend increasing your minimum rate to ₹12,000 for better ROI.",
+  "I detected a new urgent task: ₹55,000 Full-Stack E-commerce — 99% match! Should I apply?",
+];
+let agentReplyIdx = 0;
+function floatAgentChat(e) { if (e.key === 'Enter') floatAgentSend(); }
+function floatAgentSend() {
+  const input = document.getElementById('floatAgentInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const body = document.getElementById('agentChatBody');
+  const userMsg = document.createElement('div');
+  userMsg.className = 'agent-msg user'; userMsg.textContent = text;
+  body.appendChild(userMsg);
+  input.value = '';
+  setTimeout(() => {
+    const botMsg = document.createElement('div');
+    botMsg.className = 'agent-msg bot';
+    botMsg.textContent = agentReplies[agentReplyIdx % agentReplies.length];
+    agentReplyIdx++;
+    body.appendChild(botMsg);
+    body.scrollTop = body.scrollHeight;
+  }, 800);
+  body.scrollTop = body.scrollHeight;
+}
+function agentChat(e) { if (e.key === 'Enter') agentChatSend(); }
+function agentChatSend() {
+  const input = document.getElementById('agentMainInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const body = document.getElementById('agentChatMain');
+  const userMsg = document.createElement('div');
+  userMsg.className = 'agent-msg user'; userMsg.textContent = text;
+  body.appendChild(userMsg);
+  input.value = '';
+  setTimeout(() => {
+    const botMsg = document.createElement('div');
+    botMsg.className = 'agent-msg bot';
+    botMsg.textContent = agentReplies[agentReplyIdx % agentReplies.length];
+    agentReplyIdx++;
+    body.appendChild(botMsg);
+    body.scrollTop = body.scrollHeight;
+  }, 800);
+  body.scrollTop = body.scrollHeight;
+}
+
+// ─── TOAST ───
+function showToast(msg, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const icons = { success: '✅', info: 'ℹ️', warning: '⚠️' };
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<span>${icons[type]}</span><span>${msg}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(20px)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 3500);
+}
+
+// Auto-show a welcome toast
+setTimeout(() => showToast('🤖 Agent found 6 new task matches for you!', 'warning'), 1200);
 </script>
 </body>
 </html>
