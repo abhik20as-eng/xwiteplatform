@@ -1,2180 +1,1383 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TaskHive — Work. Connect. Earn.</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskLink AI | Collaboration Hub</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-surface": "#1b1c1a",
+          "surface-container-high": "#e9e8e5",
+          "on-primary": "#ffffff",
+          "surface-tint": "#006398",
+          "surface-bright": "#faf9f6",
+          "on-error-container": "#93000a",
+          "primary": "#005d8f",
+          "primary-fixed-dim": "#93ccff",
+          "on-primary-fixed-variant": "#004b74",
+          "tertiary-fixed-dim": "#ffb876",
+          "inverse-surface": "#2f312f",
+          "error": "#ba1a1a",
+          "on-background": "#1b1c1a",
+          "error-container": "#ffdad6",
+          "on-secondary": "#ffffff",
+          "primary-fixed": "#cde5ff",
+          "on-primary-fixed": "#001d32",
+          "on-surface-variant": "#404850",
+          "on-secondary-fixed": "#001d32",
+          "secondary-fixed-dim": "#adcae7",
+          "inverse-on-surface": "#f2f1ee",
+          "surface-container-low": "#f4f3f0",
+          "surface-container-lowest": "#ffffff",
+          "tertiary": "#854a00",
+          "primary-container": "#0077b5",
+          "surface-container-highest": "#e3e2df",
+          "surface": "#faf9f6",
+          "secondary-fixed": "#cde5ff",
+          "secondary-container": "#c3e0fe",
+          "on-error": "#ffffff",
+          "surface-variant": "#e3e2df",
+          "outline": "#707881",
+          "on-tertiary-container": "#fff5ef",
+          "secondary": "#45617a",
+          "surface-container": "#efeeeb",
+          "surface-dim": "#dbdad7",
+          "tertiary-fixed": "#ffdcc0",
+          "on-tertiary-fixed": "#2d1600",
+          "on-primary-container": "#f3f7ff",
+          "tertiary-container": "#a85f00",
+          "background": "#faf9f6",
+          "outline-variant": "#bfc7d1",
+          "inverse-primary": "#93ccff",
+          "on-tertiary": "#ffffff",
+          "on-secondary-container": "#48647d",
+          "on-tertiary-fixed-variant": "#6b3b00",
+          "on-secondary-fixed-variant": "#2d4961"
+        },
+        fontFamily: {
+          "headline": ["Manrope"],
+          "body": ["Inter"],
+          "label": ["Inter"]
+        },
+        borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+      },
+    },
+  }
+</script>
 <style>
-:root {
-  --bg: #0a0c10;
-  --bg2: #111318;
-  --bg3: #181c24;
-  --card: #1a1f2e;
-  --card2: #1f2535;
-  --border: #252d40;
-  --border2: #2e3850;
-  --gold: #f5a623;
-  --gold2: #ffbd5a;
-  --gold-dim: rgba(245,166,35,0.12);
-  --blue: #4a90e2;
-  --blue2: #6aaff5;
-  --green: #27c47a;
-  --red: #e85858;
-  --purple: #8b5cf6;
-  --text: #e8eaf0;
-  --text2: #9aa3b8;
-  --text3: #5a6480;
-  --radius: 14px;
-  --radius-sm: 8px;
-  --shadow: 0 8px 32px rgba(0,0,0,0.5);
-  --glow: 0 0 30px rgba(245,166,35,0.15);
-}
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+  body { background-color: #faf9f6; }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+  /* Page transition */
+  .page { display: none; opacity: 0; transform: translateY(8px); transition: opacity 0.22s ease, transform 0.22s ease; }
+  .page.active { display: block; }
+  .page.visible { opacity: 1; transform: translateY(0); }
 
-html { scroll-behavior: smooth; }
+  /* Toast */
+  #toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: #1b1c1a; color: #fff; padding: 10px 20px; border-radius: 999px;
+    font-size: 13px; font-weight: 600; z-index: 9999;
+    opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+  /* Modal overlay */
+  #modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    z-index: 1000; align-items: center; justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  #modal-overlay.open { display: flex; }
+  #modal-box { animation: modalIn 0.2s ease; }
+  @keyframes modalIn { from { opacity:0; transform: scale(0.95) translateY(12px); } to { opacity:1; transform: scale(1) translateY(0); } }
 
-/* ─── LAYOUT ─── */
-.shell { display: flex; min-height: 100vh; }
+  .tonal-shift { transition: background-color 0.3s ease; }
 
-/* ─── SIDEBAR ─── */
-.sidebar {
-  width: 230px;
-  background: var(--bg2);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  z-index: 100;
-  overflow-y: auto;
-}
+  /* Nav active indicator */
+  .nav-desktop-link { position: relative; padding-bottom: 4px; }
+  .nav-desktop-link.active { color: #005d8f; font-weight: 700; }
+  .nav-desktop-link.active::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 2px; background: #005d8f; border-radius: 2px;
+  }
+  .nav-desktop-link:not(.active) { color: #6b7280; font-weight: 500; }
+  .nav-desktop-link:not(.active):hover { color: #005d8f; }
 
-.logo {
-  padding: 24px 20px 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.logo-icon {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, var(--gold), #e07b00);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  box-shadow: 0 4px 14px rgba(245,166,35,0.35);
-}
-.logo-text {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 18px;
-  letter-spacing: -0.5px;
-}
-.logo-text span { color: var(--gold); }
+  /* Mobile nav active */
+  .mobile-nav-btn.active { color: #005d8f; }
+  .mobile-nav-btn.active .nav-indicator { border-top: 2px solid #005d8f; }
+  .mobile-nav-btn:not(.active) { color: #6b7280; }
+  .nav-indicator { padding-top: 4px; }
 
-.nav { padding: 12px 12px; flex: 1; }
-.nav-section-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  padding: 16px 10px 6px;
-}
+  /* Search modal */
+  #search-modal {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 2000; align-items: flex-start; justify-content: center; padding-top: 80px;
+    backdrop-filter: blur(4px);
+  }
+  #search-modal.open { display: flex; }
 
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  color: var(--text2);
-  font-size: 13.5px;
-  font-weight: 500;
-  transition: all 0.18s;
-  margin-bottom: 2px;
-  position: relative;
-}
-.nav-item:hover { background: var(--bg3); color: var(--text); }
-.nav-item.active {
-  background: var(--gold-dim);
-  color: var(--gold);
-  border: 1px solid rgba(245,166,35,0.2);
-}
-.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
-.nav-badge {
-  margin-left: auto;
-  background: var(--gold);
-  color: #000;
-  font-size: 10px;
-  font-weight: 700;
-  border-radius: 50px;
-  padding: 1px 6px;
-  min-width: 18px;
-  text-align: center;
-}
-
-.sidebar-user {
-  padding: 14px 16px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-.sidebar-avatar {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4a90e2, #8b5cf6);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-.sidebar-user-info { overflow: hidden; }
-.sidebar-user-name { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.sidebar-user-role { color: var(--text3); font-size: 11px; }
-.agent-dot {
-  width: 8px; height: 8px;
-  background: var(--green);
-  border-radius: 50%;
-  margin-left: auto;
-  flex-shrink: 0;
-  animation: pulse-dot 2s infinite;
-  box-shadow: 0 0 0 0 rgba(39,196,122,0.4);
-}
-@keyframes pulse-dot {
-  0% { box-shadow: 0 0 0 0 rgba(39,196,122,0.4); }
-  70% { box-shadow: 0 0 0 6px rgba(39,196,122,0); }
-  100% { box-shadow: 0 0 0 0 rgba(39,196,122,0); }
-}
-
-/* ─── MAIN ─── */
-.main {
-  margin-left: 230px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* ─── TOPBAR ─── */
-.topbar {
-  height: 60px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(10,12,16,0.85);
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-  gap: 14px;
-  position: sticky;
-  top: 0;
-  z-index: 90;
-}
-.search-bar {
-  flex: 1;
-  max-width: 440px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  padding: 0 14px;
-  gap: 10px;
-  height: 36px;
-  transition: border-color 0.2s;
-}
-.search-bar:focus-within { border-color: var(--gold); }
-.search-bar input {
-  background: none;
-  border: none;
-  outline: none;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 13px;
-  width: 100%;
-}
-.search-bar input::placeholder { color: var(--text3); }
-.search-icon { color: var(--text3); font-size: 15px; }
-
-.topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-.icon-btn {
-  width: 36px; height: 36px;
-  border-radius: 9px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.18s;
-  position: relative;
-  color: var(--text2);
-}
-.icon-btn:hover { background: var(--border); color: var(--text); }
-.icon-btn .badge {
-  position: absolute;
-  top: -4px; right: -4px;
-  width: 16px; height: 16px;
-  background: var(--red);
-  color: #fff;
-  font-size: 9px;
-  font-weight: 700;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  border: 2px solid var(--bg);
-}
-
-.btn {
-  padding: 8px 18px;
-  border-radius: var(--radius-sm);
-  border: none;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.18s;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  text-decoration: none;
-}
-.btn-gold {
-  background: linear-gradient(135deg, var(--gold), #e08e1a);
-  color: #000;
-  box-shadow: 0 4px 14px rgba(245,166,35,0.3);
-}
-.btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,166,35,0.4); }
-.btn-outline {
-  background: transparent;
-  color: var(--text2);
-  border: 1px solid var(--border2);
-}
-.btn-outline:hover { background: var(--bg3); color: var(--text); border-color: var(--text3); }
-.btn-ghost {
-  background: var(--bg3);
-  color: var(--text2);
-  border: 1px solid var(--border);
-}
-.btn-ghost:hover { color: var(--text); border-color: var(--border2); }
-.btn-blue {
-  background: var(--blue);
-  color: #fff;
-}
-.btn-green {
-  background: var(--green);
-  color: #000;
-  font-weight: 700;
-}
-.btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 7px; }
-
-/* ─── CONTENT ─── */
-.content { padding: 28px 28px; flex: 1; }
-
-/* ─── SECTION VIEWS ─── */
-.section-view { display: none; animation: fadeSlide 0.3s ease; }
-.section-view.active { display: block; }
-@keyframes fadeSlide {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ─── PAGE HEADER ─── */
-.page-header { margin-bottom: 24px; }
-.page-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-.page-title span { color: var(--gold); }
-.page-sub { color: var(--text2); margin-top: 4px; font-size: 13px; }
-
-/* ─── STATS STRIP ─── */
-.stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 26px; }
-.stat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  transition: border-color 0.2s;
-}
-.stat-card:hover { border-color: var(--border2); }
-.stat-icon {
-  width: 42px; height: 42px;
-  border-radius: 11px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 19px;
-}
-.stat-icon.gold { background: var(--gold-dim); }
-.stat-icon.blue { background: rgba(74,144,226,0.12); }
-.stat-icon.green { background: rgba(39,196,122,0.12); }
-.stat-icon.purple { background: rgba(139,92,246,0.12); }
-.stat-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
-.stat-label { color: var(--text2); font-size: 12px; margin-top: 1px; }
-
-/* ─── TASK GRID ─── */
-.section-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-}
-.section-label { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
-.filter-chips { display: flex; gap: 7px; flex-wrap: wrap; margin-left: 2px; }
-.chip {
-  padding: 5px 13px;
-  border-radius: 50px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text2);
-  font-family: inherit;
-  transition: all 0.15s;
-}
-.chip.active { background: var(--gold-dim); border-color: rgba(245,166,35,0.35); color: var(--gold); }
-.chip:hover:not(.active) { background: var(--bg3); color: var(--text); }
-
-.task-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-
-.task-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  position: relative;
-  overflow: hidden;
-}
-.task-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--gold), transparent);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.task-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: var(--shadow); }
-.task-card:hover::before { opacity: 1; }
-
-.task-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-.task-category-badge {
-  padding: 3px 10px;
-  border-radius: 50px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.badge-design { background: rgba(139,92,246,0.15); color: #a78bfa; }
-.badge-dev { background: rgba(74,144,226,0.15); color: #6aaff5; }
-.badge-marketing { background: rgba(245,166,35,0.15); color: var(--gold); }
-.badge-writing { background: rgba(39,196,122,0.15); color: #5dd89a; }
-.badge-video { background: rgba(232,88,88,0.15); color: #f07070; }
-.badge-network { background: rgba(245,166,35,0.15); color: var(--gold); }
-
-.task-title { font-family: 'Syne', sans-serif; font-size: 14.5px; font-weight: 700; line-height: 1.35; }
-.task-desc { color: var(--text2); font-size: 12.5px; line-height: 1.5; }
-
-.task-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
-.task-poster { display: flex; align-items: center; gap: 8px; }
-.mini-avatar {
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-.task-poster-name { font-size: 12px; color: var(--text2); }
-.task-budget {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--gold);
-}
-.task-budget small { font-size: 10px; color: var(--text3); font-family: 'DM Sans', sans-serif; font-weight: 400; display: block; text-align: right; }
-
-.task-meta { display: flex; gap: 10px; flex-wrap: wrap; }
-.task-meta span {
-  font-size: 11px;
-  color: var(--text3);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-/* ─── NETWORK SECTION ─── */
-.net-layout { display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
-.company-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-.company-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.company-card:hover { border-color: var(--gold); box-shadow: var(--glow); }
-.company-banner {
-  height: 72px;
-  position: relative;
-  overflow: hidden;
-}
-.company-body { padding: 12px 16px 16px; }
-.company-logo {
-  width: 48px; height: 48px;
-  border-radius: 12px;
-  border: 3px solid var(--bg2);
-  position: absolute;
-  bottom: -20px;
-  left: 16px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-}
-.company-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; margin-top: 26px; }
-.company-industry { font-size: 11px; color: var(--text3); margin-top: 2px; }
-.company-stats-row { display: flex; gap: 14px; margin-top: 10px; }
-.company-stat { font-size: 11px; color: var(--text3); }
-.company-stat strong { color: var(--text2); font-size: 12px; }
-.company-actions { display: flex; gap: 8px; margin-top: 12px; }
-
-.people-grid { display: flex; flex-direction: column; gap: 10px; }
-.person-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.person-card:hover { border-color: var(--border2); }
-.person-info { flex: 1; overflow: hidden; }
-.person-name { font-weight: 600; font-size: 13px; }
-.person-title { color: var(--text3); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.person-mutual { font-size: 11px; color: var(--text3); margin-top: 2px; }
-.connect-btn {
-  padding: 5px 14px;
-  border-radius: 50px;
-  background: transparent;
-  border: 1px solid var(--blue);
-  color: var(--blue);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.18s;
-  white-space: nowrap;
-}
-.connect-btn:hover { background: var(--blue); color: #fff; }
-.connect-btn.pending { border-color: var(--text3); color: var(--text3); }
-.connect-btn.connected { border-color: var(--green); color: var(--green); }
-
-/* Sidebar panels */
-.side-panel {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px;
-  margin-bottom: 14px;
-}
-.side-panel-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; margin-bottom: 14px; color: var(--text); }
-
-/* ─── PROFILE SECTION ─── */
-.profile-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
-.profile-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.profile-banner-bg {
-  height: 100px;
-  background: linear-gradient(135deg, #1a2340, #2d1a40, #1a2340);
-  position: relative;
-}
-.profile-avatar-wrap {
-  position: absolute;
-  bottom: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.profile-avatar {
-  width: 64px; height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4a90e2, #8b5cf6);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 26px;
-  font-weight: 700;
-  border: 3px solid var(--card);
-}
-.profile-info { padding: 44px 20px 20px; text-align: center; }
-.profile-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; }
-.profile-tagline { color: var(--text2); font-size: 12.5px; margin-top: 4px; }
-.profile-rating { display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 10px; color: var(--gold); font-size: 13px; font-weight: 600; }
-.profile-stats { display: flex; border-top: 1px solid var(--border); margin-top: 14px; }
-.profile-stat { flex: 1; padding: 12px; text-align: center; border-right: 1px solid var(--border); }
-.profile-stat:last-child { border-right: none; }
-.profile-stat .val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; }
-.profile-stat .lbl { font-size: 10px; color: var(--text3); margin-top: 2px; }
-
-.skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.skill-tag {
-  padding: 4px 11px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 50px;
-  font-size: 11.5px;
-  color: var(--text2);
-}
-
-/* ─── AI AGENT ─── */
-.agent-card {
-  background: linear-gradient(135deg, #0f1929, #1a1030);
-  border: 1px solid rgba(139,92,246,0.3);
-  border-radius: var(--radius);
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 14px;
-}
-.agent-card::before {
-  content: '';
-  position: absolute;
-  top: -50%; right: -50%;
-  width: 200%; height: 200%;
-  background: radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 60%);
-}
-.agent-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.agent-orb {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #8b5cf6, #6366f1);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  animation: orbit-glow 3s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(139,92,246,0.4);
-}
-@keyframes orbit-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(139,92,246,0.4); }
-  50% { box-shadow: 0 0 35px rgba(139,92,246,0.7); }
-}
-.agent-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
-.agent-status { font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 5px; }
-.agent-activity {
-  background: rgba(0,0,0,0.3);
-  border-radius: var(--radius-sm);
-  padding: 12px;
-  font-size: 12px;
-  color: var(--text2);
-  line-height: 1.6;
-}
-.agent-activity-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.agent-activity-item:last-child { border-bottom: none; }
-.agent-dot2 {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--purple);
-  flex-shrink: 0;
-  margin-top: 5px;
-}
-
-/* ─── MESSAGES ─── */
-.msg-layout { display: grid; grid-template-columns: 280px 1fr; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; height: calc(100vh - 200px); }
-.msg-list {
-  border-right: 1px solid var(--border);
-  background: var(--card);
-  overflow-y: auto;
-}
-.msg-list-header {
-  padding: 16px 18px;
-  border-bottom: 1px solid var(--border);
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-}
-.msg-conv {
-  padding: 14px 16px;
-  display: flex;
-  gap: 11px;
-  cursor: pointer;
-  transition: background 0.15s;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-}
-.msg-conv:hover { background: var(--card2); }
-.msg-conv.active { background: var(--gold-dim); border-left: 2px solid var(--gold); }
-.msg-conv-info { flex: 1; overflow: hidden; }
-.msg-conv-name { font-weight: 600; font-size: 13px; display: flex; justify-content: space-between; }
-.msg-conv-time { font-size: 10px; color: var(--text3); font-weight: 400; }
-.msg-conv-preview { font-size: 12px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-.msg-conv-badge { width: 18px; height: 18px; background: var(--gold); color: #000; font-size: 9px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
-
-.msg-area { display: flex; flex-direction: column; background: var(--bg2); }
-.msg-area-header {
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--card);
-}
-.msg-area-body { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-.msg-bubble-wrap { display: flex; gap: 10px; }
-.msg-bubble-wrap.own { flex-direction: row-reverse; }
-.msg-bubble {
-  max-width: 65%;
-  padding: 10px 14px;
-  border-radius: 14px;
-  font-size: 13px;
-  line-height: 1.5;
-}
-.msg-bubble-wrap:not(.own) .msg-bubble { background: var(--card2); border-bottom-left-radius: 4px; }
-.msg-bubble-wrap.own .msg-bubble { background: linear-gradient(135deg, rgba(245,166,35,0.2), rgba(245,166,35,0.1)); border-bottom-right-radius: 4px; border: 1px solid rgba(245,166,35,0.2); }
-.msg-time { font-size: 10px; color: var(--text3); margin-top: 4px; text-align: right; }
-.msg-input-bar {
-  padding: 14px 16px;
-  border-top: 1px solid var(--border);
-  background: var(--card);
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-.msg-input {
-  flex: 1;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px 14px;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 13px;
-  outline: none;
-  resize: none;
-  height: 38px;
-}
-.msg-input:focus { border-color: var(--gold); }
-
-/* ─── PAYMENT MODAL ─── */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(6px);
-  z-index: 500;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.2s ease;
-}
-.modal-overlay.open { display: flex; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-.modal {
-  background: var(--bg2);
-  border: 1px solid var(--border2);
-  border-radius: 18px;
-  padding: 28px;
-  width: 100%;
-  max-width: 500px;
-  position: relative;
-  animation: slideUp 0.25s ease;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.modal-lg { max-width: 720px; }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.modal-close {
-  position: absolute;
-  top: 16px; right: 16px;
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  color: var(--text2);
-  font-size: 14px;
-  transition: all 0.15s;
-}
-.modal-close:hover { background: var(--border); color: var(--text); }
-.modal-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; margin-bottom: 6px; }
-.modal-sub { color: var(--text2); font-size: 13px; margin-bottom: 22px; }
-
-/* Payment */
-.payment-pkg-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-.pkg-card {
-  background: var(--bg3);
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  cursor: pointer;
-  transition: all 0.18s;
-  text-align: center;
-}
-.pkg-card:hover, .pkg-card.selected { border-color: var(--gold); background: var(--gold-dim); }
-.pkg-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; }
-.pkg-price { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: var(--gold); margin: 8px 0; }
-.pkg-delivery { font-size: 11px; color: var(--text3); }
-.pkg-features { font-size: 11.5px; color: var(--text2); margin-top: 8px; line-height: 1.6; text-align: left; }
-
-.form-group { margin-bottom: 16px; }
-.form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-input, .form-select {
-  width: 100%;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px 14px;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 13px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.form-input:focus, .form-select:focus { border-color: var(--gold); }
-.form-select option { background: var(--bg2); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-.payment-summary {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 18px;
-}
-.pay-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 13px; }
-.pay-row.total { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 12px; font-weight: 700; font-size: 15px; }
-.pay-row.total .amount { color: var(--gold); }
-
-/* Company profile modal */
-.cmp-cover { height: 130px; border-radius: 12px; margin-bottom: 0; overflow: hidden; }
-.cmp-header { padding: 0 24px 20px; position: relative; margin-top: -30px; }
-.cmp-logo-big {
-  width: 68px; height: 68px;
-  border-radius: 16px;
-  border: 3px solid var(--bg2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px;
-  margin-bottom: 12px;
-}
-.cmp-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin: 16px 0; }
-.cmp-tab {
-  padding: 10px 18px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text3);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.15s;
-  margin-bottom: -1px;
-}
-.cmp-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-.cmp-tab-content { display: none; }
-.cmp-tab-content.active { display: block; }
-
-/* Notification panel */
-.notif-list { display: flex; flex-direction: column; gap: 6px; }
-.notif-item {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  display: flex;
-  gap: 11px;
-  align-items: flex-start;
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-.notif-item:hover { border-color: var(--border2); }
-.notif-item.unread { border-left: 3px solid var(--gold); }
-.notif-icon-wrap {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px;
-  flex-shrink: 0;
-}
-.notif-text { font-size: 13px; line-height: 1.4; }
-.notif-text strong { color: var(--text); }
-.notif-time { font-size: 11px; color: var(--text3); margin-top: 3px; }
-
-/* Wallet section */
-.wallet-top { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-.wallet-card {
-  background: linear-gradient(135deg, #1a2340, #0f1929);
-  border: 1px solid rgba(74,144,226,0.2);
-  border-radius: var(--radius);
-  padding: 22px;
-}
-.wallet-label { font-size: 12px; color: var(--text3); }
-.wallet-amount { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 30px; margin: 8px 0 2px; }
-.wallet-amount.gold { color: var(--gold); }
-.wallet-pending { font-size: 12px; color: var(--text3); }
-
-.tx-list { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-.tx-header { padding: 14px 18px; border-bottom: 1px solid var(--border); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; }
-.tx-item { display: flex; align-items: center; gap: 14px; padding: 13px 18px; border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.15s; cursor: pointer; }
-.tx-item:hover { background: rgba(255,255,255,0.02); }
-.tx-item:last-child { border-bottom: none; }
-.tx-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
-.tx-info { flex: 1; }
-.tx-name { font-size: 13px; font-weight: 500; }
-.tx-date { font-size: 11px; color: var(--text3); }
-.tx-amount { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; }
-.tx-amount.credit { color: var(--green); }
-.tx-amount.debit { color: var(--red); }
-
-/* ─── SCROLLBAR ─── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text3); }
-
-/* ─── MISC ─── */
-.divider { height: 1px; background: var(--border); margin: 16px 0; }
-.avatar-lg {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700;
-  font-size: 17px;
-  flex-shrink: 0;
-}
-.tag {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 3px 9px;
-  border-radius: 50px;
-  font-size: 11px;
-  font-weight: 600;
-}
-.tag-gold { background: var(--gold-dim); color: var(--gold); }
-.tag-green { background: rgba(39,196,122,0.12); color: var(--green); }
-.tag-blue { background: rgba(74,144,226,0.12); color: var(--blue2); }
-.tag-red { background: rgba(232,88,88,0.12); color: #f07070; }
-.tag-purple { background: rgba(139,92,246,0.12); color: #a78bfa; }
-
-.empty-state { text-align: center; padding: 50px 20px; color: var(--text3); }
-.empty-state .icon { font-size: 42px; margin-bottom: 12px; }
-.empty-state p { font-size: 14px; }
-
-/* Toast */
-.toast-container { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
-.toast {
-  background: var(--card2);
-  border: 1px solid var(--border2);
-  border-radius: var(--radius);
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  box-shadow: var(--shadow);
-  animation: toastIn 0.3s ease;
-  max-width: 300px;
-}
-.toast.success { border-left: 3px solid var(--green); }
-.toast.info { border-left: 3px solid var(--blue); }
-.toast.warning { border-left: 3px solid var(--gold); }
-@keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-
-/* Agent chat widget */
-.agent-widget {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 400;
-}
-.agent-fab {
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #8b5cf6, #6366f1);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
-  cursor: pointer;
-  box-shadow: 0 6px 24px rgba(139,92,246,0.5);
-  animation: orbit-glow 3s ease-in-out infinite;
-  border: none;
-}
-.agent-popup {
-  position: absolute;
-  bottom: 64px;
-  right: 0;
-  width: 320px;
-  background: var(--bg2);
-  border: 1px solid rgba(139,92,246,0.3);
-  border-radius: 16px;
-  overflow: hidden;
-  display: none;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.6);
-}
-.agent-popup.open { display: block; animation: slideUp 0.2s ease; }
-.agent-popup-header {
-  padding: 14px 16px;
-  background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(99,102,241,0.1));
-  border-bottom: 1px solid rgba(139,92,246,0.15);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.agent-chat-body { padding: 14px; height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.agent-msg { font-size: 12.5px; line-height: 1.5; }
-.agent-msg.bot { background: rgba(139,92,246,0.1); border-radius: 10px; padding: 9px 12px; border: 1px solid rgba(139,92,246,0.15); color: var(--text2); }
-.agent-msg.user { background: var(--bg3); border-radius: 10px; padding: 9px 12px; text-align: right; }
-.agent-input-row { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
-.agent-input {
-  flex: 1;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 12px;
-  color: var(--text);
-  font-family: inherit;
-  outline: none;
-}
-.agent-send { padding: 0 12px; height: 34px; border-radius: 8px; background: var(--purple); border: none; color: #fff; cursor: pointer; font-size: 14px; }
-
-/* RESPONSIVE SIMPLIFICATION (keeps it working on smaller viewports) */
-@media (max-width: 1100px) {
-  .task-grid { grid-template-columns: 1fr 1fr; }
-  .stats-strip { grid-template-columns: repeat(2, 1fr); }
-}
+  /* Connect button states */
+  .btn-connect.connected { background: #e9e8e5; color: #404850; }
+  .btn-follow.followed { background: transparent; border-color: #707881; color: #404850; }
 </style>
 </head>
-<body>
+<body class="font-body text-on-surface antialiased min-h-screen">
 
-<div class="shell">
+<!-- ===== TOAST ===== -->
+<div id="toast"></div>
 
-<!-- ═══ SIDEBAR ═══ -->
-<aside class="sidebar">
-  <div class="logo">
-    <div class="logo-icon">🐝</div>
-    <div class="logo-text">Task<span>Hive</span></div>
-  </div>
-
-  <nav class="nav">
-    <div class="nav-section-label">Main</div>
-    <div class="nav-item active" onclick="showSection('home',this)">
-      <span class="nav-icon">🏠</span> Home
-    </div>
-    <div class="nav-item" onclick="showSection('tasks',this)">
-      <span class="nav-icon">📋</span> Browse Tasks
-      <span class="nav-badge">24</span>
-    </div>
-    <div class="nav-item" onclick="showSection('products',this)">
-      <span class="nav-icon">📦</span> Products
+<!-- ===== HEADER ===== -->
+<header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-zinc-200/30 shadow-sm">
+  <div class="flex justify-between items-center px-6 h-16 w-full max-w-screen-2xl mx-auto">
+    <!-- Branding -->
+    <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
+      <span class="material-symbols-outlined text-primary text-3xl">hub</span>
+      <h1 class="font-headline font-extrabold tracking-tight text-primary text-xl hidden sm:block">TaskLink AI</h1>
     </div>
 
-    <div class="nav-section-label">Network</div>
-    <div class="nav-item" onclick="showSection('network',this)">
-      <span class="nav-icon">🌐</span> Network
-    </div>
-    <div class="nav-item" onclick="showSection('messages',this)">
-      <span class="nav-icon">💬</span> Messages
-      <span class="nav-badge">3</span>
-    </div>
-    <div class="nav-item" onclick="showSection('notifications',this)">
-      <span class="nav-icon">🔔</span> Notifications
-      <span class="nav-badge">7</span>
-    </div>
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-8">
+      <a class="nav-desktop-link active transition-colors" onclick="navigate('home')" href="#">Feed</a>
+      <a class="nav-desktop-link transition-colors" onclick="navigate('network')" href="#">Network</a>
+      <a class="nav-desktop-link transition-colors" onclick="navigate('post')" href="#">Post</a>
+      <a class="nav-desktop-link transition-colors" onclick="navigate('alerts')" href="#">Alerts</a>
+      <a class="nav-desktop-link transition-colors" onclick="navigate('profile')" href="#">Profile</a>
+    </nav>
 
-    <div class="nav-section-label">Account</div>
-    <div class="nav-item" onclick="showSection('profile',this)">
-      <span class="nav-icon">👤</span> My Profile
-    </div>
-    <div class="nav-item" onclick="showSection('wallet',this)">
-      <span class="nav-icon">💳</span> Wallet
-    </div>
-    <div class="nav-item" onclick="showSection('agent',this)">
-      <span class="nav-icon">🤖</span> My AI Agent
-    </div>
-  </nav>
-
-  <div class="sidebar-user" onclick="showSection('profile', document.querySelector('[onclick*=profile]'))">
-    <div class="sidebar-avatar">AK</div>
-    <div class="sidebar-user-info">
-      <div class="sidebar-user-name">Arjun Kumar</div>
-      <div class="sidebar-user-role">Full-Stack Dev</div>
-    </div>
-    <div class="agent-dot" title="AI Agent Active"></div>
-  </div>
-</aside>
-
-<!-- ═══ MAIN AREA ═══ -->
-<div class="main">
-
-  <!-- Topbar -->
-  <div class="topbar">
-    <div class="search-bar">
-      <span class="search-icon">🔍</span>
-      <input type="text" placeholder="Search tasks, companies, people…">
-    </div>
-    <div class="topbar-actions">
-      <div class="icon-btn" onclick="showSection('notifications', document.querySelectorAll('.nav-item')[6])" title="Notifications">
-        🔔
-        <span class="badge">7</span>
+    <!-- Search + Actions -->
+    <div class="flex items-center gap-3">
+      <!-- Search (desktop) -->
+      <div class="hidden md:flex flex-1 max-w-xs">
+        <div class="relative w-full">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-lg">search</span>
+          <input id="desktop-search" class="w-full bg-surface-container-high border-none rounded-full py-2 pl-9 pr-4 text-sm focus:ring-2 focus:ring-primary focus:bg-white transition-all" placeholder="Search..." type="text" onclick="openSearchModal()"/>
+        </div>
       </div>
-      <div class="icon-btn" onclick="showSection('messages', document.querySelectorAll('.nav-item')[5])" title="Messages">
-        💬
-        <span class="badge">3</span>
+      <!-- Search icon (mobile) -->
+      <button class="md:hidden p-2 rounded-full hover:bg-surface-container-high transition-colors" onclick="openSearchModal()">
+        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+      </button>
+      <!-- Notifications -->
+      <button class="relative p-2 rounded-full hover:bg-surface-container-high transition-colors" onclick="navigate('alerts')">
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+        <span id="notif-badge" class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+      <!-- AI Agent -->
+      <button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-4 py-2 rounded-full font-medium shadow-sm hover:opacity-90 active:scale-95 transition-all" onclick="showToast('AI Agent activated!')">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">smart_toy</span>
+        <span class="text-sm font-label hidden sm:inline">AI Agent</span>
+      </button>
+      <!-- Avatar -->
+      <div class="w-9 h-9 rounded-full overflow-hidden border-2 border-primary/20 cursor-pointer" onclick="navigate('profile')">
+        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4ML4s_lrbymG_xzjFv1oiIn4VnB0RKqmV-HwvGMevfFOAp2AN6fJLSxzo0J524gWOiKaoLhosJcE0GgquQ2dx38K3OzRRfIE8p5aZMSBrkU-dLq4XhkLPzg8GUXtZ9QDxQmn-2q3X-_hvxk8Ye-Yw5LGifLiPveJfvV2PMkG-AyRJ_7yI7k6mUazZkE62oHEDZwusFLxVhguym1lZj3w_J8iDdbU3CJ58P7yk_hNHy5exltYJ5U2Xl0ryDQ-FV1SIa-kM1nqxwv0" alt="Profile"/>
       </div>
-      <button class="btn btn-gold" onclick="openModal('postTaskModal')">
-        ＋ Post Task
+    </div>
+  </div>
+</header>
+
+<!-- ===== SEARCH MODAL ===== -->
+<div id="search-modal" onclick="closeSearchModal(event)">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-surface-container-high">
+      <span class="material-symbols-outlined text-primary">search</span>
+      <input id="search-input" class="flex-1 bg-transparent border-none outline-none text-sm font-medium placeholder:text-on-surface-variant" placeholder="Search collaborators, projects, skills..." type="text" autofocus/>
+      <button onclick="closeSearchModal()" class="p-1 rounded-full hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant text-sm">close</span>
       </button>
     </div>
+    <div class="p-4">
+      <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Recent</p>
+      <div class="space-y-2">
+        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors" onclick="searchSelect('AI Dashboard Design')">
+          <span class="material-symbols-outlined text-on-surface-variant text-sm">history</span>
+          <span class="text-sm">AI Dashboard Design</span>
+        </div>
+        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors" onclick="searchSelect('Cloud Architecture')">
+          <span class="material-symbols-outlined text-on-surface-variant text-sm">history</span>
+          <span class="text-sm">Cloud Architecture</span>
+        </div>
+        <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors" onclick="searchSelect('UX Design collaborations')">
+          <span class="material-symbols-outlined text-on-surface-variant text-sm">history</span>
+          <span class="text-sm">UX Design collaborations</span>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 
-  <!-- Content -->
-  <div class="content">
-
-    <!-- ══ HOME ══ -->
-    <div class="section-view active" id="sec-home">
-      <div class="page-header">
-        <div class="page-title">Good morning, <span>Arjun</span> 👋</div>
-        <div class="page-sub">Your AI Agent found 6 new matching tasks today</div>
+<!-- ===== PROPOSAL MODAL ===== -->
+<div id="modal-overlay" onclick="closeModal(event)">
+  <div id="modal-box" class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
+    <div class="p-6 border-b border-surface-container-high flex justify-between items-center">
+      <h3 class="font-headline font-extrabold text-lg text-on-surface" id="modal-title">Propose Collaboration</h3>
+      <button onclick="closeModal()" class="p-2 rounded-full hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant">close</span>
+      </button>
+    </div>
+    <div class="p-6 space-y-4">
+      <div>
+        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Your Message</label>
+        <textarea id="modal-message" class="mt-2 w-full bg-surface-container-low rounded-xl p-3 text-sm border-none resize-none focus:ring-2 focus:ring-primary outline-none" rows="4" placeholder="Describe what you're looking for and what you can offer in return..."></textarea>
       </div>
-
-      <!-- Stats -->
-      <div class="stats-strip">
-        <div class="stat-card">
-          <div class="stat-icon gold">💰</div>
-          <div>
-            <div class="stat-val">₹48,200</div>
-            <div class="stat-label">Total Earned</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon blue">📋</div>
-          <div>
-            <div class="stat-val">12</div>
-            <div class="stat-label">Active Tasks</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon green">✅</div>
-          <div>
-            <div class="stat-val">47</div>
-            <div class="stat-label">Completed</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon purple">🌐</div>
-          <div>
-            <div class="stat-val">138</div>
-            <div class="stat-label">Connections</div>
-          </div>
+      <div>
+        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Your Skills to Offer</label>
+        <div class="mt-2 flex flex-wrap gap-2">
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider cursor-pointer hover:opacity-80">AI Strategy</span>
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider cursor-pointer hover:opacity-80">React Native</span>
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider cursor-pointer hover:opacity-80">UX Design</span>
         </div>
       </div>
-
-      <!-- Agent alert -->
-      <div class="agent-card" style="margin-bottom:22px;">
-        <div class="agent-header">
-          <div class="agent-orb">🤖</div>
-          <div>
-            <div class="agent-name">Hive Agent — Arjun</div>
-            <div class="agent-status"><span style="width:7px;height:7px;background:var(--green);border-radius:50%;display:inline-block;"></span> Active · Scanning for matches</div>
-          </div>
-          <button class="btn btn-ghost btn-sm" onclick="showSection('agent',null)" style="margin-left:auto;">View Agent →</button>
-        </div>
-        <div class="agent-activity">
-          <div class="agent-activity-item"><div class="agent-dot2"></div>Found 6 tasks matching your React + Node.js profile — highest budget: ₹25,000</div>
-          <div class="agent-activity-item"><div class="agent-dot2"></div>Nexacore Pvt Ltd viewed your profile 3 times — consider reaching out</div>
-          <div class="agent-activity-item"><div class="agent-dot2"></div>Auto-applied to "E-commerce Dashboard Design" within your saved criteria</div>
-        </div>
+      <div>
+        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Budget Range</label>
+        <select class="mt-2 w-full bg-surface-container-low rounded-xl p-3 text-sm border-none focus:ring-2 focus:ring-primary outline-none">
+          <option>$500 - $1,000</option>
+          <option>$1,000 - $2,500</option>
+          <option>$2,500 - $5,000</option>
+          <option>Skill exchange only</option>
+        </select>
       </div>
+    </div>
+    <div class="px-6 pb-6 flex gap-3">
+      <button onclick="closeModal()" class="flex-1 py-2.5 rounded-full border border-outline text-on-surface-variant font-bold text-sm hover:bg-surface-container-low transition-colors">Cancel</button>
+      <button onclick="submitProposal()" class="flex-1 py-2.5 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold text-sm shadow-md hover:opacity-95 transition-all active:scale-95">Send Proposal</button>
+    </div>
+  </div>
+</div>
 
-      <!-- Recommended Tasks -->
-      <div class="section-toolbar">
-        <div class="section-label">🔥 Recommended Tasks</div>
-        <div class="filter-chips">
-          <button class="chip active" onclick="filterChip(this)">All</button>
-          <button class="chip" onclick="filterChip(this)">Design</button>
-          <button class="chip" onclick="filterChip(this)">Dev</button>
-          <button class="chip" onclick="filterChip(this)">Marketing</button>
-          <button class="chip" onclick="filterChip(this)">Writing</button>
-        </div>
-        <button class="btn btn-outline btn-sm" onclick="showSection('tasks', document.querySelectorAll('.nav-item')[1])" style="margin-left:auto;">See All →</button>
+<!-- ===== POST CREATION MODAL ===== -->
+<div id="post-modal-overlay" onclick="closePostModal(event)">
+  <div style="display:none" id="post-modal-box" class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+    <div class="p-5 border-b border-surface-container-high flex justify-between items-center">
+      <h3 class="font-headline font-extrabold text-lg text-on-surface" id="post-modal-title">Create Post</h3>
+      <button onclick="closePostModal()" class="p-2 rounded-full hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant">close</span>
+      </button>
+    </div>
+    <div class="p-5 space-y-4">
+      <div class="flex gap-3">
+        <img class="w-10 h-10 rounded-lg object-cover flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3SikYaU-Swj8h87lW8qxswRtRlmNEqbOYDB6quuu-5fYN75vnZLB4KDtpH9D7K6yUsOajbE5c9A1Y5voA4mBBlm4dCkNbPU0ZtLD0FHjdnQB9xMbn7cpC4jMfPf2JQBEipk1ZW4jxCRZ9HWCLT02FGhm1VRu6Q4KQ-0ajc1DTQQiDXaOwHqmK5QZipenMfgp4USgPMNwBETX4s9i49LZJmM4QZg6InXJnb5hUYrQawoqbwoikSmNvw2tHghhM2YEZ2gTfsfwPFBE" alt="Marcus"/>
+        <textarea id="post-content" class="flex-1 bg-surface-container-low rounded-xl p-3 text-sm border-none resize-none focus:ring-2 focus:ring-primary outline-none" rows="4" placeholder="Share your collaboration request, project idea, or skill offering..."></textarea>
       </div>
-
-      <div class="task-grid">
-        <!-- Task cards -->
-        <div class="task-card" onclick="openModal('payModal')">
-          <div class="task-card-top">
-            <span class="task-category-badge badge-dev">Development</span>
-            <span class="tag tag-green">🤖 Agent Match</span>
-          </div>
-          <div class="task-title">React Dashboard for SaaS Analytics Platform</div>
-          <div class="task-desc">Need an experienced React dev to build interactive charts, filters, and export features for our analytics portal.</div>
-          <div class="task-meta">
-            <span>⏰ 7 days</span>
-            <span>📍 Remote</span>
-            <span>🔵 5 proposals</span>
-          </div>
-          <div class="task-footer">
-            <div class="task-poster">
-              <div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f)">NX</div>
-              <span class="task-poster-name">Nexacore Inc.</span>
-            </div>
-            <div class="task-budget">₹25,000<small>Fixed Price</small></div>
-          </div>
-        </div>
-
-        <div class="task-card" onclick="openModal('payModal')">
-          <div class="task-card-top">
-            <span class="task-category-badge badge-design">Design</span>
-            <span class="tag tag-gold">⭐ Urgent</span>
-          </div>
-          <div class="task-title">Brand Identity & Logo Design for Fintech Startup</div>
-          <div class="task-desc">Looking for a creative designer to craft a complete brand kit: logo, color palette, typography & guidelines.</div>
-          <div class="task-meta">
-            <span>⏰ 3 days</span>
-            <span>📍 Remote</span>
-            <span>🔵 12 proposals</span>
-          </div>
-          <div class="task-footer">
-            <div class="task-poster">
-              <div class="mini-avatar" style="background:linear-gradient(135deg,#f5a623,#a06010)">FP</div>
-              <span class="task-poster-name">FinPulse Labs</span>
-            </div>
-            <div class="task-budget">₹18,500<small>Fixed Price</small></div>
-          </div>
-        </div>
-
-        <div class="task-card" onclick="openModal('payModal')">
-          <div class="task-card-top">
-            <span class="task-category-badge badge-writing">Writing</span>
-          </div>
-          <div class="task-title">Technical Blog Content — 10 Articles on AI/ML</div>
-          <div class="task-desc">We need a skilled technical writer to produce 10 in-depth blog posts on AI, ML, and data science topics.</div>
-          <div class="task-meta">
-            <span>⏰ 14 days</span>
-            <span>📍 Remote</span>
-            <span>🔵 8 proposals</span>
-          </div>
-          <div class="task-footer">
-            <div class="task-poster">
-              <div class="mini-avatar" style="background:linear-gradient(135deg,#27c47a,#0a6640)">BT</div>
-              <span class="task-poster-name">ByteTrend Media</span>
-            </div>
-            <div class="task-budget">₹12,000<small>Fixed Price</small></div>
-          </div>
+      <div>
+        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Post Type</label>
+        <div class="mt-2 flex gap-2 flex-wrap">
+          <button class="post-type-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-primary text-primary text-xs font-bold" onclick="selectPostType(this, 'Propose Collab')">
+            <span class="material-symbols-outlined text-xs">add_circle</span> Propose Collab
+          </button>
+          <button class="post-type-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-outline-variant text-on-surface-variant text-xs font-bold" onclick="selectPostType(this, 'Skill Exchange')">
+            <span class="material-symbols-outlined text-xs">handshake</span> Skill Exchange
+          </button>
+          <button class="post-type-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-outline-variant text-on-surface-variant text-xs font-bold" onclick="selectPostType(this, 'Post Project')">
+            <span class="material-symbols-outlined text-xs">rocket_launch</span> Post Project
+          </button>
         </div>
       </div>
     </div>
-
-    <!-- ══ TASKS ══ -->
-    <div class="section-view" id="sec-tasks">
-      <div class="page-header">
-        <div class="page-title">Browse <span>Tasks</span></div>
-        <div class="page-sub">Find work that matches your skills</div>
-      </div>
-      <div class="section-toolbar">
-        <div class="filter-chips">
-          <button class="chip active" onclick="filterChip(this)">All</button>
-          <button class="chip" onclick="filterChip(this)">Design</button>
-          <button class="chip" onclick="filterChip(this)">Development</button>
-          <button class="chip" onclick="filterChip(this)">Marketing</button>
-          <button class="chip" onclick="filterChip(this)">Video</button>
-          <button class="chip" onclick="filterChip(this)">Writing</button>
-        </div>
-        <button class="btn btn-gold" onclick="openModal('postTaskModal')" style="margin-left:auto;">＋ Post Task</button>
-      </div>
-      <div class="task-grid">
-        <div class="task-card" onclick="openModal('payModal')">
-          <div class="task-card-top"><span class="task-category-badge badge-dev">Development</span><span class="tag tag-green">🤖 Agent Match</span></div>
-          <div class="task-title">React Dashboard for SaaS Analytics Platform</div>
-          <div class="task-desc">Need an experienced React dev to build interactive charts and export features.</div>
-          <div class="task-meta"><span>⏰ 7 days</span><span>📍 Remote</span><span>🔵 5 proposals</span></div>
-          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f)">NX</div><span class="task-poster-name">Nexacore Inc.</span></div><div class="task-budget">₹25,000<small>Fixed Price</small></div></div>
-        </div>
-        <div class="task-card" onclick="openModal('payModal')">
-          <div class="task-card-top"><span class="task-category-badge badge-design">Design</span><span class="tag tag-gold">⭐ Urgent</span></div>
-          <div class="task-title">Brand Identity & Logo Design</div>
-          <div class="task-desc">Complete brand kit: logo, color palette, typography and brand guidelines document.</div>
-          <div class="task-meta"><span>⏰ 3 days</span><span>📍 Remote</span><span>🔵 12 proposals</span></div>
-          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#f5a623,#a06010)">FP</div><span class="task-poster-name">FinPulse Labs</span></div><div class="task-budget">₹18,500<small>Fixed Price</small></div></div>
-        </div>
-        <div class="task-card" onclick="openModal('payModal')">
-          <div class="task-card-top"><span class="task-category-badge badge-marketing">Marketing</span></div>
-          <div class="task-title">Social Media Campaign — Product Launch</div>
-          <div class="task-desc">Plan and execute a 30-day social media campaign for our new product launch across Instagram & LinkedIn.</div>
-          <div class="task-meta"><span>⏰ 30 days</span><span>📍 Remote</span><span>🔵 3 proposals</span></div>
-          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#8b5cf6,#4c1d95)">GX</div><span class="task-poster-name">Growthex</span></div><div class="task-budget">₹9,000<small>Fixed Price</small></div></div>
-        </div>
-        <div class="task-card" onclick="openModal('payModal')">
-          <div class="task-card-top"><span class="task-category-badge badge-video">Video</span></div>
-          <div class="task-title">Product Demo Video Editing (3–5 min)</div>
-          <div class="task-desc">Edit and polish a raw recorded product demo with captions, animations and music.</div>
-          <div class="task-meta"><span>⏰ 5 days</span><span>📍 Remote</span><span>🔵 7 proposals</span></div>
-          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#e85858,#7a1a1a)">VS</div><span class="task-poster-name">Veedstudio</span></div><div class="task-budget">₹7,500<small>Fixed Price</small></div></div>
-        </div>
-        <div class="task-card" onclick="openModal('payModal')">
-          <div class="task-card-top"><span class="task-category-badge badge-writing">Writing</span></div>
-          <div class="task-title">Technical Blog Content — 10 Articles on AI/ML</div>
-          <div class="task-desc">10 in-depth blog posts on AI, ML, and data science topics — SEO-optimized.</div>
-          <div class="task-meta"><span>⏰ 14 days</span><span>📍 Remote</span><span>🔵 8 proposals</span></div>
-          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#27c47a,#0a6640)">BT</div><span class="task-poster-name">ByteTrend Media</span></div><div class="task-budget">₹12,000<small>Fixed Price</small></div></div>
-        </div>
-        <div class="task-card" onclick="openModal('payModal')">
-          <div class="task-card-top"><span class="task-category-badge badge-dev">Development</span><span class="tag tag-blue">💎 Premium</span></div>
-          <div class="task-title">Full-Stack E-commerce Platform with Payments</div>
-          <div class="task-desc">Build a complete e-commerce site using Next.js + Razorpay. Responsive, fast, SEO-ready.</div>
-          <div class="task-meta"><span>⏰ 21 days</span><span>📍 Remote</span><span>🔵 2 proposals</span></div>
-          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6)">SR</div><span class="task-poster-name">ShopRocket</span></div><div class="task-budget">₹55,000<small>Fixed Price</small></div></div>
-        </div>
-      </div>
+    <div class="px-5 pb-5 flex gap-3">
+      <button onclick="closePostModal()" class="flex-1 py-2.5 rounded-full border border-outline text-on-surface-variant font-bold text-sm hover:bg-surface-container-low transition-colors">Cancel</button>
+      <button onclick="submitPost()" class="flex-1 py-2.5 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold text-sm shadow-md hover:opacity-95 transition-all active:scale-95">Publish</button>
     </div>
+  </div>
+</div>
+<style>#post-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1000; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+#post-modal-overlay.open { display:flex; }
+#post-modal-box { display:block !important; animation: modalIn 0.2s ease; }</style>
 
-    <!-- ══ PRODUCTS ══ -->
-    <div class="section-view" id="sec-products">
-      <div class="page-header">
-        <div class="page-title">My <span>Products</span></div>
-        <div class="page-sub">Services you offer to the marketplace</div>
-      </div>
-      <div class="section-toolbar">
-        <div class="section-label">Active Listings</div>
-        <button class="btn btn-gold" style="margin-left:auto;" onclick="openModal('postTaskModal')">＋ Add Service</button>
-      </div>
-      <div class="task-grid">
-        <div class="task-card">
-          <div class="task-card-top"><span class="task-category-badge badge-dev">Development</span><span class="tag tag-green">✅ Active</span></div>
-          <div class="task-title">Full-Stack Web App Development (React + Node)</div>
-          <div class="task-desc">I build scalable, modern web applications with clean architecture and full API integration.</div>
-          <div class="task-meta"><span>⭐ 4.9 (32 reviews)</span><span>🔵 8 orders</span></div>
-          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6)">AK</div><span class="task-poster-name">You</span></div><div class="task-budget">₹15,000<small>Starting from</small></div></div>
-        </div>
-        <div class="task-card">
-          <div class="task-card-top"><span class="task-category-badge badge-dev">Development</span><span class="tag tag-green">✅ Active</span></div>
-          <div class="task-title">REST API Development & Integration</div>
-          <div class="task-desc">Design and build RESTful APIs with auth, rate limiting, and comprehensive documentation.</div>
-          <div class="task-meta"><span>⭐ 5.0 (14 reviews)</span><span>🔵 3 orders</span></div>
-          <div class="task-footer"><div class="task-poster"><div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6)">AK</div><span class="task-poster-name">You</span></div><div class="task-budget">₹8,000<small>Starting from</small></div></div>
-        </div>
-        <div class="task-card" style="border-style:dashed;cursor:pointer;" onclick="openModal('postTaskModal')">
-          <div style="text-align:center;padding:30px 0;color:var(--text3);">
-            <div style="font-size:36px;margin-bottom:12px;">＋</div>
-            <div style="font-weight:600;">Add New Service</div>
-            <div style="font-size:12px;margin-top:6px;">Reach thousands of clients</div>
+<!-- ============================= -->
+<!-- PAGE: HOME / FEED             -->
+<!-- ============================= -->
+<div id="page-home" class="page active">
+  <main class="pt-24 pb-20 px-4 md:px-6 max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+    <!-- Left Sidebar -->
+    <aside class="hidden lg:block lg:col-span-3">
+      <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-zinc-200/10">
+        <div class="h-16 bg-gradient-to-r from-primary/20 to-secondary/20"></div>
+        <div class="px-4 pb-6 -mt-8 text-center">
+          <img alt="Marcus Sterling" class="w-20 h-20 rounded-xl mx-auto border-4 border-white object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA93n_cHy19hpbD0teE-YtdoV4mQL52SFeLuan4xty7JIaLqk7Eqb5X6UD_wSJvf1o21b2xSDxG5ea3wn0xYiGG2oNj-Y2q0NdwkRmVhsM7ek6yQNllASl7rHwAUpSN_pSM5Fl1NYx1vn1J5MZM1sZ3llGT0YWPEoM8A1gZzgx4vXoj3ePGs_JAiQvYOIQz6s4FqolA7pXLxoxdoY8SX1kJAWAxVtEiaCScRzetldZYmbE6g9REyXR1JUIstlB9jUS4HSJsLqFFAZI"/>
+          <h2 class="mt-3 font-headline font-bold text-on-surface text-lg leading-tight">Marcus Sterling</h2>
+          <p class="text-on-surface-variant text-xs font-medium mt-1">Principal Product Designer</p>
+          <div class="mt-6 border-t border-surface-container-high pt-4 text-left space-y-3">
+            <div class="flex justify-between text-xs"><span class="text-on-surface-variant">Profile visitors</span><span class="text-primary font-bold">1,284</span></div>
+            <div class="flex justify-between text-xs"><span class="text-on-surface-variant">Active Collabs</span><span class="text-primary font-bold">12</span></div>
+            <div class="flex justify-between text-xs"><span class="text-on-surface-variant">Proposals Sent</span><span class="text-primary font-bold" id="proposals-count">3</span></div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- ══ NETWORK ══ -->
-    <div class="section-view" id="sec-network">
-      <div class="page-header">
-        <div class="page-title">Your <span>Network</span></div>
-        <div class="page-sub">Companies, professionals & connections</div>
+      <div class="mt-6 bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-zinc-200/10">
+        <h3 class="font-headline font-bold text-sm mb-4">Skills to Offer</h3>
+        <div class="flex flex-wrap gap-2">
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">AI Strategy</span>
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">React Native</span>
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">UX Design</span>
+        </div>
       </div>
-      <div class="net-layout">
-        <div>
-          <!-- Companies -->
-          <div class="section-label" style="margin-bottom:14px;">🏢 Companies to Follow</div>
-          <div class="company-grid" style="margin-bottom:24px;">
-            <div class="company-card" onclick="openModal('companyModal')">
-              <div class="company-banner" style="background:linear-gradient(135deg,#0f2040,#1a4080);">
-                <div class="company-logo" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f);">🚀</div>
-              </div>
-              <div class="company-body">
-                <div class="company-name">Nexacore Technologies</div>
-                <div class="company-industry">SaaS · 500–1000 employees</div>
-                <div class="company-stats-row">
-                  <div class="company-stat"><strong>12.4K</strong><br>Followers</div>
-                  <div class="company-stat"><strong>28</strong><br>Open Tasks</div>
-                  <div class="company-stat"><strong>4.8 ⭐</strong><br>Rating</div>
-                </div>
-                <div class="company-actions">
-                  <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();followCompany(this)">＋ Follow</button>
-                  <button class="btn btn-gold btn-sm">View →</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="company-card" onclick="openModal('companyModal')">
-              <div class="company-banner" style="background:linear-gradient(135deg,#1a0f30,#3d1a7a);">
-                <div class="company-logo" style="background:linear-gradient(135deg,#8b5cf6,#4c1d95);">💡</div>
-              </div>
-              <div class="company-body">
-                <div class="company-name">FinPulse Labs</div>
-                <div class="company-industry">Fintech · 50–200 employees</div>
-                <div class="company-stats-row">
-                  <div class="company-stat"><strong>3.1K</strong><br>Followers</div>
-                  <div class="company-stat"><strong>9</strong><br>Open Tasks</div>
-                  <div class="company-stat"><strong>4.6 ⭐</strong><br>Rating</div>
-                </div>
-                <div class="company-actions">
-                  <button class="btn btn-ghost btn-sm followed" onclick="event.stopPropagation();followCompany(this)" style="color:var(--green);border-color:var(--green);">✓ Following</button>
-                  <button class="btn btn-gold btn-sm">View →</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="company-card" onclick="openModal('companyModal')">
-              <div class="company-banner" style="background:linear-gradient(135deg,#0f2a1a,#1a5530);">
-                <div class="company-logo" style="background:linear-gradient(135deg,#27c47a,#0a6640);">📊</div>
-              </div>
-              <div class="company-body">
-                <div class="company-name">ByteTrend Media</div>
-                <div class="company-industry">Digital Media · 10–50 employees</div>
-                <div class="company-stats-row">
-                  <div class="company-stat"><strong>892</strong><br>Followers</div>
-                  <div class="company-stat"><strong>5</strong><br>Open Tasks</div>
-                  <div class="company-stat"><strong>4.7 ⭐</strong><br>Rating</div>
-                </div>
-                <div class="company-actions">
-                  <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();followCompany(this)">＋ Follow</button>
-                  <button class="btn btn-gold btn-sm">View →</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="company-card" onclick="openModal('companyModal')">
-              <div class="company-banner" style="background:linear-gradient(135deg,#2a0f0f,#6b1a1a);">
-                <div class="company-logo" style="background:linear-gradient(135deg,#e85858,#7a1a1a);">🎬</div>
-              </div>
-              <div class="company-body">
-                <div class="company-name">Veedstudio Creative</div>
-                <div class="company-industry">Creative Agency · 10–50 employees</div>
-                <div class="company-stats-row">
-                  <div class="company-stat"><strong>2.4K</strong><br>Followers</div>
-                  <div class="company-stat"><strong>7</strong><br>Open Tasks</div>
-                  <div class="company-stat"><strong>4.9 ⭐</strong><br>Rating</div>
-                </div>
-                <div class="company-actions">
-                  <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();followCompany(this)">＋ Follow</button>
-                  <button class="btn btn-gold btn-sm">View →</button>
-                </div>
-              </div>
-            </div>
+      <div class="mt-6 bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-zinc-200/10">
+        <h3 class="font-headline font-bold text-sm mb-3">Quick Stats</h3>
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 text-xs">
+            <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
+            <span class="text-on-surface-variant">3 active proposals</span>
           </div>
-
-          <!-- People -->
-          <div class="section-label" style="margin-bottom:14px;">👥 People You May Know</div>
-          <div class="people-grid">
-            <div class="person-card">
-              <div class="avatar-lg" style="background:linear-gradient(135deg,#e85858,#7a1a1a)">PR</div>
-              <div class="person-info">
-                <div class="person-name">Priya Rajesh</div>
-                <div class="person-title">UI/UX Designer · Bengaluru</div>
-                <div class="person-mutual">3 mutual connections</div>
-              </div>
-              <button class="connect-btn" onclick="sendConnect(this)">Connect</button>
-            </div>
-            <div class="person-card">
-              <div class="avatar-lg" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f)">MS</div>
-              <div class="person-info">
-                <div class="person-name">Manish Sharma</div>
-                <div class="person-title">Product Manager · Mumbai</div>
-                <div class="person-mutual">7 mutual connections</div>
-              </div>
-              <button class="connect-btn pending" onclick="sendConnect(this)">Pending</button>
-            </div>
-            <div class="person-card">
-              <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640)">RA</div>
-              <div class="person-info">
-                <div class="person-name">Ritu Agarwal</div>
-                <div class="person-title">Marketing Lead · Delhi</div>
-                <div class="person-mutual">12 mutual connections</div>
-              </div>
-              <button class="connect-btn connected">✓ Connected</button>
-            </div>
-            <div class="person-card">
-              <div class="avatar-lg" style="background:linear-gradient(135deg,#8b5cf6,#4c1d95)">KV</div>
-              <div class="person-info">
-                <div class="person-name">Kiran Verma</div>
-                <div class="person-title">Data Scientist · Hyderabad</div>
-                <div class="person-mutual">2 mutual connections</div>
-              </div>
-              <button class="connect-btn" onclick="sendConnect(this)">Connect</button>
-            </div>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+            <span class="text-on-surface-variant">5 pending reviews</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="w-2 h-2 rounded-full bg-tertiary inline-block"></span>
+            <span class="text-on-surface-variant">2 skill exchanges</span>
           </div>
         </div>
+      </div>
+    </aside>
 
-        <!-- Side panel -->
-        <div>
-          <div class="side-panel">
-            <div class="side-panel-title">📥 Connection Requests</div>
-            <div class="people-grid">
-              <div class="person-card" style="flex-direction:column;align-items:flex-start;gap:10px;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                  <div class="avatar-lg" style="background:linear-gradient(135deg,#f5a623,#a06010);width:36px;height:36px;font-size:14px;">NK</div>
-                  <div class="person-info">
-                    <div class="person-name">Nikhil Kapoor</div>
-                    <div class="person-title">Backend Engineer</div>
+    <!-- Feed -->
+    <section class="lg:col-span-6 space-y-6">
+      <!-- Post Creation Box -->
+      <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-zinc-200/10">
+        <div class="flex gap-3">
+          <img alt="Marcus Sterling" class="w-12 h-12 rounded-lg object-cover flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3SikYaU-Swj8h87lW8qxswRtRlmNEqbOYDB6quuu-5fYN75vnZLB4KDtpH9D7K6yUsOajbE5c9A1Y5voA4mBBlm4dCkNbPU0ZtLD0FHjdnQB9xMbn7cpC4jMfPf2JQBEipk1ZW4jxCRZ9HWCLT02FGhm1VRu6Q4KQ-0ajc1DTQQiDXaOwHqmK5QZipenMfgp4USgPMNwBETX4s9i49LZJmM4QZg6InXJnb5hUYrQawoqbwoikSmNvw2tHghhM2YEZ2gTfsfwPFBE"/>
+          <button class="flex-1 bg-surface-container-low text-on-surface-variant text-left px-5 rounded-full hover:bg-surface-container-high transition-colors text-sm font-medium" onclick="openPostModal('New Post')">
+            Request a skill or project collaboration...
+          </button>
+        </div>
+        <div class="flex justify-around mt-4 pt-2 border-t border-surface-container-high">
+          <button class="flex items-center gap-2 text-on-surface-variant hover:bg-surface-container-low px-3 py-2 rounded-lg transition-colors" onclick="openPostModal('Propose Collab')">
+            <span class="material-symbols-outlined text-primary">add_circle</span>
+            <span class="text-xs font-semibold">Propose Collab</span>
+          </button>
+          <button class="flex items-center gap-2 text-on-surface-variant hover:bg-surface-container-low px-3 py-2 rounded-lg transition-colors" onclick="openPostModal('Skill Exchange')">
+            <span class="material-symbols-outlined text-tertiary">handshake</span>
+            <span class="text-xs font-semibold">Skill Exchange</span>
+          </button>
+          <button class="flex items-center gap-2 text-on-surface-variant hover:bg-surface-container-low px-3 py-2 rounded-lg transition-colors" onclick="openPostModal('Post Project')">
+            <span class="material-symbols-outlined text-secondary">rocket_launch</span>
+            <span class="text-xs font-semibold">Post Project</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Dynamic Feed -->
+      <div id="feed-container" class="space-y-6">
+        <!-- Card 1 -->
+        <article class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-zinc-200/10 feed-card">
+          <div class="p-5">
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex gap-3">
+                <img alt="Sarah Chen" class="w-12 h-12 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA38Z3bII9hx00WrevarZDg-cjb94OaHxN8qgy0zVs4aRXpPLJsFWngcaSmKMNqJcg7n6JEH9t7qbUzfQQWcE25pEUYiDnw1dqp_wc3aiOdazjzu9OvUGTI4uRfkCvgD--OXsQKOw2GrsYUWF-rKx9PAmEXmSUrPeNgMHHazCI1SjQGAFKbW8KgS88n6MfkK0YIxuqCZPpqZXsTU9A2_DfKQsKzATd5G1NzybFjsjfZspoSrQr2FnDt4VvU5h-3MBwHF6hN8t-uWb4"/>
+                <div>
+                  <h4 class="font-headline font-bold text-sm text-on-surface">Sarah Chen</h4>
+                  <p class="text-[11px] text-on-surface-variant">Design Lead at NeuralSystems • 4h ago</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-primary font-extrabold text-lg leading-none font-headline tracking-tight">$1,200</div>
+                <div class="text-[10px] text-on-surface-variant font-bold uppercase mt-1">Project Budget</div>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <h3 class="font-headline font-extrabold text-xl text-primary leading-snug tracking-tight">Looking for Collaboration in AI Dashboard Design</h3>
+              <p class="text-on-surface text-sm leading-relaxed">Seeking a peer collaborator to lead the visual overhaul of our enterprise AI monitoring platform. I can offer backend infrastructure mentorship in exchange for expert UI guidance. Must be comfortable with complex data visualization.</p>
+              <div class="flex flex-wrap gap-2 py-2">
+                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">UI/UX Design</span>
+                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Data Viz</span>
+                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Skill Exchange</span>
+              </div>
+            </div>
+            <!-- Engagement -->
+            <div class="mt-4 pt-3 border-t border-surface-container-high flex items-center gap-4 text-xs text-on-surface-variant">
+              <button class="like-btn flex items-center gap-1 hover:text-primary transition-colors" onclick="toggleLike(this)">
+                <span class="material-symbols-outlined text-base">thumb_up</span> <span class="like-count">24</span>
+              </button>
+              <button class="flex items-center gap-1 hover:text-primary transition-colors" onclick="showToast('Comments coming soon!')">
+                <span class="material-symbols-outlined text-base">comment</span> 8
+              </button>
+              <button class="flex items-center gap-1 hover:text-primary transition-colors ml-auto" onclick="showToast('Post shared!')">
+                <span class="material-symbols-outlined text-base">share</span> Share
+              </button>
+              <button class="flex items-center gap-1 hover:text-primary transition-colors" onclick="toggleBookmark(this)">
+                <span class="material-symbols-outlined text-base">bookmark</span>
+              </button>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <button class="flex-1 bg-gradient-to-r from-primary to-primary-container text-white py-2.5 rounded-lg font-bold text-sm shadow-md hover:opacity-95 transition-all active:scale-95" onclick="openProposalModal('Sarah Chen')">Propose Collaboration</button>
+              <button class="flex items-center justify-center bg-surface-container-high text-primary px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-surface-container-highest transition-colors" onclick="showToast('AI Agent matching in progress...')">
+                <span class="material-symbols-outlined mr-2">psychology</span> Agent Match
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-zinc-200/10 feed-card">
+          <div class="p-5">
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex gap-3">
+                <img alt="David Miller" class="w-12 h-12 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK3VIwopN2w3MokHCJt0OoAYYKaEiKMilI-jC1JF8q7uijqPATR1bNBowC-uCMkikpQtR7fXaXnemXNCzcQeylpAOt0knXE5QKHlOW8Mi4OYyM7WHdbleMAxE2nAhP6fFeSbTqKOJgBv5bGPB7k-dsqb-jBdPgpob_PqtPXigdgyqPbFjzI-TzoZZ21n6DnaRLkAN8craRFSzuqWB8nNRef3_VfN_8KWY9-lfxInH1lqvHnlDt8dtub3MgQcCopG4V9Lm-qEq0NBU"/>
+                <div>
+                  <h4 class="font-headline font-bold text-sm text-on-surface">David Miller</h4>
+                  <p class="text-[11px] text-on-surface-variant">CTO at CloudScale AI • 8h ago</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-primary font-extrabold text-lg leading-none font-headline tracking-tight">$850</div>
+                <div class="text-[10px] text-on-surface-variant font-bold uppercase mt-1">Collab Value</div>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <h3 class="font-headline font-extrabold text-xl text-primary leading-snug tracking-tight">Looking for Collaboration in Cloud Architecture</h3>
+              <p class="text-on-surface text-sm leading-relaxed">Scaling our GPU clusters for massive LLM training. Need a peer with deep AWS/SageMaker knowledge for a 2-week intensive collaboration sprint. Happy to trade strategy consulting for technical implementation.</p>
+              <div class="flex flex-wrap gap-2 py-2">
+                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">AWS</span>
+                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Kubernetes</span>
+                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">LLM Ops</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-surface-container-high flex items-center gap-4 text-xs text-on-surface-variant">
+              <button class="like-btn flex items-center gap-1 hover:text-primary transition-colors" onclick="toggleLike(this)">
+                <span class="material-symbols-outlined text-base">thumb_up</span> <span class="like-count">41</span>
+              </button>
+              <button class="flex items-center gap-1 hover:text-primary transition-colors" onclick="showToast('Comments coming soon!')">
+                <span class="material-symbols-outlined text-base">comment</span> 12
+              </button>
+              <button class="flex items-center gap-1 hover:text-primary transition-colors ml-auto" onclick="showToast('Post shared!')">
+                <span class="material-symbols-outlined text-base">share</span> Share
+              </button>
+              <button class="flex items-center gap-1 hover:text-primary transition-colors" onclick="toggleBookmark(this)">
+                <span class="material-symbols-outlined text-base">bookmark</span>
+              </button>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <button class="flex-1 bg-gradient-to-r from-primary to-primary-container text-white py-2.5 rounded-lg font-bold text-sm shadow-md hover:opacity-95 transition-all active:scale-95" onclick="openProposalModal('David Miller')">Collaborate</button>
+              <button class="flex items-center justify-center bg-surface-container-high text-primary px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-surface-container-highest transition-colors" onclick="showToast('AI Agent matching in progress...')">
+                <span class="material-symbols-outlined mr-2">psychology</span> Agent Match
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 (bonus) -->
+        <article class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-zinc-200/10 feed-card">
+          <div class="p-5">
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex gap-3">
+                <img alt="Sophia M" class="w-12 h-12 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBIccUv1tE8Wk78MX-64IGxosnAC-YW1si5QVdAZ9eyYdfmf70btblf_r7S4iy6e8ttyRyaoMhWz62QPIm33-b9BKgw7uPOvRRv5cSII67LxUhwv4qJ_qI7jbMbho9kH4CjMyVEevl-KFaAYkpjSuA898YgMmxSb7awa9PUNwNNpt2kW26JxlkW0_2XTMmo83rNyb44GMEDTWX3b0PxTiY3cBR1RQFCt95EsGTIkz2IXd19yljOm5-yM4micY2IbXUlb23cTtR9I0"/>
+                <div>
+                  <h4 class="font-headline font-bold text-sm text-on-surface">Sophia Marchesi</h4>
+                  <p class="text-[11px] text-on-surface-variant">Chief Design Officer at Anthropic • 1d ago</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-primary font-extrabold text-lg leading-none font-headline tracking-tight">Skill Swap</div>
+                <div class="text-[10px] text-on-surface-variant font-bold uppercase mt-1">Exchange Type</div>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <h3 class="font-headline font-extrabold text-xl text-primary leading-snug tracking-tight">Design System Audit for ML Pipeline Review</h3>
+              <p class="text-on-surface text-sm leading-relaxed">Looking to exchange my expertise in design systems and Figma token architecture for someone who can review our internal ML data pipeline and suggest improvements. Open to a multi-week exchange.</p>
+              <div class="flex flex-wrap gap-2 py-2">
+                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Figma</span>
+                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Design Tokens</span>
+                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">ML Ops</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-surface-container-high flex items-center gap-4 text-xs text-on-surface-variant">
+              <button class="like-btn flex items-center gap-1 hover:text-primary transition-colors" onclick="toggleLike(this)">
+                <span class="material-symbols-outlined text-base">thumb_up</span> <span class="like-count">67</span>
+              </button>
+              <button class="flex items-center gap-1 hover:text-primary transition-colors" onclick="showToast('Comments coming soon!')">
+                <span class="material-symbols-outlined text-base">comment</span> 19
+              </button>
+              <button class="flex items-center gap-1 hover:text-primary transition-colors ml-auto" onclick="showToast('Post shared!')">
+                <span class="material-symbols-outlined text-base">share</span> Share
+              </button>
+              <button class="flex items-center gap-1 hover:text-primary transition-colors" onclick="toggleBookmark(this)">
+                <span class="material-symbols-outlined text-base">bookmark</span>
+              </button>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <button class="flex-1 bg-gradient-to-r from-primary to-primary-container text-white py-2.5 rounded-lg font-bold text-sm shadow-md hover:opacity-95 transition-all active:scale-95" onclick="openProposalModal('Sophia Marchesi')">Propose Exchange</button>
+              <button class="flex items-center justify-center bg-surface-container-high text-primary px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-surface-container-highest transition-colors" onclick="showToast('AI Agent matching in progress...')">
+                <span class="material-symbols-outlined mr-2">psychology</span> Agent Match
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Load More -->
+        <div class="text-center pt-2">
+          <button onclick="loadMore()" id="load-more-btn" class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-bold text-sm px-8 py-3 rounded-full hover:bg-surface-container-low transition-colors shadow-sm">
+            Load More Posts
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Sidebar -->
+    <aside class="hidden lg:block lg:col-span-3 space-y-6">
+      <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-zinc-200/10">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-headline font-bold text-sm">Collaboration News</h3>
+          <span class="material-symbols-outlined text-on-surface-variant text-sm cursor-pointer" onclick="showToast('News settings')">info</span>
+        </div>
+        <ul class="space-y-4">
+          <li><a class="group block cursor-pointer" onclick="showToast('Opening article...')">
+            <p class="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">• Best practices for skill swapping</p>
+            <p class="text-[10px] text-on-surface-variant ml-3">Top news • 12,402 readers</p>
+          </a></li>
+          <li><a class="group block cursor-pointer" onclick="showToast('Opening article...')">
+            <p class="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">• Peer-to-peer AI networks grow 40%</p>
+            <p class="text-[10px] text-on-surface-variant ml-3">2d ago • 5,190 readers</p>
+          </a></li>
+          <li><a class="group block cursor-pointer" onclick="showToast('Opening article...')">
+            <p class="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">• Top 10 in-demand skills for Q2 2026</p>
+            <p class="text-[10px] text-on-surface-variant ml-3">1d ago • 8,740 readers</p>
+          </a></li>
+        </ul>
+      </div>
+
+      <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-zinc-200/10">
+        <h3 class="font-headline font-bold text-sm mb-4">People You May Know</h3>
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+            <img class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOd058EmKU934WZfDf8OsRNYR6H6B7rcUOKXuhRZp3TTtewfzz3fDEv8-C5oewbiMLcDNI1_jf1rRg8j3jdM2eFZrbNvjqMR0lmkzwM3fkYLSFqI2sxH9GyckIJ9AvLZeAf3CIWPj5SdyslGL8OUjPyBwsgcSE_BUKtqcWuWD0QlL6eUqM3V63QWtT7Jj9KAyAElRtyWh2UnazvLxgWWUHtzaEiIaqt_eii4ayKPJPZtJ9cbIOUbsY0k5_1hZR9iGjQPwkckAG7lA" alt="Marcus T"/>
+            <div class="flex-1">
+              <p class="text-xs font-bold text-on-surface">Marcus Thorne</p>
+              <p class="text-[10px] text-on-surface-variant">Senior AI Researcher, MIT</p>
+            </div>
+            <button class="text-xs font-bold text-primary border border-primary px-3 py-1 rounded-full hover:bg-primary/5 transition-colors" onclick="quickConnect(this)">+ Connect</button>
+          </div>
+          <div class="flex items-center gap-3">
+            <img class="w-10 h-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsHqlLjG2dVugELTUPT5taZORP9pYpEXqzv9xjr5PUA6DJZMkYvkoWl1U7yG_KySwnXBMUJ1lBy1EtL_53AwCnG6eckLZCUyEq8zSZygF8Usc0AulIqrRaih_Rm1ILnDfUOSntw3OElf-q7Xe2t-qhxael1b_SjaENOKLWThR0sWrMLEhgxd94eGDgCwj192zYqKytmRW3iJGTQ4mgzOYTYjM2F0SXNHfz_iebaXfib48POvzUsxoZeGJ27soGJlBbc26E8hZkpRI" alt="Julianne"/>
+            <div class="flex-1">
+              <p class="text-xs font-bold text-on-surface">Julianne Webb</p>
+              <p class="text-[10px] text-on-surface-variant">Growth Lead, Shopify</p>
+            </div>
+            <button class="text-xs font-bold text-primary border border-primary px-3 py-1 rounded-full hover:bg-primary/5 transition-colors" onclick="quickConnect(this)">+ Connect</button>
+          </div>
+        </div>
+        <button class="mt-4 w-full text-xs font-bold text-primary hover:underline" onclick="navigate('network')">See all in Network →</button>
+      </div>
+
+      <div class="sticky top-24 p-4 text-center">
+        <p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Matched for you</p>
+        <div class="mt-4 bg-gradient-to-br from-primary/10 to-primary-container/10 p-6 rounded-2xl border border-primary/20">
+          <span class="material-symbols-outlined text-primary text-4xl mb-2" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
+          <h4 class="font-headline font-bold text-sm text-on-surface leading-tight">AI Collab Matching</h4>
+          <p class="text-[11px] mt-2 text-on-surface-variant">Find peers with the exact skills you need to complete your next big project.</p>
+          <button class="mt-4 w-full bg-primary text-white text-xs font-bold py-2 rounded-full shadow-sm hover:bg-primary-container transition-colors" onclick="showToast('AI sync initiated! Finding best matches...')">Sync Now</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<!-- ============================= -->
+<!-- PAGE: NETWORK                 -->
+<!-- ============================= -->
+<div id="page-network" class="page">
+  <main class="pt-24 pb-20 px-4 md:px-8 max-w-screen-2xl mx-auto min-h-screen">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Left Sidebar -->
+      <aside class="lg:col-span-3 space-y-6">
+        <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/10">
+          <h2 class="font-headline text-lg font-bold mb-6 text-on-surface">Manage my network</h2>
+          <nav class="space-y-1">
+            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Connections')">
+              <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">group</span><span class="font-medium">Connections</span></div>
+              <span class="text-xs font-bold text-primary">1,248</span>
+            </a>
+            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Contacts')">
+              <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">contact_page</span><span class="font-medium">Contacts</span></div>
+              <span class="text-xs font-bold text-primary">3,102</span>
+            </a>
+            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Following & Followers')">
+              <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">person_add</span><span class="font-medium">Following &amp; Followers</span></div>
+            </a>
+            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Groups')">
+              <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">groups</span><span class="font-medium">Groups</span></div>
+              <span class="text-xs font-bold text-primary">12</span>
+            </a>
+            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Events')">
+              <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">event</span><span class="font-medium">Events</span></div>
+            </a>
+            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Newsletters')">
+              <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">newspaper</span><span class="font-medium">Newsletters</span></div>
+              <span class="text-xs font-bold text-primary">4</span>
+            </a>
+          </nav>
+        </div>
+
+        <!-- Invitations -->
+        <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant/10">
+          <div class="p-4 border-b border-surface-container">
+            <h3 class="font-headline font-bold text-sm uppercase tracking-wider text-zinc-400">Pending Invitations (<span id="invite-count">2</span>)</h3>
+          </div>
+          <div class="divide-y divide-surface-container" id="invitations-list">
+            <div class="p-4 hover:bg-surface-container-low transition-colors" id="invite-elena">
+              <div class="flex items-start gap-3">
+                <img class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnxmucMzL5ZV6GWj1nXw_P6fZIu26v-9uAkEl78CirOoKUnzIxFAMmuEVJRyCbL3S-Cw2zGdz26BPLIB2pva9drrUVZheIKVS3Q_CbL5FRdKepJ3bO2tbhchn8RGjaNpqML30KVLNsYa9VgxHIEJZ9ssMxY5fsUqHximOZZQClepxIZ7_CDvQ96ilxjCT5FkAnt0zgIXYZlbMjvt7D51pJX4gAAA4TraDBXACxxQuItzRMCSI15n_nMBLRtdCGzZibzEfeSw7R6tg" alt="Elena"/>
+                <div class="flex-1 min-w-0">
+                  <p class="font-bold text-sm truncate">Elena Vance</p>
+                  <p class="text-xs text-on-surface-variant truncate">Product Lead at NeuroLink</p>
+                  <div class="flex gap-2 mt-3">
+                    <button class="flex-1 py-1.5 rounded-full border border-primary text-primary text-xs font-bold hover:bg-primary/5 transition-colors" onclick="ignoreInvite('invite-elena')">Ignore</button>
+                    <button class="flex-1 py-1.5 rounded-full bg-primary text-white text-xs font-bold shadow-sm hover:bg-primary-container transition-colors" onclick="acceptInvite('invite-elena', 'Elena Vance')">Accept</button>
                   </div>
                 </div>
-                <div style="display:flex;gap:8px;width:100%;">
-                  <button class="btn btn-green btn-sm" style="flex:1;" onclick="acceptConnect(this)">Accept</button>
-                  <button class="btn btn-ghost btn-sm" style="flex:1;">Decline</button>
+              </div>
+            </div>
+            <div class="p-4 hover:bg-surface-container-low transition-colors" id="invite-alex">
+              <div class="flex items-start gap-3">
+                <img class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9OFMFNQzOCOJyOpKYyFcfwqm7gsjsJFhfKa3RiEEcGWae06t39_MQeR3_ETAmy2hYGsyM2qoUAF7yCW5ggB6buexTYt1Q4X6JPeXInXUWNiUSiqixbW0nhub01ABg7mhqLbUzJryrjYdp8nsxHDnauTze4zsB8pJyE3S01ZEQObqCO3leT8zVv_3ECyxOqy-rO1RKQQ8ctAAGT_7fFGkTJSjLpZA_wWd526Xss7Q2men8MqcOKkgGFvVDRJHWAwbfVL0BzszvZz4" alt="Alex"/>
+                <div class="flex-1 min-w-0">
+                  <p class="font-bold text-sm truncate">Dr. Robert Chen</p>
+                  <p class="text-xs text-on-surface-variant truncate">Data Scientist at Tesla</p>
+                  <div class="flex gap-2 mt-3">
+                    <button class="flex-1 py-1.5 rounded-full border border-primary text-primary text-xs font-bold hover:bg-primary/5 transition-colors" onclick="ignoreInvite('invite-alex')">Ignore</button>
+                    <button class="flex-1 py-1.5 rounded-full bg-primary text-white text-xs font-bold shadow-sm hover:bg-primary-container transition-colors" onclick="acceptInvite('invite-alex', 'Dr. Robert Chen')">Accept</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
-          <div class="side-panel">
-            <div class="side-panel-title">📈 Network Stats</div>
-            <div style="display:flex;flex-direction:column;gap:10px;">
-              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Profile views</span><strong>42 this week</strong></div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Search appearances</span><strong>187</strong></div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">New followers</span><strong>+16</strong></div>
-            </div>
-          </div>
+          <button class="w-full py-3 text-sm font-bold text-primary hover:bg-surface-container-low transition-colors border-t border-surface-container" onclick="showToast('Managing all invitations...')">Manage all</button>
         </div>
-      </div>
-    </div>
+      </aside>
 
-    <!-- ══ MESSAGES ══ -->
-    <div class="section-view" id="sec-messages">
-      <div class="page-header">
-        <div class="page-title">💬 <span>Messages</span></div>
-        <div class="page-sub">Chat with connected users</div>
-      </div>
-      <div class="msg-layout">
-        <div class="msg-list">
-          <div class="msg-list-header">Conversations</div>
-          <div class="msg-conv active" onclick="setConv(this, 'Ritu Agarwal')">
-            <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640);width:40px;height:40px;font-size:15px;">RA</div>
-            <div class="msg-conv-info">
-              <div class="msg-conv-name">Ritu Agarwal <span class="msg-conv-time">2m</span></div>
-              <div class="msg-conv-preview">Can you share the deliverable files?</div>
-            </div>
-            <div class="msg-conv-badge">2</div>
-          </div>
-          <div class="msg-conv" onclick="setConv(this, 'Nexacore Inc.')">
-            <div class="avatar-lg" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f);width:40px;height:40px;font-size:13px;border-radius:10px;">NX</div>
-            <div class="msg-conv-info">
-              <div class="msg-conv-name">Nexacore Inc. <span class="msg-conv-time">1h</span></div>
-              <div class="msg-conv-preview">Thanks! We'll review and get back.</div>
-            </div>
-            <div class="msg-conv-badge">1</div>
-          </div>
-          <div class="msg-conv" onclick="setConv(this, 'Kiran Verma')">
-            <div class="avatar-lg" style="background:linear-gradient(135deg,#8b5cf6,#4c1d95);width:40px;height:40px;font-size:15px;">KV</div>
-            <div class="msg-conv-info">
-              <div class="msg-conv-name">Kiran Verma <span class="msg-conv-time">3h</span></div>
-              <div class="msg-conv-preview">Sure, let's collaborate on this!</div>
-            </div>
-          </div>
-          <div style="padding:50px 20px;text-align:center;color:var(--text3);font-size:12px;">Only connected users can message each other</div>
-        </div>
-        <div class="msg-area">
-          <div class="msg-area-header">
-            <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640);width:38px;height:38px;font-size:14px;" id="msgHeaderAvatar">RA</div>
+      <!-- Main Content -->
+      <div class="lg:col-span-9 space-y-8">
+
+        <!-- Companies -->
+        <section>
+          <div class="flex items-end justify-between mb-6">
             <div>
-              <div style="font-weight:600;font-size:13px;" id="msgHeaderName">Ritu Agarwal</div>
-              <div style="font-size:11px;color:var(--green);">● Online</div>
+              <h2 class="font-headline text-2xl font-extrabold tracking-tight text-on-surface">Recommended for your Industry</h2>
+              <p class="text-on-surface-variant mt-1">Stay ahead with insights from leading AI and design firms.</p>
             </div>
-            <button class="btn btn-gold btn-sm" style="margin-left:auto;" onclick="openModal('payModal')">💳 Payment</button>
+            <button class="text-primary font-bold text-sm flex items-center gap-1 hover:underline" onclick="showToast('Showing all recommended companies')">
+              See all <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
           </div>
-          <div class="msg-area-body" id="msgBody">
-            <div class="msg-bubble-wrap">
-              <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640);width:30px;height:30px;font-size:11px;flex-shrink:0;">RA</div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Company 1 -->
+            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
+              <div class="h-16 bg-gradient-to-br from-primary-fixed to-primary-container relative">
+                <div class="absolute -bottom-6 left-6 w-14 h-14 bg-white rounded-lg p-2 shadow-sm border border-surface-container-highest">
+                  <img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkK6gJV1D1w-3RJulgrB89Gal3yKeDmTi-TU9tE82LHvGytXDP-3gHpVZrTogmbds9ffPEn2mNvbl5tGz-_Mk2YiYRb628CX4HMuVNZVY4E_D8UKzzLO80Myl5CloKueCdfivwS0PLF2hKcl78ppi8_F0ufAjPDbhtcVD1b3K1GeAx-CZu6u0O5DqlITP0jYsvX4XHVyLsFo9bSI-9fkV9g1wLNoTD1b-M8QkchSlgm1nORkkgWcaqwAectFa_kyfn-H1YFkhYhZA" alt="TaskLink"/>
+                </div>
+              </div>
+              <div class="p-6 pt-8">
+                <h3 class="font-headline font-bold text-lg group-hover:text-primary transition-colors">TaskLink AI</h3>
+                <p class="text-xs text-on-surface-variant mb-1">Artificial Intelligence • 1.2M followers</p>
+                <p class="text-sm text-zinc-500 line-clamp-2 mb-4 leading-relaxed">Pioneering the next generation of autonomous workflow orchestration for creative agencies.</p>
+                <button class="btn-follow w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="toggleFollow(this, 'TaskLink AI')">
+                  <span class="material-symbols-outlined text-sm">add</span> Follow
+                </button>
+              </div>
+            </div>
+            <!-- Company 2 -->
+            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
+              <div class="h-16 bg-gradient-to-br from-secondary-container to-secondary relative">
+                <div class="absolute -bottom-6 left-6 w-14 h-14 bg-white rounded-lg p-2 shadow-sm border border-surface-container-highest">
+                  <img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhlBiGuGGnEW4a9JW90fr8oB-E2YxH5iC2pbnkQ5Cy_gYEiazpsTtRF-RrhfsXyNq3kBT8HJ45zm-zOlS0W__9Yj5yuu48nuVEcmX5PuKxSi3NhbBRsKpt6jitNmT94DPin1zG35c-RqeQZWv-P9Y4UZyy4bOntrFa2mMhqdpwawGSi3Rx2FrrBvxASQr-CT1TYTIryzw5DRIiCIQUHfMOi47l45uPO1r1lbPMVud1zTcBI5B3zCu7SYkwA7ewyJdClns23d-CjGU" alt="DSI"/>
+                </div>
+              </div>
+              <div class="p-6 pt-8">
+                <h3 class="font-headline font-bold text-lg group-hover:text-primary transition-colors">Design Systems Inc.</h3>
+                <p class="text-xs text-on-surface-variant mb-1">UI/UX Design • 450K followers</p>
+                <p class="text-sm text-zinc-500 line-clamp-2 mb-4 leading-relaxed">The global authority on building scalable and accessible design languages for enterprise.</p>
+                <button class="btn-follow w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="toggleFollow(this, 'Design Systems Inc.')">
+                  <span class="material-symbols-outlined text-sm">add</span> Follow
+                </button>
+              </div>
+            </div>
+            <!-- Company 3 -->
+            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
+              <div class="h-16 bg-gradient-to-br from-tertiary-fixed to-tertiary-container relative">
+                <div class="absolute -bottom-6 left-6 w-14 h-14 bg-white rounded-lg p-2 shadow-sm border border-surface-container-highest">
+                  <img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5tA4bAgowunD0vSoQtpb8dO71DTWqnkb3viM9AznuqMx2ZXNMPCMwWMow2JfgP5MMQN12gnTrwiGUIUiDDJAo7Am173GXysyxfcQGTJHuDevTjZJwS8JaiMZ6jVv4LE5l-nsposnWv5HIMtuqKGCSiLdyn5FZD11YZRk0yUCKHjFG2X4SIQ9kvIOgSJrxh3DHyjzZ8ssK_MQj1WkfuY5KWBw_q4W4VmC7Oi6DHBnfDBYzyn5m3Q3QVDtyJqgr66YKQ1dwSXuN7QA" alt="FV"/>
+                </div>
+              </div>
+              <div class="p-6 pt-8">
+                <h3 class="font-headline font-bold text-lg group-hover:text-primary transition-colors">Future Ventures</h3>
+                <p class="text-xs text-on-surface-variant mb-1">Venture Capital • 89K followers</p>
+                <p class="text-sm text-zinc-500 line-clamp-2 mb-4 leading-relaxed">Investing in early-stage startups that focus on radical human-computer interaction models.</p>
+                <button class="btn-follow w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="toggleFollow(this, 'Future Ventures')">
+                  <span class="material-symbols-outlined text-sm">add</span> Follow
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- People You May Know -->
+        <section>
+          <div class="flex items-end justify-between mb-6">
+            <div>
+              <h2 class="font-headline text-2xl font-extrabold tracking-tight text-on-surface">People you may know</h2>
+              <p class="text-on-surface-variant mt-1">Based on your shared connections and professional history.</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Person 1 -->
+            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-6 flex items-start gap-6 relative overflow-hidden group hover:bg-surface-container-low transition-colors shadow-sm" id="person-sophia">
+              <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button class="p-2 rounded-full hover:bg-surface-container-highest transition-colors" onclick="dismissPerson('person-sophia')">
+                  <span class="material-symbols-outlined text-zinc-400 text-sm">close</span>
+                </button>
+              </div>
+              <div class="relative flex-shrink-0">
+                <img class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBIccUv1tE8Wk78MX-64IGxosnAC-YW1si5QVdAZ9eyYdfmf70btblf_r7S4iy6e8ttyRyaoMhWz62QPIm33-b9BKgw7uPOvRRv5cSII67LxUhwv4qJ_qI7jbMbho9kH4CjMyVEevl-KFaAYkpjSuA898YgMmxSb7awa9PUNwNNpt2kW26JxlkW0_2XTMmo83rNyb44GMEDTWX3b0PxTiY3cBR1RQFCt95EsGTIkz2IXd19yljOm5-yM4micY2IbXUlb23cTtR9I0" alt="Sophia"/>
+                <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-2 border-white rounded-full" title="Online now"></div>
+              </div>
+              <div class="flex-1 space-y-2">
+                <div><h4 class="font-headline font-bold text-xl text-on-surface">Sophia Marchesi</h4><p class="text-sm font-medium text-primary">Chief Design Officer at Anthropic</p></div>
+                <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+                  <div class="flex -space-x-2">
+                    <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASy5ITY7hs31L9Qcx-P8c4mrGD7IkOxSua-7-NAgm8gHJ-mKhRDma702kSsomNIZ_B6SQNRwiT-eESi-olAULcH4CnTVn2BglRRYASA3JmsjpWbXVyTMSrV8XsaEfw9rxQUHkzQ_6qu1pSqKjeDcMQi9VWnp1bwRvhCUU_ceFH67-8a74AOH5oR4uhCyFoUox_irKpLcrXgQylioG9KXVya5r7IsWKn1VYxlKB9s_QvCmqvAIDwu7mKc2pzxLi54W51nQRasqpe1A" alt=""/>
+                    <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBoxX1SY66_AROL9GW2gqkcJoOqjEKxD1rF7-zVF39dQDLpxMswFhvJscHkuYKC1JDORqB9dB7GrKVMWk3hZpOLYoDAuAN4tKwQ7qeKHi7aMu9Mv4EyFFVeR1a88xWAdKZ3Ht_0vK7lWSD2l_BmUd32BjHl0KG-F3CKKepcxt6PTjvlxVBBR_yHFFwWLfkLhrmButsCuwspRNS2vPSwWraGiZEjjfYRwBNtcooj6gVSPicz7TICX4rZnWAz0SU26gR9PBiuPel__g" alt=""/>
+                  </div>
+                  <span>24 shared connections</span>
+                </div>
+                <div class="pt-2">
+                  <button class="btn-connect flex items-center gap-2 px-6 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-[0_4px_12px_rgba(0,93,143,0.2)] active:scale-95 transition-all" onclick="connectPerson(this, 'Sophia Marchesi')">
+                    <span class="material-symbols-outlined text-lg">person_add</span> Connect
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Person 2 -->
+            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-6 flex items-start gap-6 relative overflow-hidden group hover:bg-surface-container-low transition-colors shadow-sm" id="person-marcus">
+              <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button class="p-2 rounded-full hover:bg-surface-container-highest transition-colors" onclick="dismissPerson('person-marcus')">
+                  <span class="material-symbols-outlined text-zinc-400 text-sm">close</span>
+                </button>
+              </div>
+              <div class="relative flex-shrink-0">
+                <img class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOd058EmKU934WZfDf8OsRNYR6H6B7rcUOKXuhRZp3TTtewfzz3fDEv8-C5oewbiMLcDNI1_jf1rRg8j3jdM2eFZrbNvjqMR0lmkzwM3fkYLSFqI2sxH9GyckIJ9AvLZeAf3CIWPj5SdyslGL8OUjPyBwsgcSE_BUKtqcWuWD0QlL6eUqM3V63QWtT7Jj9KAyAElRtyWh2UnazvLxgWWUHtzaEiIaqt_eii4ayKPJPZtJ9cbIOUbsY0k5_1hZR9iGjQPwkckAG7lA" alt="Marcus T"/>
+              </div>
+              <div class="flex-1 space-y-2">
+                <div><h4 class="font-headline font-bold text-xl text-on-surface">Marcus Thorne</h4><p class="text-sm font-medium text-primary">Senior AI Researcher at MIT Lab</p></div>
+                <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+                  <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFfQPaqaUSUiGVUDFJcZ4HTRh50Iuv3HmOwrjB4YakoHnLUdQaIIiXKPRozmBdqQQBjo_rwDZPsBys4cjgmB9eE4d0ZoO281DDqpi0BGaw-jL5yg-spb8iL-7u1OcRaGQUv950l4UAjKDFC-CZiZ3SmRjlcy7gYi2tjYAOLJt8lFzsdFARhCdS-BW1Ju2M8G590UjIg_KIXsfOjfqmWQOtoVyXXDWwBQQozk9o3wHknioym57UBe458Q_DBfrvZsBUS0uPdkIn_ok" alt=""/>
+                  <span>12 shared connections</span>
+                </div>
+                <div class="pt-2">
+                  <button class="btn-connect flex items-center gap-2 px-6 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-[0_4px_12px_rgba(0,93,143,0.2)] active:scale-95 transition-all" onclick="connectPerson(this, 'Marcus Thorne')">
+                    <span class="material-symbols-outlined text-lg">person_add</span> Connect
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Person 3 -->
+            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-6 flex items-start gap-6 relative overflow-hidden group hover:bg-surface-container-low transition-colors shadow-sm" id="person-julianne">
+              <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button class="p-2 rounded-full hover:bg-surface-container-highest transition-colors" onclick="dismissPerson('person-julianne')">
+                  <span class="material-symbols-outlined text-zinc-400 text-sm">close</span>
+                </button>
+              </div>
+              <div class="relative flex-shrink-0">
+                <img class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsHqlLjG2dVugELTUPT5taZORP9pYpEXqzv9xjr5PUA6DJZMkYvkoWl1U7yG_KySwnXBMUJ1lBy1EtL_53AwCnG6eckLZCUyEq8zSZygF8Usc0AulIqrRaih_Rm1ILnDfUOSntw3OElf-q7Xe2t-qhxael1b_SjaENOKLWThR0sWrMLEhgxd94eGDgCwj192zYqKytmRW3iJGTQ4mgzOYTYjM2F0SXNHfz_iebaXfib48POvzUsxoZeGJ27soGJlBbc26E8hZkpRI" alt="Julianne"/>
+              </div>
+              <div class="flex-1 space-y-2">
+                <div><h4 class="font-headline font-bold text-xl text-on-surface">Julianne Webb</h4><p class="text-sm font-medium text-primary">Strategic Growth Lead at Shopify</p></div>
+                <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+                  <div class="flex -space-x-2">
+                    <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCu9JqYyPNGmvJaO8uT6S0PUOn9opKOqGZPyYQaECAhtMMjJ63U6z0fC8cxcxd_WV0RQx0l-tNZTw9h5hfIzsoSiItStgelWJewt6XoI4RozX_GQkPshy7wmYA0SY0CfqTibXWkx0MVi50R7drwYXpbANEdgATJgf8ltNxn6rEayPWMOdDLjr2CBgis5l-_GhXOL2ZVCjHadVlixzKKpTs_qGm1TF8iZdUpMpE7ZVpzy2NPCxoWAQ-Kvtxyl8HpzsL-Fd7pLkfowM" alt=""/>
+                    <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAl0fecooc3-kyvxd0W341BcySunRgPiT5vQQfU2W5My25qjQ1Y_sk3lpfzMX8XYnMx0lCdE7bluu8Noq46YWIoEZDLbg74Y_asZASIPpc5muqMaVKcJfB9PxcEWBu6XwnRghck-ioG3_5prjMb2Z--9129Yo9v6bRRt7sJKcaaPNHYCwi9x21KxvQ-mmIfx2md6C0dUqNd3IGwli7GrXKJ8BnFcZUiDGGfeVnP66LTZFjmc2eYYZbgzTowTIBFktUx-AkkmqqQ-XE" alt=""/>
+                  </div>
+                  <span>8 shared connections</span>
+                </div>
+                <div class="pt-2">
+                  <button class="btn-connect flex items-center gap-2 px-6 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-[0_4px_12px_rgba(0,93,143,0.2)] active:scale-95 transition-all" onclick="connectPerson(this, 'Julianne Webb')">
+                    <span class="material-symbols-outlined text-lg">person_add</span> Connect
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Person 4 -->
+            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-6 flex items-start gap-6 relative overflow-hidden group hover:bg-surface-container-low transition-colors shadow-sm" id="person-robert">
+              <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button class="p-2 rounded-full hover:bg-surface-container-highest transition-colors" onclick="dismissPerson('person-robert')">
+                  <span class="material-symbols-outlined text-zinc-400 text-sm">close</span>
+                </button>
+              </div>
+              <div class="relative flex-shrink-0">
+                <img class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9OFMFNQzOCOJyOpKYyFcfwqm7gsjsJFhfKa3RiEEcGWae06t39_MQeR3_ETAmy2hYGsyM2qoUAF7yCW5ggB6buexTYt1Q4X6JPeXInXUWNiUSiqixbW0nhub01ABg7mhqLbUzJryrjYdp8nsxHDnauTze4zsB8pJyE3S01ZEQObqCO3leT8zVv_3ECyxOqy-rO1RKQQ8ctAAGT_7fFGkTJSjLpZA_wWd526Xss7Q2men8MqcOKkgGFvVDRJHWAwbfVL0BzszvZz4" alt="Robert"/>
+              </div>
+              <div class="flex-1 space-y-2">
+                <div><h4 class="font-headline font-bold text-xl text-on-surface">Dr. Robert Chen</h4><p class="text-sm font-medium text-primary">Data Scientist at Tesla Motors</p></div>
+                <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+                  <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDysJk3nEbNaku8nDU_oG7tgEIC4PYe0m3Ocw10mfwcRlyX0bkSsipjxI67at7_c4TRwgiUWjdL4sJZql6TxNVBDAN5x6JCKN457f15T4tDXv9hyYuBbiD-gHeg5n59CpkZjLVj8IGusO8U46oi_XPZW9zGbIvJeDF4XXxsKqJHLSo7YDuGVKU1tVQF1xFXkmDKZ84CaRKnTRPYQgatoyWNYxv2yGDpJ7wXnOnm9HUoJ6AMEAfuTsB9xjM1MpB50uIobXzF5mny-Tk" alt=""/>
+                  <span>42 shared connections</span>
+                </div>
+                <div class="pt-2">
+                  <button class="btn-connect flex items-center gap-2 px-6 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-[0_4px_12px_rgba(0,93,143,0.2)] active:scale-95 transition-all" onclick="connectPerson(this, 'Dr. Robert Chen')">
+                    <span class="material-symbols-outlined text-lg">person_add</span> Connect
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Company Detail -->
+        <section class="bg-surface-container-low rounded-xl border border-outline-variant/20 p-8 shadow-sm">
+          <div class="flex flex-col md:flex-row gap-8">
+            <div class="w-full md:w-1/3">
+              <div class="bg-white rounded-xl p-6 border border-zinc-200 shadow-sm">
+                <img class="w-24 h-24 object-contain mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADZLstFtmrWR-p6x2aV-tJKLvmkQ67uwWmiczEor6H4p-GWrnYu9ZBCrL8Ki6YwDfGoZEFz5iO8kFYUVx5wdyefLwSyNA2c4S55f7ii-qbJr6U35YdoZosDcSHppyzkP-Wc1NKK8yh74E5znaJjIksuPzxViSyMk9yjAXRzSjUIJ0wUqLdvyXSmWFCQWuO5r1t54d2K573KW9-bs0xIUot2oeZ5Ja4SlXUUTC3bjKcAINCFXKDpbwTemFrQr80nfg84s-c4ZKPewc" alt="TaskLink"/>
+                <h3 class="font-headline text-2xl font-extrabold text-on-surface">TaskLink AI</h3>
+                <p class="text-primary font-bold text-sm mb-4 cursor-pointer hover:underline" onclick="showToast('Opening tasklink.ai/careers')">tasklink.ai/careers</p>
+                <div class="space-y-3">
+                  <div class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-zinc-400">location_on</span>San Francisco, CA</div>
+                  <div class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-zinc-400">group</span>501-1,000 employees</div>
+                  <div class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-zinc-400">domain</span>Information Technology</div>
+                </div>
+                <button class="w-full mt-6 py-3 rounded-full bg-primary text-white font-bold hover:bg-primary-container transition-colors shadow-lg shadow-primary/20" onclick="showToast('Now following TaskLink AI!')">Follow TaskLink</button>
+              </div>
+            </div>
+            <div class="w-full md:w-2/3 space-y-6">
               <div>
-                <div class="msg-bubble">Hey Arjun! Your proposal looks great. When can you start on the marketing copy?</div>
-                <div class="msg-time">10:23 AM</div>
+                <h4 class="font-headline font-bold text-lg mb-2">About the Company</h4>
+                <p class="text-zinc-600 leading-relaxed text-sm">At TaskLink AI, we believe the future of work isn't just about productivity—it's about augmentation. Our platform integrates seamless AI agents into your daily professional stack, automating the mundane to let you focus on the architectural.</p>
               </div>
-            </div>
-            <div class="msg-bubble-wrap own">
-              <div class="avatar-lg" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6);width:30px;height:30px;font-size:11px;flex-shrink:0;">AK</div>
-              <div>
-                <div class="msg-bubble">Hi Ritu! I can start tomorrow. I've reviewed the brief and have some initial ideas ready.</div>
-                <div class="msg-time">10:26 AM</div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded-lg border border-zinc-100">
+                  <p class="text-xs text-zinc-400 font-bold uppercase">Recent Activity</p>
+                  <p class="text-sm font-medium text-zinc-800 mt-1">4 new jobs posted today</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg border border-zinc-100">
+                  <p class="text-xs text-zinc-400 font-bold uppercase">Network</p>
+                  <p class="text-sm font-medium text-zinc-800 mt-1">12 alumni work here</p>
+                </div>
               </div>
-            </div>
-            <div class="msg-bubble-wrap">
-              <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640);width:30px;height:30px;font-size:11px;flex-shrink:0;">RA</div>
-              <div>
-                <div class="msg-bubble">Perfect! Can you share the deliverable files once you have the first draft?</div>
-                <div class="msg-time">10:31 AM</div>
+              <div class="pt-4 border-t border-zinc-200">
+                <h4 class="font-headline font-bold text-sm text-zinc-400 uppercase tracking-widest mb-4">Featured Insights</h4>
+                <div class="bg-white rounded-lg p-4 border border-zinc-100 flex gap-4 cursor-pointer hover:shadow-md transition-shadow" onclick="showToast('Opening article...')">
+                  <div class="w-20 h-20 bg-zinc-100 rounded-md overflow-hidden flex-shrink-0">
+                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5lt0Iv8rTSdj-A6M-Ww1pQF5fZIFkqPUNJuhsfpNU-Z4Kz_53vgiqBuFLVQa4YgG90FGisy7L42h4WSQKCzAmaq806cX8hp-ynQuiDX5q2WXgdzNi-spSGSZMTGClTtNQ1XXCFTlgkKDuD0XmoYnccl8-q-GoDiddKEnIBP7i8zNh8h1jl7a_Vef2c6uhbw2vpLAPAYVNTJp3L5OSwMuEXYnrwcKw3F7eQkYZ85bQ6sTuN7CQ0yOKw34AOVpA70eQ7TmpQrzQT94" alt="Report"/>
+                  </div>
+                  <div>
+                    <p class="text-xs text-primary font-bold">REPORT • JAN 2024</p>
+                    <p class="font-bold text-zinc-800 leading-tight mt-1">The State of AI in Enterprise: A 2024 Retrospective</p>
+                    <p class="text-xs text-zinc-500 mt-2">6 min read • 4,200 reads</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="msg-input-bar">
-            <textarea class="msg-input" id="msgInput" placeholder="Type a message…" onkeydown="sendMsg(event)" rows="1"></textarea>
-            <button class="btn btn-gold btn-sm" onclick="sendMsgBtn()">Send ➤</button>
-          </div>
-        </div>
+        </section>
       </div>
     </div>
-
-    <!-- ══ NOTIFICATIONS ══ -->
-    <div class="section-view" id="sec-notifications">
-      <div class="page-header">
-        <div class="page-title">🔔 <span>Notifications</span></div>
-        <div class="page-sub">Stay updated on your activity</div>
-      </div>
-      <div class="notif-list">
-        <div class="notif-item unread">
-          <div class="notif-icon-wrap" style="background:rgba(39,196,122,0.12)">✅</div>
-          <div>
-            <div class="notif-text"><strong>Ritu Agarwal</strong> accepted your connection request — you can now message each other</div>
-            <div class="notif-time">2 minutes ago</div>
-          </div>
-        </div>
-        <div class="notif-item unread">
-          <div class="notif-icon-wrap" style="background:rgba(245,166,35,0.12)">💰</div>
-          <div>
-            <div class="notif-text"><strong>₹8,500</strong> payment released by Nexacore Inc. for "API Integration Task"</div>
-            <div class="notif-time">1 hour ago</div>
-          </div>
-        </div>
-        <div class="notif-item unread">
-          <div class="notif-icon-wrap" style="background:rgba(139,92,246,0.12)">🤖</div>
-          <div>
-            <div class="notif-text">Your <strong>AI Agent</strong> found 6 new tasks matching your profile — React, Node.js, TypeScript</div>
-            <div class="notif-time">3 hours ago</div>
-          </div>
-        </div>
-        <div class="notif-item unread">
-          <div class="notif-icon-wrap" style="background:rgba(74,144,226,0.12)">👤</div>
-          <div>
-            <div class="notif-text"><strong>Nexacore Technologies</strong> viewed your profile</div>
-            <div class="notif-time">5 hours ago</div>
-          </div>
-        </div>
-        <div class="notif-item">
-          <div class="notif-icon-wrap" style="background:rgba(245,166,35,0.12)">📋</div>
-          <div>
-            <div class="notif-text">New task posted: <strong>"E-commerce Platform Development"</strong> matching your skills — ₹55,000</div>
-            <div class="notif-time">Yesterday</div>
-          </div>
-        </div>
-        <div class="notif-item">
-          <div class="notif-icon-wrap" style="background:rgba(232,88,88,0.12)">⭐</div>
-          <div>
-            <div class="notif-text"><strong>ByteTrend Media</strong> left you a 5-star review on your last project</div>
-            <div class="notif-time">2 days ago</div>
-          </div>
-        </div>
-        <div class="notif-item">
-          <div class="notif-icon-wrap" style="background:rgba(74,144,226,0.12)">🤝</div>
-          <div>
-            <div class="notif-text"><strong>Nikhil Kapoor</strong> sent you a connection request</div>
-            <div class="notif-time">2 days ago</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ PROFILE ══ -->
-    <div class="section-view" id="sec-profile">
-      <div class="page-header">
-        <div class="page-title">My <span>Profile</span></div>
-        <div class="page-sub">How others see you on TaskHive</div>
-      </div>
-      <div class="profile-layout">
-        <div>
-          <div class="profile-card" style="margin-bottom:14px;">
-            <div class="profile-banner-bg">
-              <div class="profile-avatar-wrap"><div class="profile-avatar">AK</div></div>
-            </div>
-            <div class="profile-info">
-              <div class="profile-name">Arjun Kumar</div>
-              <div class="profile-tagline">Full-Stack Developer · React · Node.js · TypeScript</div>
-              <div class="profile-rating">★★★★★ <span style="color:var(--text2);font-weight:400;">4.9 (46 reviews)</span></div>
-              <div style="margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-                <span class="tag tag-green">🟢 Available</span>
-                <span class="tag tag-blue">💎 Level 2</span>
-              </div>
-              <div class="profile-stats">
-                <div class="profile-stat"><div class="val">47</div><div class="lbl">Completed</div></div>
-                <div class="profile-stat"><div class="val">138</div><div class="lbl">Connections</div></div>
-                <div class="profile-stat"><div class="val">₹48K</div><div class="lbl">Earned</div></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="side-panel">
-            <div class="side-panel-title">🛠 Skills</div>
-            <div class="skill-tags">
-              <span class="skill-tag">React</span>
-              <span class="skill-tag">Node.js</span>
-              <span class="skill-tag">TypeScript</span>
-              <span class="skill-tag">PostgreSQL</span>
-              <span class="skill-tag">Docker</span>
-              <span class="skill-tag">GraphQL</span>
-              <span class="skill-tag">Next.js</span>
-              <span class="skill-tag">Redis</span>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="profile-card" style="padding:22px;">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:12px;">About Me</div>
-            <div style="color:var(--text2);font-size:13.5px;line-height:1.7;">
-              Full-stack developer with 5+ years building scalable web applications for startups and enterprises. I specialize in React ecosystems and Node.js backends, with a focus on performance, clean code, and great user experience. Open to remote tasks, part-time consulting, and long-term partnerships.
-            </div>
-            <div class="divider"></div>
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:14px;">Portfolio</div>
-            <div class="task-grid" style="grid-template-columns:1fr 1fr;">
-              <div class="task-card" style="padding:14px;">
-                <div class="task-category-badge badge-dev" style="display:inline-block;margin-bottom:8px;">Dev</div>
-                <div style="font-weight:600;font-size:13px;">SaaS Dashboard Platform</div>
-                <div style="font-size:12px;color:var(--text3);margin-top:4px;">React, TypeScript, Charts</div>
-              </div>
-              <div class="task-card" style="padding:14px;">
-                <div class="task-category-badge badge-dev" style="display:inline-block;margin-bottom:8px;">Dev</div>
-                <div style="font-weight:600;font-size:13px;">E-commerce API System</div>
-                <div style="font-size:12px;color:var(--text3);margin-top:4px;">Node.js, Postgres, Redis</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ WALLET ══ -->
-    <div class="section-view" id="sec-wallet">
-      <div class="page-header">
-        <div class="page-title">💳 <span>Wallet</span></div>
-        <div class="page-sub">Manage your earnings and payments</div>
-      </div>
-      <div class="wallet-top">
-        <div class="wallet-card">
-          <div class="wallet-label">Available Balance</div>
-          <div class="wallet-amount gold">₹18,450</div>
-          <div class="wallet-pending">₹6,200 pending clearance</div>
-          <div style="display:flex;gap:8px;margin-top:16px;">
-            <button class="btn btn-gold btn-sm">Withdraw</button>
-            <button class="btn btn-ghost btn-sm">Add Funds</button>
-          </div>
-        </div>
-        <div class="wallet-card">
-          <div class="wallet-label">In Escrow (Protected)</div>
-          <div class="wallet-amount" style="color:var(--blue2);">₹12,000</div>
-          <div class="wallet-pending">Secured for active tasks</div>
-          <div style="margin-top:16px;font-size:12px;color:var(--text3);line-height:1.5;">Funds released automatically upon task completion & approval</div>
-        </div>
-      </div>
-      <div class="tx-list">
-        <div class="tx-header">Transaction History</div>
-        <div class="tx-item">
-          <div class="tx-icon" style="background:rgba(39,196,122,0.12)">💸</div>
-          <div class="tx-info"><div class="tx-name">Payment Received — React Dashboard</div><div class="tx-date">Mar 22, 2026 · Nexacore Inc.</div></div>
-          <div class="tx-amount credit">+₹25,000</div>
-        </div>
-        <div class="tx-item">
-          <div class="tx-icon" style="background:rgba(232,88,88,0.12)">🛒</div>
-          <div class="tx-info"><div class="tx-name">Service Fee — Platform Commission</div><div class="tx-date">Mar 22, 2026 · TaskHive</div></div>
-          <div class="tx-amount debit">−₹2,500</div>
-        </div>
-        <div class="tx-item">
-          <div class="tx-icon" style="background:rgba(39,196,122,0.12)">💸</div>
-          <div class="tx-info"><div class="tx-name">Payment Received — API Integration</div><div class="tx-date">Mar 18, 2026 · FinPulse Labs</div></div>
-          <div class="tx-amount credit">+₹8,500</div>
-        </div>
-        <div class="tx-item">
-          <div class="tx-icon" style="background:rgba(74,144,226,0.12)">🔒</div>
-          <div class="tx-info"><div class="tx-name">Escrow — E-commerce Platform</div><div class="tx-date">Mar 25, 2026 · ShopRocket</div></div>
-          <div class="tx-amount" style="color:var(--blue2);">₹12,000 🔒</div>
-        </div>
-        <div class="tx-item">
-          <div class="tx-icon" style="background:rgba(245,166,35,0.12)">🏦</div>
-          <div class="tx-info"><div class="tx-name">Withdrawal to Bank Account</div><div class="tx-date">Mar 15, 2026 · HDFC ••••4821</div></div>
-          <div class="tx-amount debit">−₹15,000</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ AI AGENT ══ -->
-    <div class="section-view" id="sec-agent">
-      <div class="page-header">
-        <div class="page-title">🤖 My <span>AI Agent</span></div>
-        <div class="page-sub">Your personal assistant — always working, always learning</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 360px;gap:20px;">
-        <div>
-          <div class="agent-card" style="margin-bottom:16px;">
-            <div class="agent-header">
-              <div class="agent-orb">🤖</div>
-              <div>
-                <div class="agent-name">Hive Agent — Arjun</div>
-                <div class="agent-status"><span style="width:7px;height:7px;background:var(--green);border-radius:50%;display:inline-block;"></span> Active since 08:00 AM</div>
-              </div>
-            </div>
-            <div class="agent-activity">
-              <div class="agent-activity-item"><div class="agent-dot2"></div><strong style="color:var(--text);">Task Scanning:</strong> Found 6 new matching tasks (React, Node.js, TypeScript). Top match: ₹25,000 React Dashboard at Nexacore — 97% compatibility.</div>
-              <div class="agent-activity-item"><div class="agent-dot2"></div><strong style="color:var(--text);">Auto-Applied:</strong> Submitted proposal to "E-commerce Dashboard Design" within your saved criteria. Proposal tailored to client brief.</div>
-              <div class="agent-activity-item"><div class="agent-dot2"></div><strong style="color:var(--text);">Profile Insight:</strong> Nexacore Technologies viewed your profile 3 times this week. Suggested action: Follow up.</div>
-              <div class="agent-activity-item"><div class="agent-dot2"></div><strong style="color:var(--text);">Network:</strong> 2 new connection requests match your industry. Recommend accepting Nikhil Kapoor (Backend Engineer).</div>
-              <div class="agent-activity-item"><div class="agent-dot2"></div><strong style="color:var(--text);">Earnings Alert:</strong> ₹6,200 pending payment clears in 2 days. Next payout projected: ₹18,450.</div>
-            </div>
-          </div>
-
-          <div class="profile-card" style="padding:20px;">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:16px;">⚙️ Agent Preferences</div>
-            <div class="form-group">
-              <label class="form-label">Task Categories to Monitor</label>
-              <div class="filter-chips" style="margin-top:0;">
-                <button class="chip active" onclick="filterChip(this)">Development</button>
-                <button class="chip active" onclick="filterChip(this)">API</button>
-                <button class="chip" onclick="filterChip(this)">Design</button>
-                <button class="chip" onclick="filterChip(this)">Consulting</button>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Minimum Budget</label>
-                <input class="form-input" type="number" value="5000" placeholder="₹5,000">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Auto-Apply Threshold</label>
-                <select class="form-select">
-                  <option>95%+ match</option>
-                  <option selected>90%+ match</option>
-                  <option>80%+ match</option>
-                </select>
-              </div>
-            </div>
-            <button class="btn btn-gold">Save Preferences</button>
-          </div>
-        </div>
-
-        <div>
-          <div class="side-panel" style="background:linear-gradient(135deg,#0f1929,#1a1030);border-color:rgba(139,92,246,0.25);">
-            <div class="side-panel-title" style="color:#a78bfa;">💬 Chat with Agent</div>
-            <div id="agentChatMain" style="height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:12px;">
-              <div class="agent-msg bot">Hi Arjun! I'm actively scanning 1,200+ tasks right now. Found 6 that match your React + Node.js profile. Want me to send proposals?</div>
-              <div class="agent-msg user">Yes, apply to the top 3 over ₹15,000</div>
-              <div class="agent-msg bot">Done ✅ Submitted tailored proposals to: Nexacore Dashboard (₹25K), ShopRocket Platform (₹55K), and FinPulse API (₹18K). I'll notify you when they respond.</div>
-            </div>
-            <div style="display:flex;gap:8px;">
-              <input class="agent-input" id="agentMainInput" placeholder="Ask your agent…" onkeydown="agentChat(event)">
-              <button class="agent-send" onclick="agentChatSend()">➤</button>
-            </div>
-          </div>
-          <div class="side-panel">
-            <div class="side-panel-title">📊 Agent Activity (Today)</div>
-            <div style="display:flex;flex-direction:column;gap:10px;">
-              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Tasks scanned</span><strong>1,247</strong></div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Matches found</span><strong style="color:var(--gold)">6</strong></div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Proposals sent</span><strong>3</strong></div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Profile views triggered</span><strong>4</strong></div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2)">Notifications sent</span><strong>7</strong></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /content -->
-</div><!-- /main -->
-</div><!-- /shell -->
-
-<!-- ═══ TOAST CONTAINER ═══ -->
-<div class="toast-container" id="toastContainer"></div>
-
-<!-- ═══ FLOATING AGENT ═══ -->
-<div class="agent-widget">
-  <div class="agent-popup" id="agentPopup">
-    <div class="agent-popup-header">
-      <div class="agent-orb" style="width:34px;height:34px;font-size:16px;">🤖</div>
-      <div>
-        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">Hive Agent</div>
-        <div style="font-size:10px;color:var(--green);">● Active</div>
-      </div>
-      <div style="margin-left:auto;cursor:pointer;color:var(--text3);font-size:16px;" onclick="toggleAgent()">×</div>
-    </div>
-    <div class="agent-chat-body" id="agentChatBody">
-      <div class="agent-msg bot">👋 Hi! I found 6 new tasks matching your skills today. Want me to apply?</div>
-    </div>
-    <div class="agent-input-row">
-      <input class="agent-input" id="floatAgentInput" placeholder="Ask anything…" onkeydown="floatAgentChat(event)">
-      <button class="agent-send" onclick="floatAgentSend()">➤</button>
-    </div>
-  </div>
-  <button class="agent-fab" onclick="toggleAgent()" title="AI Agent">🤖</button>
+  </main>
 </div>
 
-<!-- ═══ MODAL: PAY ═══ -->
-<div class="modal-overlay" id="payModal">
-  <div class="modal">
-    <div class="modal-close" onclick="closeModal('payModal')">✕</div>
-    <div class="modal-title">Place an Order</div>
-    <div class="modal-sub">React Dashboard for SaaS Analytics Platform · Nexacore Inc.</div>
-
-    <div class="payment-pkg-row">
-      <div class="pkg-card" onclick="selectPkg(this)">
-        <div class="pkg-name">Basic</div>
-        <div class="pkg-price">₹8,000</div>
-        <div class="pkg-delivery">⏰ 7 days</div>
-        <div class="pkg-features">• 3 chart components<br>• Responsive layout<br>• 1 revision</div>
+<!-- ============================= -->
+<!-- PAGE: POST                    -->
+<!-- ============================= -->
+<div id="page-post" class="page">
+  <main class="pt-24 pb-20 px-4 max-w-2xl mx-auto min-h-screen">
+    <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-zinc-200/10 mt-4">
+      <h2 class="font-headline font-extrabold text-2xl text-on-surface mb-6">Create a Post</h2>
+      <div class="flex gap-3 mb-4">
+        <img class="w-12 h-12 rounded-lg object-cover flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3SikYaU-Swj8h87lW8qxswRtRlmNEqbOYDB6quuu-5fYN75vnZLB4KDtpH9D7K6yUsOajbE5c9A1Y5voA4mBBlm4dCkNbPU0ZtLD0FHjdnQB9xMbn7cpC4jMfPf2JQBEipk1ZW4jxCRZ9HWCLT02FGhm1VRu6Q4KQ-0ajc1DTQQiDXaOwHqmK5QZipenMfgp4USgPMNwBETX4s9i49LZJmM4QZg6InXJnb5hUYrQawoqbwoikSmNvw2tHghhM2YEZ2gTfsfwPFBE" alt="Marcus"/>
+        <div class="flex-1">
+          <textarea id="full-post-content" class="w-full bg-surface-container-low rounded-xl p-4 text-sm border-none resize-none focus:ring-2 focus:ring-primary outline-none" rows="6" placeholder="What collaboration are you looking for? Share your project or skill offering..."></textarea>
+        </div>
       </div>
-      <div class="pkg-card selected" onclick="selectPkg(this)">
-        <div class="pkg-name">Standard ⭐</div>
-        <div class="pkg-price">₹18,000</div>
-        <div class="pkg-delivery">⏰ 5 days</div>
-        <div class="pkg-features">• 8 chart components<br>• Filters & export<br>• 3 revisions</div>
+      <div class="mb-6">
+        <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Post Type</p>
+        <div class="flex gap-2 flex-wrap">
+          <button class="full-post-type active-type flex items-center gap-1.5 px-4 py-2 rounded-full border-2 border-primary text-primary text-sm font-bold" onclick="selectFullPostType(this, 'Propose Collab')">
+            <span class="material-symbols-outlined text-sm">add_circle</span> Propose Collab
+          </button>
+          <button class="full-post-type flex items-center gap-1.5 px-4 py-2 rounded-full border-2 border-outline-variant text-on-surface-variant text-sm font-bold" onclick="selectFullPostType(this, 'Skill Exchange')">
+            <span class="material-symbols-outlined text-sm">handshake</span> Skill Exchange
+          </button>
+          <button class="full-post-type flex items-center gap-1.5 px-4 py-2 rounded-full border-2 border-outline-variant text-on-surface-variant text-sm font-bold" onclick="selectFullPostType(this, 'Post Project')">
+            <span class="material-symbols-outlined text-sm">rocket_launch</span> Post Project
+          </button>
+        </div>
       </div>
-      <div class="pkg-card" onclick="selectPkg(this)">
-        <div class="pkg-name">Premium</div>
-        <div class="pkg-price">₹28,000</div>
-        <div class="pkg-delivery">⏰ 3 days</div>
-        <div class="pkg-features">• Unlimited components<br>• Full feature suite<br>• Unlimited revisions</div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Additional Requirements</label>
-      <textarea class="form-input" rows="3" placeholder="Describe any specific requirements or customizations…"></textarea>
-    </div>
-
-    <div class="payment-summary">
-      <div class="pay-row"><span>Service price</span><span>₹18,000</span></div>
-      <div class="pay-row"><span>Service fee (5%)</span><span>₹900</span></div>
-      <div class="pay-row total"><span>Total (Escrow)</span><span class="amount">₹18,900</span></div>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Payment Method</label>
-      <select class="form-select">
-        <option>💳 Credit/Debit Card</option>
-        <option>🏦 Net Banking</option>
-        <option>📱 UPI / GPay</option>
-        <option>💰 Wallet Balance (₹18,450)</option>
-      </select>
-    </div>
-
-    <div style="background:rgba(39,196,122,0.08);border:1px solid rgba(39,196,122,0.2);border-radius:var(--radius-sm);padding:12px;font-size:12px;color:var(--text2);margin-bottom:16px;">
-      🔒 <strong style="color:var(--green);">Escrow Protection:</strong> Your payment is held securely and only released when you approve the delivery. 100% refund guarantee.
-    </div>
-
-    <button class="btn btn-green" style="width:100%;justify-content:center;padding:12px;" onclick="processPayment()">
-      🔒 Confirm & Pay — ₹18,900
-    </button>
-  </div>
-</div>
-
-<!-- ═══ MODAL: COMPANY ═══ -->
-<div class="modal-overlay" id="companyModal">
-  <div class="modal modal-lg">
-    <div class="modal-close" onclick="closeModal('companyModal')">✕</div>
-    <div class="cmp-cover" style="background:linear-gradient(135deg,#0f2040,#1a4080,#0f2040);">
-      <div style="padding:20px;font-size:30px;opacity:0.15;letter-spacing:10px;">🚀🚀🚀🚀</div>
-    </div>
-    <div class="cmp-header">
-      <div class="cmp-logo-big" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f);">🚀</div>
-      <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+      <div class="grid grid-cols-2 gap-4 mb-6">
         <div>
-          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;">Nexacore Technologies</div>
-          <div style="color:var(--text2);font-size:13px;margin-top:3px;">SaaS & Cloud Infrastructure · Bengaluru, India</div>
-          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-            <span class="tag tag-blue">🏢 500–1000 emp</span>
-            <span class="tag tag-gold">⭐ 4.8 Rating</span>
-            <span class="tag tag-green">✅ Verified</span>
-          </div>
+          <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Budget / Value</label>
+          <input type="text" class="mt-2 w-full bg-surface-container-low rounded-xl p-3 text-sm border-none focus:ring-2 focus:ring-primary outline-none" placeholder="e.g. $1,200 or Skill Swap"/>
         </div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-outline" onclick="followCompany(this)">＋ Follow</button>
-          <button class="btn btn-gold" onclick="closeModal('companyModal');showSection('messages',null)">💬 Message</button>
+        <div>
+          <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Duration</label>
+          <select class="mt-2 w-full bg-surface-container-low rounded-xl p-3 text-sm border-none focus:ring-2 focus:ring-primary outline-none">
+            <option>1 week</option><option>2 weeks</option><option>1 month</option><option>Ongoing</option>
+          </select>
         </div>
+      </div>
+      <div class="mb-6">
+        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Skills Required</label>
+        <input type="text" class="mt-2 w-full bg-surface-container-low rounded-xl p-3 text-sm border-none focus:ring-2 focus:ring-primary outline-none" placeholder="e.g. React, UX Design, AWS (comma separated)"/>
+      </div>
+      <div class="flex gap-3">
+        <button class="flex-1 py-3 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold text-sm shadow-md hover:opacity-95 transition-all active:scale-95" onclick="publishFullPost()">Publish Post</button>
+        <button class="px-6 py-3 rounded-full border border-outline-variant text-on-surface-variant font-bold text-sm hover:bg-surface-container-low transition-colors" onclick="navigate('home')">Cancel</button>
       </div>
     </div>
-
-    <div style="padding:0 24px;">
-      <div class="cmp-tabs">
-        <div class="cmp-tab active" onclick="cmpTab(this,'about')">About</div>
-        <div class="cmp-tab" onclick="cmpTab(this,'tasks')">Open Tasks (28)</div>
-        <div class="cmp-tab" onclick="cmpTab(this,'reviews')">Reviews</div>
-        <div class="cmp-tab" onclick="cmpTab(this,'people')">People</div>
-      </div>
-
-      <div class="cmp-tab-content active" id="cmp-about">
-        <p style="color:var(--text2);font-size:13.5px;line-height:1.7;margin-bottom:16px;">Nexacore Technologies is a leading SaaS company building next-generation cloud infrastructure and business intelligence tools. Founded in 2018, we've helped 3,000+ businesses automate and scale their operations. We regularly hire top freelance talent through TaskHive.</p>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
-          <div style="background:var(--bg3);border-radius:var(--radius);padding:16px;text-align:center;"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--gold);">12.4K</div><div style="font-size:12px;color:var(--text3);">Followers</div></div>
-          <div style="background:var(--bg3);border-radius:var(--radius);padding:16px;text-align:center;"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--gold);">480+</div><div style="font-size:12px;color:var(--text3);">Tasks Completed</div></div>
-          <div style="background:var(--bg3);border-radius:var(--radius);padding:16px;text-align:center;"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--gold);">₹2.4Cr</div><div style="font-size:12px;color:var(--text3);">Paid Out</div></div>
-        </div>
-      </div>
-
-      <div class="cmp-tab-content" id="cmp-tasks">
-        <div class="task-grid" style="grid-template-columns:1fr 1fr;">
-          <div class="task-card" onclick="closeModal('companyModal');openModal('payModal')">
-            <div class="task-category-badge badge-dev" style="display:inline-block;margin-bottom:8px;">Dev</div>
-            <div class="task-title">React Dashboard</div>
-            <div class="task-budget">₹25,000</div>
-          </div>
-          <div class="task-card" onclick="closeModal('companyModal');openModal('payModal')">
-            <div class="task-category-badge badge-dev" style="display:inline-block;margin-bottom:8px;">Dev</div>
-            <div class="task-title">Node.js Microservices</div>
-            <div class="task-budget">₹40,000</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="cmp-tab-content" id="cmp-reviews">
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <div style="background:var(--bg3);border-radius:var(--radius);padding:14px;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-              <div class="mini-avatar" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6);">RK</div>
-              <div><div style="font-weight:600;font-size:13px;">Rahul K.</div><div style="color:var(--gold);font-size:12px;">★★★★★</div></div>
-              <div style="margin-left:auto;color:var(--text3);font-size:11px;">2 weeks ago</div>
-            </div>
-            <div style="font-size:13px;color:var(--text2);">Great client! Clear requirements, prompt feedback, and payment released on time. Highly recommended.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="cmp-tab-content" id="cmp-people">
-        <div class="people-grid">
-          <div class="person-card">
-            <div class="avatar-lg" style="background:linear-gradient(135deg,#4a90e2,#1a4d8f)">VP</div>
-            <div class="person-info"><div class="person-name">Vikram Patel</div><div class="person-title">CTO · Nexacore</div></div>
-            <button class="connect-btn" onclick="sendConnect(this)">Connect</button>
-          </div>
-          <div class="person-card">
-            <div class="avatar-lg" style="background:linear-gradient(135deg,#27c47a,#0a6640)">SA</div>
-            <div class="person-info"><div class="person-name">Sneha Anand</div><div class="person-title">HR Lead · Nexacore</div></div>
-            <button class="connect-btn" onclick="sendConnect(this)">Connect</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div style="height:20px;"></div>
-  </div>
+  </main>
 </div>
 
-<!-- ═══ MODAL: POST TASK ═══ -->
-<div class="modal-overlay" id="postTaskModal">
-  <div class="modal">
-    <div class="modal-close" onclick="closeModal('postTaskModal')">✕</div>
-    <div class="modal-title">Post a Task</div>
-    <div class="modal-sub">Find the perfect freelancer for your project</div>
-    <div class="form-group">
-      <label class="form-label">Task Title</label>
-      <input class="form-input" placeholder="e.g., Build a landing page for my SaaS product">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Category</label>
-      <select class="form-select">
-        <option>Development</option>
-        <option>Design</option>
-        <option>Marketing</option>
-        <option>Writing</option>
-        <option>Video</option>
-        <option>Other</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Description</label>
-      <textarea class="form-input" rows="4" placeholder="Describe the task in detail…"></textarea>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Budget (₹)</label>
-        <input class="form-input" type="number" placeholder="e.g., 15000">
+<!-- ============================= -->
+<!-- PAGE: ALERTS                  -->
+<!-- ============================= -->
+<div id="page-alerts" class="page">
+  <main class="pt-24 pb-20 px-4 max-w-2xl mx-auto min-h-screen">
+    <div class="mt-4">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="font-headline font-extrabold text-2xl text-on-surface">Notifications</h2>
+        <button class="text-xs font-bold text-primary hover:underline" onclick="markAllRead()">Mark all as read</button>
       </div>
-      <div class="form-group">
-        <label class="form-label">Deadline</label>
-        <input class="form-input" type="number" placeholder="Days to complete">
+      <div class="space-y-2" id="alerts-list">
+        <div class="bg-primary/5 border-l-4 border-primary p-4 rounded-r-xl flex gap-4 cursor-pointer hover:bg-primary/10 transition-colors alert-item unread" onclick="readAlert(this)">
+          <span class="material-symbols-outlined text-primary flex-shrink-0 mt-0.5">handshake</span>
+          <div><p class="text-sm font-bold text-on-surface">Sarah Chen responded to your proposal</p><p class="text-xs text-on-surface-variant mt-1">She's interested in collaborating on the AI Dashboard project • 20m ago</p></div>
+          <span class="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-2"></span>
+        </div>
+        <div class="bg-primary/5 border-l-4 border-primary p-4 rounded-r-xl flex gap-4 cursor-pointer hover:bg-primary/10 transition-colors alert-item unread" onclick="readAlert(this)">
+          <span class="material-symbols-outlined text-primary flex-shrink-0 mt-0.5">person_add</span>
+          <div><p class="text-sm font-bold text-on-surface">Elena Vance sent you a connection request</p><p class="text-xs text-on-surface-variant mt-1">Product Lead at NeuroLink • 1h ago</p></div>
+          <span class="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-2"></span>
+        </div>
+        <div class="bg-primary/5 border-l-4 border-primary p-4 rounded-r-xl flex gap-4 cursor-pointer hover:bg-primary/10 transition-colors alert-item unread" onclick="readAlert(this)">
+          <span class="material-symbols-outlined text-primary flex-shrink-0 mt-0.5">auto_awesome</span>
+          <div><p class="text-sm font-bold text-on-surface">AI Agent found 3 new matches for you</p><p class="text-xs text-on-surface-variant mt-1">Based on your UX Design and AI Strategy skills • 3h ago</p></div>
+          <span class="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-2"></span>
+        </div>
+        <div class="bg-white border border-zinc-200/20 p-4 rounded-xl flex gap-4 cursor-pointer hover:bg-surface-container-low transition-colors alert-item" onclick="readAlert(this)">
+          <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 mt-0.5">thumb_up</span>
+          <div><p class="text-sm font-medium text-on-surface">David Miller liked your recent post</p><p class="text-xs text-on-surface-variant mt-1">Cloud Architecture collaboration • 1d ago</p></div>
+        </div>
+        <div class="bg-white border border-zinc-200/20 p-4 rounded-xl flex gap-4 cursor-pointer hover:bg-surface-container-low transition-colors alert-item" onclick="readAlert(this)">
+          <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 mt-0.5">comment</span>
+          <div><p class="text-sm font-medium text-on-surface">Marcus Thorne commented on your post</p><p class="text-xs text-on-surface-variant mt-1">"This is exactly what we need! I'd love to connect..." • 2d ago</p></div>
+        </div>
+        <div class="bg-white border border-zinc-200/20 p-4 rounded-xl flex gap-4 cursor-pointer hover:bg-surface-container-low transition-colors alert-item" onclick="readAlert(this)">
+          <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 mt-0.5">rocket_launch</span>
+          <div><p class="text-sm font-medium text-on-surface">Your profile was viewed 84 times this week</p><p class="text-xs text-on-surface-variant mt-1">That's 23% more than last week • 3d ago</p></div>
+        </div>
       </div>
     </div>
-    <button class="btn btn-gold" style="width:100%;justify-content:center;padding:12px;" onclick="closeModal('postTaskModal');showToast('Task posted! AI agents will match freelancers.','success')">
-      🚀 Post Task
-    </button>
-  </div>
+  </main>
 </div>
+
+<!-- ============================= -->
+<!-- PAGE: PROFILE                 -->
+<!-- ============================= -->
+<div id="page-profile" class="page">
+  <main class="pt-24 pb-20 px-4 max-w-3xl mx-auto min-h-screen">
+    <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-zinc-200/10 mt-4">
+      <div class="h-32 bg-gradient-to-r from-primary/30 via-secondary/20 to-tertiary/20 relative">
+        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-sm text-primary px-3 py-1.5 rounded-full text-xs font-bold hover:bg-white transition-colors shadow-sm" onclick="showToast('Edit cover photo')">
+          <span class="material-symbols-outlined text-xs mr-1">edit</span> Edit Cover
+        </button>
+      </div>
+      <div class="px-6 pb-6">
+        <div class="flex justify-between items-end -mt-12 mb-4">
+          <img alt="Marcus Sterling" class="w-24 h-24 rounded-2xl border-4 border-white object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA93n_cHy19hpbD0teE-YtdoV4mQL52SFeLuan4xty7JIaLqk7Eqb5X6UD_wSJvf1o21b2xSDxG5ea3wn0xYiGG2oNj-Y2q0NdwkRmVhsM7ek6yQNllASl7rHwAUpSN_pSM5Fl1NYx1vn1J5MZM1sZ3llGT0YWPEoM8A1gZzgx4vXoj3ePGs_JAiQvYOIQz6s4FqolA7pXLxoxdoY8SX1kJAWAxVtEiaCScRzetldZYmbE6g9REyXR1JUIstlB9jUS4HSJsLqFFAZI"/>
+          <button class="bg-primary text-white px-5 py-2 rounded-full font-bold text-sm shadow-sm hover:bg-primary-container transition-colors" onclick="showToast('Opening profile editor...')">
+            <span class="material-symbols-outlined text-sm mr-1">edit</span> Edit Profile
+          </button>
+        </div>
+        <h2 class="font-headline font-extrabold text-2xl text-on-surface">Marcus Sterling</h2>
+        <p class="text-primary font-bold text-sm mt-1">Principal Product Designer</p>
+        <p class="text-on-surface-variant text-sm mt-1">San Francisco, CA • <span class="text-primary cursor-pointer hover:underline" onclick="navigate('network')">1,248 connections</span></p>
+        <p class="text-on-surface text-sm leading-relaxed mt-4">Passionate product designer with 8+ years crafting enterprise AI interfaces. I specialize in turning complex data into intuitive user experiences. Currently open to skill exchanges and collaboration opportunities in AI design and strategy.</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">AI Strategy</span>
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">React Native</span>
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">UX Design</span>
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Figma</span>
+          <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Design Systems</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-4 mt-6">
+      <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-zinc-200/10 text-center">
+        <p class="font-headline font-extrabold text-2xl text-primary">1,284</p>
+        <p class="text-xs text-on-surface-variant mt-1 font-medium">Profile Views</p>
+      </div>
+      <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-zinc-200/10 text-center">
+        <p class="font-headline font-extrabold text-2xl text-primary">12</p>
+        <p class="text-xs text-on-surface-variant mt-1 font-medium">Active Collabs</p>
+      </div>
+      <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-zinc-200/10 text-center">
+        <p class="font-headline font-extrabold text-2xl text-primary" id="profile-proposals">3</p>
+        <p class="text-xs text-on-surface-variant mt-1 font-medium">Proposals Sent</p>
+      </div>
+    </div>
+
+    <!-- Experience -->
+    <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-zinc-200/10 mt-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-headline font-bold text-lg">Experience</h3>
+        <button class="p-2 rounded-full hover:bg-surface-container-high transition-colors" onclick="showToast('Add experience')"><span class="material-symbols-outlined text-primary text-sm">add</span></button>
+      </div>
+      <div class="space-y-4">
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary">hub</span>
+          </div>
+          <div>
+            <p class="font-bold text-sm text-on-surface">Principal Product Designer</p>
+            <p class="text-xs text-on-surface-variant">TaskLink AI • 2023 – Present</p>
+            <p class="text-xs text-on-surface mt-1 leading-relaxed">Leading the design of AI-powered collaboration tools and enterprise dashboards.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-secondary">design_services</span>
+          </div>
+          <div>
+            <p class="font-bold text-sm text-on-surface">Senior UX Designer</p>
+            <p class="text-xs text-on-surface-variant">NeuralSystems Inc. • 2020 – 2023</p>
+            <p class="text-xs text-on-surface mt-1 leading-relaxed">Designed the core monitoring dashboard used by 500+ enterprise clients.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ============================= -->
+<!-- BOTTOM NAV (Mobile)           -->
+<!-- ============================= -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 bg-white border-t border-zinc-200 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] z-50">
+  <button class="mobile-nav-btn flex flex-col items-center justify-center active" onclick="navigate('home')">
+    <div class="nav-indicator"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">home</span></div>
+    <span class="text-[10px] font-medium tracking-wide uppercase mt-0.5">Feed</span>
+  </button>
+  <button class="mobile-nav-btn flex flex-col items-center justify-center" onclick="navigate('network')">
+    <div class="nav-indicator"><span class="material-symbols-outlined">group</span></div>
+    <span class="text-[10px] font-medium tracking-wide uppercase mt-0.5">Network</span>
+  </button>
+  <button class="mobile-nav-btn flex flex-col items-center justify-center" onclick="navigate('post')">
+    <div class="nav-indicator"><span class="material-symbols-outlined text-3xl">add_box</span></div>
+  </button>
+  <button class="mobile-nav-btn flex flex-col items-center justify-center relative" onclick="navigate('alerts')">
+    <div class="nav-indicator relative">
+      <span class="material-symbols-outlined">notifications</span>
+      <span id="mobile-notif-badge" class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+    </div>
+    <span class="text-[10px] font-medium tracking-wide uppercase mt-0.5">Alerts</span>
+  </button>
+  <button class="mobile-nav-btn flex flex-col items-center justify-center" onclick="navigate('profile')">
+    <div class="nav-indicator"><span class="material-symbols-outlined">person</span></div>
+    <span class="text-[10px] font-medium tracking-wide uppercase mt-0.5">Profile</span>
+  </button>
+</nav>
 
 <script>
-// ─── NAVIGATION ───
-function showSection(id, navEl) {
-  document.querySelectorAll('.section-view').forEach(s => s.classList.remove('active'));
-  const sec = document.getElementById('sec-' + id);
-  if (sec) sec.classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  if (navEl) navEl.classList.add('active');
-}
+  // ── State ──────────────────────────────────────────────
+  let currentPage = 'home';
+  let proposalCount = 3;
+  let pendingInvites = 2;
+  let selectedPostType = 'Propose Collab';
+  let postTypeSelected = 'Propose Collab';
 
-// ─── MODALS ───
-function openModal(id) {
-  document.getElementById(id).classList.add('open');
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-}
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) overlay.classList.remove('open');
+  // ── Navigation ─────────────────────────────────────────
+  function navigate(page) {
+    // Hide current
+    const prev = document.getElementById('page-' + currentPage);
+    if (prev) { prev.classList.remove('visible'); setTimeout(() => { prev.classList.remove('active'); }, 220); }
+
+    currentPage = page;
+
+    // Show new
+    setTimeout(() => {
+      const next = document.getElementById('page-' + page);
+      if (next) {
+        next.classList.add('active');
+        requestAnimationFrame(() => { requestAnimationFrame(() => { next.classList.add('visible'); }); });
+      }
+    }, 50);
+
+    // Update desktop nav
+    document.querySelectorAll('.nav-desktop-link').forEach(el => {
+      el.classList.remove('active');
+      const text = el.textContent.trim().toLowerCase();
+      if (text === page || (page === 'home' && text === 'feed')) el.classList.add('active');
+    });
+
+    // Update mobile nav
+    document.querySelectorAll('.mobile-nav-btn').forEach((btn, i) => {
+      btn.classList.remove('active');
+      const pages = ['home','network','post','alerts','profile'];
+      if (pages[i] === page) btn.classList.add('active');
+    });
+
+    // Clear notification badge on alerts
+    if (page === 'alerts') {
+      document.getElementById('notif-badge').style.display = 'none';
+      const mb = document.getElementById('mobile-notif-badge');
+      if (mb) mb.style.display = 'none';
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Activate initial page
+  setTimeout(() => { document.getElementById('page-home').classList.add('visible'); }, 100);
+
+  // ── Toast ──────────────────────────────────────────────
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // ── Search Modal ───────────────────────────────────────
+  function openSearchModal() {
+    document.getElementById('search-modal').classList.add('open');
+    setTimeout(() => document.getElementById('search-input').focus(), 100);
+  }
+  function closeSearchModal(e) {
+    if (!e || e.target === document.getElementById('search-modal') || e.type === 'click' && !e.target.closest('#search-input')) {
+      document.getElementById('search-modal').classList.remove('open');
+    }
+  }
+  function searchSelect(term) {
+    document.getElementById('search-modal').classList.remove('open');
+    showToast('Searching: ' + term);
+  }
+  document.getElementById('search-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { searchSelect(e.target.value || 'your query'); e.target.value = ''; }
+    if (e.key === 'Escape') closeSearchModal();
   });
-});
 
-// ─── FILTER CHIPS ───
-function filterChip(el) {
-  const parent = el.parentElement;
-  parent.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-}
-
-// ─── FOLLOW COMPANY ───
-function followCompany(btn) {
-  if (btn.classList.contains('followed')) {
-    btn.textContent = '＋ Follow';
-    btn.classList.remove('followed');
-    btn.style.color = ''; btn.style.borderColor = '';
-    showToast('Unfollowed company', 'info');
-  } else {
-    btn.textContent = '✓ Following';
-    btn.classList.add('followed');
-    btn.style.color = 'var(--green)'; btn.style.borderColor = 'var(--green)';
-    showToast('Now following! You\'ll get task alerts from this company.', 'success');
+  // ── Proposal Modal ─────────────────────────────────────
+  function openProposalModal(name) {
+    document.getElementById('modal-title').textContent = 'Propose to ' + name;
+    document.getElementById('modal-overlay').classList.add('open');
   }
-}
-
-// ─── CONNECT ───
-function sendConnect(btn) {
-  if (btn.classList.contains('pending')) return;
-  if (btn.classList.contains('connected')) return;
-  btn.textContent = 'Pending';
-  btn.classList.add('pending');
-  btn.style.borderColor = 'var(--text3)'; btn.style.color = 'var(--text3)';
-  showToast('Connection request sent!', 'success');
-}
-function acceptConnect(btn) {
-  const card = btn.closest('.person-card');
-  if (card) {
-    card.innerHTML = '<div style="color:var(--green);font-size:13px;font-weight:600;padding:4px 0;">✅ Connected! You can now message each other.</div>';
-    showToast('Connection accepted! You can now message Nikhil.', 'success');
+  function closeModal(e) {
+    if (!e || e.target === document.getElementById('modal-overlay')) {
+      document.getElementById('modal-overlay').classList.remove('open');
+      document.getElementById('modal-message').value = '';
+    }
   }
-}
+  function submitProposal() {
+    const msg = document.getElementById('modal-message').value.trim();
+    if (!msg) { showToast('Please write a message first!'); return; }
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.getElementById('modal-message').value = '';
+    proposalCount++;
+    const el = document.getElementById('proposals-count');
+    if (el) el.textContent = proposalCount;
+    const pp = document.getElementById('profile-proposals');
+    if (pp) pp.textContent = proposalCount;
+    showToast('Proposal sent successfully! 🎉');
+  }
 
-// ─── COMPANY TABS ───
-function cmpTab(el, id) {
-  document.querySelectorAll('.cmp-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.cmp-tab-content').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  const content = document.getElementById('cmp-' + id);
-  if (content) content.classList.add('active');
-}
+  // ── Post Modal ─────────────────────────────────────────
+  function openPostModal(type) {
+    document.getElementById('post-modal-title').textContent = type || 'Create Post';
+    document.getElementById('post-modal-overlay').classList.add('open');
+    document.querySelectorAll('.post-type-btn').forEach(b => {
+      b.classList.toggle('border-primary', b.textContent.trim().includes(type));
+      b.classList.toggle('text-primary', b.textContent.trim().includes(type));
+      b.classList.toggle('border-outline-variant', !b.textContent.trim().includes(type));
+      b.classList.toggle('text-on-surface-variant', !b.textContent.trim().includes(type));
+    });
+  }
+  function closePostModal(e) {
+    if (!e || e.target === document.getElementById('post-modal-overlay')) {
+      document.getElementById('post-modal-overlay').classList.remove('open');
+      document.getElementById('post-content').value = '';
+    }
+  }
+  function selectPostType(btn, type) {
+    selectedPostType = type;
+    document.querySelectorAll('.post-type-btn').forEach(b => {
+      b.classList.remove('border-primary','text-primary');
+      b.classList.add('border-outline-variant','text-on-surface-variant');
+    });
+    btn.classList.add('border-primary','text-primary');
+    btn.classList.remove('border-outline-variant','text-on-surface-variant');
+  }
+  function submitPost() {
+    const content = document.getElementById('post-content').value.trim();
+    if (!content) { showToast('Please write something first!'); return; }
+    document.getElementById('post-modal-overlay').classList.remove('open');
+    document.getElementById('post-content').value = '';
+    showToast('Post published successfully! 🚀');
+  }
 
-// ─── MESSAGES ───
-function setConv(el, name) {
-  document.querySelectorAll('.msg-conv').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
-  document.getElementById('msgHeaderName').textContent = name;
-  document.getElementById('msgHeaderAvatar').textContent = initials;
-}
-function sendMsg(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsgBtn(); } }
-function sendMsgBtn() {
-  const input = document.getElementById('msgInput');
-  const text = input.value.trim();
-  if (!text) return;
-  const body = document.getElementById('msgBody');
-  const wrap = document.createElement('div');
-  wrap.className = 'msg-bubble-wrap own';
-  wrap.innerHTML = `<div class="avatar-lg" style="background:linear-gradient(135deg,#4a90e2,#8b5cf6);width:30px;height:30px;font-size:11px;flex-shrink:0;">AK</div><div><div class="msg-bubble">${text}</div><div class="msg-time">Just now</div></div>`;
-  body.appendChild(wrap);
-  input.value = '';
-  body.scrollTop = body.scrollHeight;
-}
+  // ── Full Post Page ─────────────────────────────────────
+  function selectFullPostType(btn, type) {
+    postTypeSelected = type;
+    document.querySelectorAll('.full-post-type').forEach(b => {
+      b.classList.remove('border-primary','text-primary','active-type');
+      b.classList.add('border-outline-variant','text-on-surface-variant');
+    });
+    btn.classList.add('border-primary','text-primary');
+    btn.classList.remove('border-outline-variant','text-on-surface-variant');
+  }
+  function publishFullPost() {
+    const content = document.getElementById('full-post-content').value.trim();
+    if (!content) { showToast('Please write your post content!'); return; }
+    document.getElementById('full-post-content').value = '';
+    showToast('Post published! 🚀 Redirecting to feed...');
+    setTimeout(() => navigate('home'), 1500);
+  }
 
-// ─── PAYMENT ───
-function selectPkg(el) {
-  el.closest('.payment-pkg-row').querySelectorAll('.pkg-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-}
-function processPayment() {
-  closeModal('payModal');
-  showToast('🔒 Payment secured in escrow! Task started.', 'success');
-}
+  // ── Like / Bookmark ────────────────────────────────────
+  function toggleLike(btn) {
+    const countEl = btn.querySelector('.like-count');
+    const icon = btn.querySelector('.material-symbols-outlined');
+    const liked = btn.dataset.liked === 'true';
+    btn.dataset.liked = !liked;
+    countEl.textContent = liked ? parseInt(countEl.textContent) - 1 : parseInt(countEl.textContent) + 1;
+    icon.style.fontVariationSettings = liked ? "'FILL' 0" : "'FILL' 1";
+    btn.style.color = liked ? '' : '#005d8f';
+  }
+  function toggleBookmark(btn) {
+    const icon = btn.querySelector('.material-symbols-outlined');
+    const bookmarked = btn.dataset.bookmarked === 'true';
+    btn.dataset.bookmarked = !bookmarked;
+    icon.style.fontVariationSettings = bookmarked ? "'FILL' 0" : "'FILL' 1";
+    btn.style.color = bookmarked ? '' : '#005d8f';
+    showToast(bookmarked ? 'Removed from saved' : 'Post saved!');
+  }
 
-// ─── AGENT ───
-function toggleAgent() {
-  document.getElementById('agentPopup').classList.toggle('open');
-}
-const agentReplies = [
-  "I've scanned 1,247 tasks and found 6 that match your skills. Shall I apply to the top matches?",
-  "Your profile has been viewed 42 times this week. Nexacore Technologies viewed it 3 times — I recommend following up.",
-  "I've already submitted proposals to the top 3 tasks matching your criteria. Awaiting responses.",
-  "Based on your past earnings, I recommend increasing your minimum rate to ₹12,000 for better ROI.",
-  "I detected a new urgent task: ₹55,000 Full-Stack E-commerce — 99% match! Should I apply?",
-];
-let agentReplyIdx = 0;
-function floatAgentChat(e) { if (e.key === 'Enter') floatAgentSend(); }
-function floatAgentSend() {
-  const input = document.getElementById('floatAgentInput');
-  const text = input.value.trim();
-  if (!text) return;
-  const body = document.getElementById('agentChatBody');
-  const userMsg = document.createElement('div');
-  userMsg.className = 'agent-msg user'; userMsg.textContent = text;
-  body.appendChild(userMsg);
-  input.value = '';
-  setTimeout(() => {
-    const botMsg = document.createElement('div');
-    botMsg.className = 'agent-msg bot';
-    botMsg.textContent = agentReplies[agentReplyIdx % agentReplies.length];
-    agentReplyIdx++;
-    body.appendChild(botMsg);
-    body.scrollTop = body.scrollHeight;
-  }, 800);
-  body.scrollTop = body.scrollHeight;
-}
-function agentChat(e) { if (e.key === 'Enter') agentChatSend(); }
-function agentChatSend() {
-  const input = document.getElementById('agentMainInput');
-  const text = input.value.trim();
-  if (!text) return;
-  const body = document.getElementById('agentChatMain');
-  const userMsg = document.createElement('div');
-  userMsg.className = 'agent-msg user'; userMsg.textContent = text;
-  body.appendChild(userMsg);
-  input.value = '';
-  setTimeout(() => {
-    const botMsg = document.createElement('div');
-    botMsg.className = 'agent-msg bot';
-    botMsg.textContent = agentReplies[agentReplyIdx % agentReplies.length];
-    agentReplyIdx++;
-    body.appendChild(botMsg);
-    body.scrollTop = body.scrollHeight;
-  }, 800);
-  body.scrollTop = body.scrollHeight;
-}
+  // ── Network: Connect / Follow / Dismiss ────────────────
+  function connectPerson(btn, name) {
+    if (btn.dataset.connected === 'true') return;
+    btn.dataset.connected = 'true';
+    btn.innerHTML = '<span class="material-symbols-outlined text-lg">check</span> Connected';
+    btn.classList.remove('bg-primary','shadow-[0_4px_12px_rgba(0,93,143,0.2)]');
+    btn.classList.add('bg-surface-container-high','text-on-surface-variant');
+    showToast('Connected with ' + name + '! 🤝');
+  }
+  function quickConnect(btn) {
+    btn.textContent = '✓ Pending';
+    btn.disabled = true;
+    btn.classList.add('opacity-60');
+    showToast('Connection request sent!');
+  }
+  function toggleFollow(btn, name) {
+    const following = btn.dataset.following === 'true';
+    btn.dataset.following = !following;
+    if (!following) {
+      btn.innerHTML = '<span class="material-symbols-outlined text-sm">check</span> Following';
+      btn.classList.add('bg-primary/5');
+      showToast('Now following ' + name + '!');
+    } else {
+      btn.innerHTML = '<span class="material-symbols-outlined text-sm">add</span> Follow';
+      btn.classList.remove('bg-primary/5');
+      showToast('Unfollowed ' + name);
+    }
+  }
+  function dismissPerson(id) {
+    const el = document.getElementById(id);
+    if (el) { el.style.opacity = '0'; el.style.transform = 'scale(0.95)'; el.style.transition = 'all 0.2s'; setTimeout(() => el.remove(), 200); showToast('Suggestion dismissed'); }
+  }
 
-// ─── TOAST ───
-function showToast(msg, type = 'info') {
-  const container = document.getElementById('toastContainer');
-  const icons = { success: '✅', info: 'ℹ️', warning: '⚠️' };
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.innerHTML = `<span>${icons[type]}</span><span>${msg}</span>`;
-  container.appendChild(toast);
-  setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(20px)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 3500);
-}
+  // ── Invitations ────────────────────────────────────────
+  function acceptInvite(id, name) {
+    const el = document.getElementById(id);
+    if (el) { el.style.opacity = '0'; el.style.transition = 'opacity 0.2s'; setTimeout(() => el.remove(), 200); }
+    pendingInvites--;
+    updateInviteCount();
+    showToast('Connected with ' + name + '! 🎉');
+  }
+  function ignoreInvite(id) {
+    const el = document.getElementById(id);
+    if (el) { el.style.opacity = '0'; el.style.transition = 'opacity 0.2s'; setTimeout(() => el.remove(), 200); }
+    pendingInvites = Math.max(0, pendingInvites - 1);
+    updateInviteCount();
+    showToast('Invitation ignored');
+  }
+  function updateInviteCount() {
+    const el = document.getElementById('invite-count');
+    if (el) el.textContent = pendingInvites;
+  }
 
-// Auto-show a welcome toast
-setTimeout(() => showToast('🤖 Agent found 6 new task matches for you!', 'warning'), 1200);
+  // ── Alerts ─────────────────────────────────────────────
+  function readAlert(el) {
+    el.classList.remove('unread','bg-primary/5','border-l-4','border-primary');
+    el.classList.add('bg-white','border','border-zinc-200/20');
+    const dot = el.querySelector('.bg-primary.rounded-full.w-2');
+    if (dot) dot.remove();
+  }
+  function markAllRead() {
+    document.querySelectorAll('.alert-item').forEach(el => readAlert(el));
+    showToast('All notifications marked as read');
+  }
+
+  // ── Load More ──────────────────────────────────────────
+  function loadMore() {
+    const btn = document.getElementById('load-more-btn');
+    btn.textContent = 'Loading...';
+    btn.disabled = true;
+    setTimeout(() => {
+      const card = document.createElement('article');
+      card.className = 'bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-zinc-200/10 feed-card';
+      card.innerHTML = `<div class="p-5">
+        <div class="flex justify-between items-start mb-4">
+          <div class="flex gap-3">
+            <img alt="New" class="w-12 h-12 rounded-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9OFMFNQzOCOJyOpKYyFcfwqm7gsjsJFhfKa3RiEEcGWae06t39_MQeR3_ETAmy2hYGsyM2qoUAF7yCW5ggB6buexTYt1Q4X6JPeXInXUWNiUSiqixbW0nhub01ABg7mhqLbUzJryrjYdp8nsxHDnauTze4zsB8pJyE3S01ZEQObqCO3leT8zVv_3ECyxOqy-rO1RKQQ8ctAAGT_7fFGkTJSjLpZA_wWd526Xss7Q2men8MqcOKkgGFvVDRJHWAwbfVL0BzszvZz4"/>
+            <div><h4 class="font-headline font-bold text-sm text-on-surface">Dr. Robert Chen</h4><p class="text-[11px] text-on-surface-variant">Data Scientist at Tesla • Just now</p></div>
+          </div>
+          <div class="text-right"><div class="text-primary font-extrabold text-lg font-headline">$2,500</div><div class="text-[10px] text-on-surface-variant font-bold uppercase mt-1">Project Budget</div></div>
+        </div>
+        <h3 class="font-headline font-extrabold text-xl text-primary mb-2">Autonomous Vehicle Data Pipeline Optimization</h3>
+        <p class="text-on-surface text-sm leading-relaxed mb-3">Seeking an experienced ML Ops engineer to help optimize our real-time sensor data pipeline. Offering strategy consulting in return. 3-week sprint.</p>
+        <div class="flex gap-2 flex-wrap mb-4">
+          <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase">ML Ops</span>
+          <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase">Python</span>
+          <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase">Real-time Data</span>
+        </div>
+        <div class="flex gap-3">
+          <button class="flex-1 bg-gradient-to-r from-primary to-primary-container text-white py-2.5 rounded-lg font-bold text-sm shadow-md hover:opacity-95 active:scale-95 transition-all" onclick="openProposalModal('Dr. Robert Chen')">Propose Collaboration</button>
+          <button class="flex items-center justify-center bg-surface-container-high text-primary px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-surface-container-highest" onclick="showToast('AI Agent matching...')"><span class="material-symbols-outlined mr-2">psychology</span>Agent Match</button>
+        </div>
+      </div>`;
+      const container = document.getElementById('feed-container');
+      const loadMoreWrapper = btn.closest('div');
+      container.insertBefore(card, loadMoreWrapper);
+      btn.textContent = 'Load More Posts';
+      btn.disabled = false;
+      showToast('New posts loaded!');
+    }, 1000);
+  }
+
+  // ── Keyboard shortcuts ─────────────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.getElementById('modal-overlay').classList.remove('open');
+      document.getElementById('post-modal-overlay').classList.remove('open');
+      document.getElementById('search-modal').classList.remove('open');
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearchModal(); }
+  });
 </script>
 </body>
 </html>
