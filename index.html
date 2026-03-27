@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html class="light" lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>TaskLink AI | Collaboration Hub</title>
+<title>XWITE | Collaboration Hub</title>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap" rel="stylesheet"/>
@@ -79,12 +80,10 @@
     vertical-align: middle;
   }
   body { background-color: #faf9f6; }
-
   /* Page transition */
   .page { display: none; opacity: 0; transform: translateY(8px); transition: opacity 0.22s ease, transform 0.22s ease; }
   .page.active { display: block; }
   .page.visible { opacity: 1; transform: translateY(0); }
-
   /* Toast */
   #toast {
     position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -93,7 +92,6 @@
     opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none;
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
   /* Modal overlay */
   #modal-overlay {
     display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
@@ -103,9 +101,7 @@
   #modal-overlay.open { display: flex; }
   #modal-box { animation: modalIn 0.2s ease; }
   @keyframes modalIn { from { opacity:0; transform: scale(0.95) translateY(12px); } to { opacity:1; transform: scale(1) translateY(0); } }
-
   .tonal-shift { transition: background-color 0.3s ease; }
-
   /* Nav active indicator */
   .nav-desktop-link { position: relative; padding-bottom: 4px; }
   .nav-desktop-link.active { color: #005d8f; font-weight: 700; }
@@ -115,13 +111,11 @@
   }
   .nav-desktop-link:not(.active) { color: #6b7280; font-weight: 500; }
   .nav-desktop-link:not(.active):hover { color: #005d8f; }
-
   /* Mobile nav active */
   .mobile-nav-btn.active { color: #005d8f; }
   .mobile-nav-btn.active .nav-indicator { border-top: 2px solid #005d8f; }
   .mobile-nav-btn:not(.active) { color: #6b7280; }
   .nav-indicator { padding-top: 4px; }
-
   /* Search modal */
   #search-modal {
     display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
@@ -129,26 +123,38 @@
     backdrop-filter: blur(4px);
   }
   #search-modal.open { display: flex; }
-
-  /* Connect button states */
-  .btn-connect.connected { background: #e9e8e5; color: #404850; }
-  .btn-follow.followed { background: transparent; border-color: #707881; color: #404850; }
+  /* Feed description read-more */
+  .feed-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    position: relative;
+  }
+  .feed-description.expanded {
+    -webkit-line-clamp: unset;
+  }
+  .read-more-link {
+    color: #005d8f;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: block;
+    margin-top: 8px;
+  }
 </style>
 </head>
 <body class="font-body text-on-surface antialiased min-h-screen">
-
 <!-- ===== TOAST ===== -->
 <div id="toast"></div>
-
 <!-- ===== HEADER ===== -->
 <header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-zinc-200/30 shadow-sm">
   <div class="flex justify-between items-center px-6 h-16 w-full max-w-screen-2xl mx-auto">
     <!-- Branding -->
     <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
       <span class="material-symbols-outlined text-primary text-3xl">hub</span>
-      <h1 class="font-headline font-extrabold tracking-tight text-primary text-xl hidden sm:block">TaskLink AI</h1>
+      <h1 class="font-headline font-extrabold tracking-tight text-primary text-xl hidden sm:block">XWITE</h1>
     </div>
-
     <!-- Desktop Nav -->
     <nav class="hidden md:flex items-center gap-8">
       <a class="nav-desktop-link active transition-colors" onclick="navigate('home')" href="#">Feed</a>
@@ -157,7 +163,6 @@
       <a class="nav-desktop-link transition-colors" onclick="navigate('alerts')" href="#">Alerts</a>
       <a class="nav-desktop-link transition-colors" onclick="navigate('profile')" href="#">Profile</a>
     </nav>
-
     <!-- Search + Actions -->
     <div class="flex items-center gap-3">
       <!-- Search (desktop) -->
@@ -171,13 +176,8 @@
       <button class="md:hidden p-2 rounded-full hover:bg-surface-container-high transition-colors" onclick="openSearchModal()">
         <span class="material-symbols-outlined text-on-surface-variant">search</span>
       </button>
-      <!-- Notifications -->
-      <button class="relative p-2 rounded-full hover:bg-surface-container-high transition-colors" onclick="navigate('alerts')">
-        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-        <span id="notif-badge" class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span>
-      </button>
       <!-- AI Agent -->
-      <button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-4 py-2 rounded-full font-medium shadow-sm hover:opacity-90 active:scale-95 transition-all" onclick="showToast('AI Agent activated!')">
+      <button class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white px-4 py-2 rounded-full font-medium shadow-sm hover:opacity-90 active:scale-95 transition-all" onclick="navigate('agent')">
         <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">smart_toy</span>
         <span class="text-sm font-label hidden sm:inline">AI Agent</span>
       </button>
@@ -188,7 +188,6 @@
     </div>
   </div>
 </header>
-
 <!-- ===== SEARCH MODAL ===== -->
 <div id="search-modal" onclick="closeSearchModal(event)">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
@@ -218,7 +217,6 @@
     </div>
   </div>
 </div>
-
 <!-- ===== PROPOSAL MODAL ===== -->
 <div id="modal-overlay" onclick="closeModal(event)">
   <div id="modal-box" class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
@@ -257,7 +255,6 @@
     </div>
   </div>
 </div>
-
 <!-- ===== POST CREATION MODAL ===== -->
 <div id="post-modal-overlay" onclick="closePostModal(event)">
   <div style="display:none" id="post-modal-box" class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
@@ -298,11 +295,10 @@
 #post-modal-box { display:block !important; animation: modalIn 0.2s ease; }</style>
 
 <!-- ============================= -->
-<!-- PAGE: HOME / FEED             -->
+<!-- PAGE: HOME / FEED -->
 <!-- ============================= -->
 <div id="page-home" class="page active">
   <main class="pt-24 pb-20 px-4 md:px-6 max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-
     <!-- Left Sidebar -->
     <aside class="hidden lg:block lg:col-span-3">
       <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-zinc-200/10">
@@ -344,7 +340,6 @@
         </div>
       </div>
     </aside>
-
     <!-- Feed -->
     <section class="lg:col-span-6 space-y-6">
       <!-- Post Creation Box -->
@@ -370,7 +365,6 @@
           </button>
         </div>
       </div>
-
       <!-- Dynamic Feed -->
       <div id="feed-container" class="space-y-6">
         <!-- Card 1 -->
@@ -391,12 +385,7 @@
             </div>
             <div class="space-y-3">
               <h3 class="font-headline font-extrabold text-xl text-primary leading-snug tracking-tight">Looking for Collaboration in AI Dashboard Design</h3>
-              <p class="text-on-surface text-sm leading-relaxed">Seeking a peer collaborator to lead the visual overhaul of our enterprise AI monitoring platform. I can offer backend infrastructure mentorship in exchange for expert UI guidance. Must be comfortable with complex data visualization.</p>
-              <div class="flex flex-wrap gap-2 py-2">
-                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">UI/UX Design</span>
-                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Data Viz</span>
-                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Skill Exchange</span>
-              </div>
+              <p class="feed-description text-on-surface text-sm leading-relaxed">Seeking a peer collaborator to lead the visual overhaul of our enterprise AI monitoring platform. I can offer backend infrastructure mentorship in exchange for expert UI guidance. Must be comfortable with complex data visualization, Figma token systems, and accessibility standards for enterprise dashboards. We are building real-time analytics that help teams make faster decisions.</p>
             </div>
             <!-- Engagement -->
             <div class="mt-4 pt-3 border-t border-surface-container-high flex items-center gap-4 text-xs text-on-surface-variant">
@@ -421,7 +410,6 @@
             </div>
           </div>
         </article>
-
         <!-- Card 2 -->
         <article class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-zinc-200/10 feed-card">
           <div class="p-5">
@@ -440,12 +428,7 @@
             </div>
             <div class="space-y-3">
               <h3 class="font-headline font-extrabold text-xl text-primary leading-snug tracking-tight">Looking for Collaboration in Cloud Architecture</h3>
-              <p class="text-on-surface text-sm leading-relaxed">Scaling our GPU clusters for massive LLM training. Need a peer with deep AWS/SageMaker knowledge for a 2-week intensive collaboration sprint. Happy to trade strategy consulting for technical implementation.</p>
-              <div class="flex flex-wrap gap-2 py-2">
-                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">AWS</span>
-                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Kubernetes</span>
-                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">LLM Ops</span>
-              </div>
+              <p class="feed-description text-on-surface text-sm leading-relaxed">Scaling our GPU clusters for massive LLM training. Need a peer with deep AWS/SageMaker knowledge for a 2-week intensive collaboration sprint. Happy to trade strategy consulting for technical implementation. Experience with Kubernetes, Terraform, and cost optimization is highly preferred.</p>
             </div>
             <div class="mt-4 pt-3 border-t border-surface-container-high flex items-center gap-4 text-xs text-on-surface-variant">
               <button class="like-btn flex items-center gap-1 hover:text-primary transition-colors" onclick="toggleLike(this)">
@@ -469,8 +452,7 @@
             </div>
           </div>
         </article>
-
-        <!-- Card 3 (bonus) -->
+        <!-- Card 3 -->
         <article class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-zinc-200/10 feed-card">
           <div class="p-5">
             <div class="flex justify-between items-start mb-4">
@@ -488,12 +470,7 @@
             </div>
             <div class="space-y-3">
               <h3 class="font-headline font-extrabold text-xl text-primary leading-snug tracking-tight">Design System Audit for ML Pipeline Review</h3>
-              <p class="text-on-surface text-sm leading-relaxed">Looking to exchange my expertise in design systems and Figma token architecture for someone who can review our internal ML data pipeline and suggest improvements. Open to a multi-week exchange.</p>
-              <div class="flex flex-wrap gap-2 py-2">
-                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Figma</span>
-                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Design Tokens</span>
-                <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">ML Ops</span>
-              </div>
+              <p class="feed-description text-on-surface text-sm leading-relaxed">Looking to exchange my expertise in design systems and Figma token architecture for someone who can review our internal ML data pipeline and suggest improvements. Open to a multi-week exchange. We need someone who understands both design tokens and MLOps best practices.</p>
             </div>
             <div class="mt-4 pt-3 border-t border-surface-container-high flex items-center gap-4 text-xs text-on-surface-variant">
               <button class="like-btn flex items-center gap-1 hover:text-primary transition-colors" onclick="toggleLike(this)">
@@ -517,7 +494,6 @@
             </div>
           </div>
         </article>
-
         <!-- Load More -->
         <div class="text-center pt-2">
           <button onclick="loadMore()" id="load-more-btn" class="bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-bold text-sm px-8 py-3 rounded-full hover:bg-surface-container-low transition-colors shadow-sm">
@@ -526,7 +502,6 @@
         </div>
       </div>
     </section>
-
     <!-- Right Sidebar -->
     <aside class="hidden lg:block lg:col-span-3 space-y-6">
       <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-zinc-200/10">
@@ -549,7 +524,6 @@
           </a></li>
         </ul>
       </div>
-
       <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-zinc-200/10">
         <h3 class="font-headline font-bold text-sm mb-4">People You May Know</h3>
         <div class="space-y-4">
@@ -572,7 +546,6 @@
         </div>
         <button class="mt-4 w-full text-xs font-bold text-primary hover:underline" onclick="navigate('network')">See all in Network →</button>
       </div>
-
       <div class="sticky top-24 p-4 text-center">
         <p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Matched for you</p>
         <div class="mt-4 bg-gradient-to-br from-primary/10 to-primary-container/10 p-6 rounded-2xl border border-primary/20">
@@ -587,43 +560,41 @@
 </div>
 
 <!-- ============================= -->
-<!-- PAGE: NETWORK                 -->
+<!-- PAGE: NETWORK -->
 <!-- ============================= -->
 <div id="page-network" class="page">
   <main class="pt-24 pb-20 px-4 md:px-8 max-w-screen-2xl mx-auto min-h-screen">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-      <!-- Left Sidebar -->
+      <!-- Left Sidebar - Manage My Network (fully functional tabs) -->
       <aside class="lg:col-span-3 space-y-6">
         <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/10">
           <h2 class="font-headline text-lg font-bold mb-6 text-on-surface">Manage my network</h2>
-          <nav class="space-y-1">
-            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Connections')">
+          <nav class="space-y-1" id="manage-network-tabs">
+            <a onclick="switchManageTab(0)" class="manage-tab flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer active-tab" data-tab="0">
               <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">group</span><span class="font-medium">Connections</span></div>
               <span class="text-xs font-bold text-primary">1,248</span>
             </a>
-            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Contacts')">
+            <a onclick="switchManageTab(1)" class="manage-tab flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" data-tab="1">
               <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">contact_page</span><span class="font-medium">Contacts</span></div>
               <span class="text-xs font-bold text-primary">3,102</span>
             </a>
-            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Following & Followers')">
+            <a onclick="switchManageTab(2)" class="manage-tab flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" data-tab="2">
               <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">person_add</span><span class="font-medium">Following &amp; Followers</span></div>
             </a>
-            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Groups')">
+            <a onclick="switchManageTab(3)" class="manage-tab flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" data-tab="3">
               <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">groups</span><span class="font-medium">Groups</span></div>
               <span class="text-xs font-bold text-primary">12</span>
             </a>
-            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Events')">
+            <a onclick="switchManageTab(4)" class="manage-tab flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" data-tab="4">
               <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">event</span><span class="font-medium">Events</span></div>
             </a>
-            <a class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" onclick="showToast('Viewing Newsletters')">
+            <a onclick="switchManageTab(5)" class="manage-tab flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors text-on-surface-variant cursor-pointer" data-tab="5">
               <div class="flex items-center gap-3"><span class="material-symbols-outlined opacity-70">newspaper</span><span class="font-medium">Newsletters</span></div>
               <span class="text-xs font-bold text-primary">4</span>
             </a>
           </nav>
         </div>
-
-        <!-- Invitations -->
+        <!-- Invitations (already fully functional) -->
         <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant/10">
           <div class="p-4 border-b border-surface-container">
             <h3 class="font-headline font-bold text-sm uppercase tracking-wider text-zinc-400">Pending Invitations (<span id="invite-count">2</span>)</h3>
@@ -656,39 +627,33 @@
               </div>
             </div>
           </div>
-          <button class="w-full py-3 text-sm font-bold text-primary hover:bg-surface-container-low transition-colors border-t border-surface-container" onclick="showToast('Managing all invitations...')">Manage all</button>
+          <button class="w-full py-3 text-sm font-bold text-primary hover:bg-surface-container-low transition-colors border-t border-surface-container" onclick="showToast('All invitations managed')">Manage all</button>
         </div>
       </aside>
-
-      <!-- Main Content -->
-      <div class="lg:col-span-9 space-y-8">
-
-        <!-- Companies -->
-        <section>
+      <!-- Main Content (changes based on manage tab) -->
+      <div class="lg:col-span-9 space-y-8" id="network-main-content">
+        <!-- Default view (Recommended Companies) remains visible initially -->
+        <section id="manage-tab-0">
           <div class="flex items-end justify-between mb-6">
             <div>
               <h2 class="font-headline text-2xl font-extrabold tracking-tight text-on-surface">Recommended for your Industry</h2>
               <p class="text-on-surface-variant mt-1">Stay ahead with insights from leading AI and design firms.</p>
             </div>
-            <button class="text-primary font-bold text-sm flex items-center gap-1 hover:underline" onclick="showToast('Showing all recommended companies')">
-              See all <span class="material-symbols-outlined text-sm">arrow_forward</span>
-            </button>
+            <button class="text-primary font-bold text-sm flex items-center gap-1 hover:underline" onclick="showToast('Showing all recommended companies')">See all <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Company 1 -->
+            <!-- Company 1 - XWITE -->
             <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
               <div class="h-16 bg-gradient-to-br from-primary-fixed to-primary-container relative">
                 <div class="absolute -bottom-6 left-6 w-14 h-14 bg-white rounded-lg p-2 shadow-sm border border-surface-container-highest">
-                  <img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkK6gJV1D1w-3RJulgrB89Gal3yKeDmTi-TU9tE82LHvGytXDP-3gHpVZrTogmbds9ffPEn2mNvbl5tGz-_Mk2YiYRb628CX4HMuVNZVY4E_D8UKzzLO80Myl5CloKueCdfivwS0PLF2hKcl78ppi8_F0ufAjPDbhtcVD1b3K1GeAx-CZu6u0O5DqlITP0jYsvX4XHVyLsFo9bSI-9fkV9g1wLNoTD1b-M8QkchSlgm1nORkkgWcaqwAectFa_kyfn-H1YFkhYhZA" alt="TaskLink"/>
+                  <img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkK6gJV1D1w-3RJulgrB89Gal3yKeDmTi-TU9tE82LHvGytXDP-3gHpVZrTogmbds9ffPEn2mNvbl5tGz-_Mk2YiYRb628CX4HMuVNZVY4E_D8UKzzLO80Myl5CloKueCdfivwS0PLF2hKcl78ppi8_F0ufAjPDbhtcVD1b3K1GeAx-CZu6u0O5DqlITP0jYsvX4XHVyLsFo9bSI-9fkV9g1wLNoTD1b-M8QkchSlgm1nORkkgWcaqwAectFa_kyfn-H1YFkhYhZA" alt="XWITE"/>
                 </div>
               </div>
               <div class="p-6 pt-8">
-                <h3 class="font-headline font-bold text-lg group-hover:text-primary transition-colors">TaskLink AI</h3>
+                <h3 class="font-headline font-bold text-lg group-hover:text-primary transition-colors">XWITE</h3>
                 <p class="text-xs text-on-surface-variant mb-1">Artificial Intelligence • 1.2M followers</p>
                 <p class="text-sm text-zinc-500 line-clamp-2 mb-4 leading-relaxed">Pioneering the next generation of autonomous workflow orchestration for creative agencies.</p>
-                <button class="btn-follow w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="toggleFollow(this, 'TaskLink AI')">
-                  <span class="material-symbols-outlined text-sm">add</span> Follow
-                </button>
+                <button class="btn-follow w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="toggleFollow(this, 'XWITE')"> <span class="material-symbols-outlined text-sm">add</span> Follow </button>
               </div>
             </div>
             <!-- Company 2 -->
@@ -702,9 +667,7 @@
                 <h3 class="font-headline font-bold text-lg group-hover:text-primary transition-colors">Design Systems Inc.</h3>
                 <p class="text-xs text-on-surface-variant mb-1">UI/UX Design • 450K followers</p>
                 <p class="text-sm text-zinc-500 line-clamp-2 mb-4 leading-relaxed">The global authority on building scalable and accessible design languages for enterprise.</p>
-                <button class="btn-follow w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="toggleFollow(this, 'Design Systems Inc.')">
-                  <span class="material-symbols-outlined text-sm">add</span> Follow
-                </button>
+                <button class="btn-follow w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="toggleFollow(this, 'Design Systems Inc.')"> <span class="material-symbols-outlined text-sm">add</span> Follow </button>
               </div>
             </div>
             <!-- Company 3 -->
@@ -718,193 +681,40 @@
                 <h3 class="font-headline font-bold text-lg group-hover:text-primary transition-colors">Future Ventures</h3>
                 <p class="text-xs text-on-surface-variant mb-1">Venture Capital • 89K followers</p>
                 <p class="text-sm text-zinc-500 line-clamp-2 mb-4 leading-relaxed">Investing in early-stage startups that focus on radical human-computer interaction models.</p>
-                <button class="btn-follow w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="toggleFollow(this, 'Future Ventures')">
-                  <span class="material-symbols-outlined text-sm">add</span> Follow
-                </button>
+                <button class="btn-follow w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="toggleFollow(this, 'Future Ventures')"> <span class="material-symbols-outlined text-sm">add</span> Follow </button>
               </div>
             </div>
           </div>
         </section>
-
-        <!-- People You May Know -->
-        <section>
-          <div class="flex items-end justify-between mb-6">
-            <div>
-              <h2 class="font-headline text-2xl font-extrabold tracking-tight text-on-surface">People you may know</h2>
-              <p class="text-on-surface-variant mt-1">Based on your shared connections and professional history.</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Person 1 -->
-            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-6 flex items-start gap-6 relative overflow-hidden group hover:bg-surface-container-low transition-colors shadow-sm" id="person-sophia">
-              <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button class="p-2 rounded-full hover:bg-surface-container-highest transition-colors" onclick="dismissPerson('person-sophia')">
-                  <span class="material-symbols-outlined text-zinc-400 text-sm">close</span>
-                </button>
-              </div>
-              <div class="relative flex-shrink-0">
-                <img class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBIccUv1tE8Wk78MX-64IGxosnAC-YW1si5QVdAZ9eyYdfmf70btblf_r7S4iy6e8ttyRyaoMhWz62QPIm33-b9BKgw7uPOvRRv5cSII67LxUhwv4qJ_qI7jbMbho9kH4CjMyVEevl-KFaAYkpjSuA898YgMmxSb7awa9PUNwNNpt2kW26JxlkW0_2XTMmo83rNyb44GMEDTWX3b0PxTiY3cBR1RQFCt95EsGTIkz2IXd19yljOm5-yM4micY2IbXUlb23cTtR9I0" alt="Sophia"/>
-                <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-2 border-white rounded-full" title="Online now"></div>
-              </div>
-              <div class="flex-1 space-y-2">
-                <div><h4 class="font-headline font-bold text-xl text-on-surface">Sophia Marchesi</h4><p class="text-sm font-medium text-primary">Chief Design Officer at Anthropic</p></div>
-                <div class="flex items-center gap-2 text-xs text-on-surface-variant">
-                  <div class="flex -space-x-2">
-                    <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASy5ITY7hs31L9Qcx-P8c4mrGD7IkOxSua-7-NAgm8gHJ-mKhRDma702kSsomNIZ_B6SQNRwiT-eESi-olAULcH4CnTVn2BglRRYASA3JmsjpWbXVyTMSrV8XsaEfw9rxQUHkzQ_6qu1pSqKjeDcMQi9VWnp1bwRvhCUU_ceFH67-8a74AOH5oR4uhCyFoUox_irKpLcrXgQylioG9KXVya5r7IsWKn1VYxlKB9s_QvCmqvAIDwu7mKc2pzxLi54W51nQRasqpe1A" alt=""/>
-                    <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBoxX1SY66_AROL9GW2gqkcJoOqjEKxD1rF7-zVF39dQDLpxMswFhvJscHkuYKC1JDORqB9dB7GrKVMWk3hZpOLYoDAuAN4tKwQ7qeKHi7aMu9Mv4EyFFVeR1a88xWAdKZ3Ht_0vK7lWSD2l_BmUd32BjHl0KG-F3CKKepcxt6PTjvlxVBBR_yHFFwWLfkLhrmButsCuwspRNS2vPSwWraGiZEjjfYRwBNtcooj6gVSPicz7TICX4rZnWAz0SU26gR9PBiuPel__g" alt=""/>
-                  </div>
-                  <span>24 shared connections</span>
-                </div>
-                <div class="pt-2">
-                  <button class="btn-connect flex items-center gap-2 px-6 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-[0_4px_12px_rgba(0,93,143,0.2)] active:scale-95 transition-all" onclick="connectPerson(this, 'Sophia Marchesi')">
-                    <span class="material-symbols-outlined text-lg">person_add</span> Connect
-                  </button>
-                </div>
-              </div>
-            </div>
-            <!-- Person 2 -->
-            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-6 flex items-start gap-6 relative overflow-hidden group hover:bg-surface-container-low transition-colors shadow-sm" id="person-marcus">
-              <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button class="p-2 rounded-full hover:bg-surface-container-highest transition-colors" onclick="dismissPerson('person-marcus')">
-                  <span class="material-symbols-outlined text-zinc-400 text-sm">close</span>
-                </button>
-              </div>
-              <div class="relative flex-shrink-0">
-                <img class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOd058EmKU934WZfDf8OsRNYR6H6B7rcUOKXuhRZp3TTtewfzz3fDEv8-C5oewbiMLcDNI1_jf1rRg8j3jdM2eFZrbNvjqMR0lmkzwM3fkYLSFqI2sxH9GyckIJ9AvLZeAf3CIWPj5SdyslGL8OUjPyBwsgcSE_BUKtqcWuWD0QlL6eUqM3V63QWtT7Jj9KAyAElRtyWh2UnazvLxgWWUHtzaEiIaqt_eii4ayKPJPZtJ9cbIOUbsY0k5_1hZR9iGjQPwkckAG7lA" alt="Marcus T"/>
-              </div>
-              <div class="flex-1 space-y-2">
-                <div><h4 class="font-headline font-bold text-xl text-on-surface">Marcus Thorne</h4><p class="text-sm font-medium text-primary">Senior AI Researcher at MIT Lab</p></div>
-                <div class="flex items-center gap-2 text-xs text-on-surface-variant">
-                  <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFfQPaqaUSUiGVUDFJcZ4HTRh50Iuv3HmOwrjB4YakoHnLUdQaIIiXKPRozmBdqQQBjo_rwDZPsBys4cjgmB9eE4d0ZoO281DDqpi0BGaw-jL5yg-spb8iL-7u1OcRaGQUv950l4UAjKDFC-CZiZ3SmRjlcy7gYi2tjYAOLJt8lFzsdFARhCdS-BW1Ju2M8G590UjIg_KIXsfOjfqmWQOtoVyXXDWwBQQozk9o3wHknioym57UBe458Q_DBfrvZsBUS0uPdkIn_ok" alt=""/>
-                  <span>12 shared connections</span>
-                </div>
-                <div class="pt-2">
-                  <button class="btn-connect flex items-center gap-2 px-6 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-[0_4px_12px_rgba(0,93,143,0.2)] active:scale-95 transition-all" onclick="connectPerson(this, 'Marcus Thorne')">
-                    <span class="material-symbols-outlined text-lg">person_add</span> Connect
-                  </button>
-                </div>
-              </div>
-            </div>
-            <!-- Person 3 -->
-            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-6 flex items-start gap-6 relative overflow-hidden group hover:bg-surface-container-low transition-colors shadow-sm" id="person-julianne">
-              <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button class="p-2 rounded-full hover:bg-surface-container-highest transition-colors" onclick="dismissPerson('person-julianne')">
-                  <span class="material-symbols-outlined text-zinc-400 text-sm">close</span>
-                </button>
-              </div>
-              <div class="relative flex-shrink-0">
-                <img class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsHqlLjG2dVugELTUPT5taZORP9pYpEXqzv9xjr5PUA6DJZMkYvkoWl1U7yG_KySwnXBMUJ1lBy1EtL_53AwCnG6eckLZCUyEq8zSZygF8Usc0AulIqrRaih_Rm1ILnDfUOSntw3OElf-q7Xe2t-qhxael1b_SjaENOKLWThR0sWrMLEhgxd94eGDgCwj192zYqKytmRW3iJGTQ4mgzOYTYjM2F0SXNHfz_iebaXfib48POvzUsxoZeGJ27soGJlBbc26E8hZkpRI" alt="Julianne"/>
-              </div>
-              <div class="flex-1 space-y-2">
-                <div><h4 class="font-headline font-bold text-xl text-on-surface">Julianne Webb</h4><p class="text-sm font-medium text-primary">Strategic Growth Lead at Shopify</p></div>
-                <div class="flex items-center gap-2 text-xs text-on-surface-variant">
-                  <div class="flex -space-x-2">
-                    <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCu9JqYyPNGmvJaO8uT6S0PUOn9opKOqGZPyYQaECAhtMMjJ63U6z0fC8cxcxd_WV0RQx0l-tNZTw9h5hfIzsoSiItStgelWJewt6XoI4RozX_GQkPshy7wmYA0SY0CfqTibXWkx0MVi50R7drwYXpbANEdgATJgf8ltNxn6rEayPWMOdDLjr2CBgis5l-_GhXOL2ZVCjHadVlixzKKpTs_qGm1TF8iZdUpMpE7ZVpzy2NPCxoWAQ-Kvtxyl8HpzsL-Fd7pLkfowM" alt=""/>
-                    <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAl0fecooc3-kyvxd0W341BcySunRgPiT5vQQfU2W5My25qjQ1Y_sk3lpfzMX8XYnMx0lCdE7bluu8Noq46YWIoEZDLbg74Y_asZASIPpc5muqMaVKcJfB9PxcEWBu6XwnRghck-ioG3_5prjMb2Z--9129Yo9v6bRRt7sJKcaaPNHYCwi9x21KxvQ-mmIfx2md6C0dUqNd3IGwli7GrXKJ8BnFcZUiDGGfeVnP66LTZFjmc2eYYZbgzTowTIBFktUx-AkkmqqQ-XE" alt=""/>
-                  </div>
-                  <span>8 shared connections</span>
-                </div>
-                <div class="pt-2">
-                  <button class="btn-connect flex items-center gap-2 px-6 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-[0_4px_12px_rgba(0,93,143,0.2)] active:scale-95 transition-all" onclick="connectPerson(this, 'Julianne Webb')">
-                    <span class="material-symbols-outlined text-lg">person_add</span> Connect
-                  </button>
-                </div>
-              </div>
-            </div>
-            <!-- Person 4 -->
-            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-6 flex items-start gap-6 relative overflow-hidden group hover:bg-surface-container-low transition-colors shadow-sm" id="person-robert">
-              <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button class="p-2 rounded-full hover:bg-surface-container-highest transition-colors" onclick="dismissPerson('person-robert')">
-                  <span class="material-symbols-outlined text-zinc-400 text-sm">close</span>
-                </button>
-              </div>
-              <div class="relative flex-shrink-0">
-                <img class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9OFMFNQzOCOJyOpKYyFcfwqm7gsjsJFhfKa3RiEEcGWae06t39_MQeR3_ETAmy2hYGsyM2qoUAF7yCW5ggB6buexTYt1Q4X6JPeXInXUWNiUSiqixbW0nhub01ABg7mhqLbUzJryrjYdp8nsxHDnauTze4zsB8pJyE3S01ZEQObqCO3leT8zVv_3ECyxOqy-rO1RKQQ8ctAAGT_7fFGkTJSjLpZA_wWd526Xss7Q2men8MqcOKkgGFvVDRJHWAwbfVL0BzszvZz4" alt="Robert"/>
-              </div>
-              <div class="flex-1 space-y-2">
-                <div><h4 class="font-headline font-bold text-xl text-on-surface">Dr. Robert Chen</h4><p class="text-sm font-medium text-primary">Data Scientist at Tesla Motors</p></div>
-                <div class="flex items-center gap-2 text-xs text-on-surface-variant">
-                  <img class="w-5 h-5 rounded-full border border-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDysJk3nEbNaku8nDU_oG7tgEIC4PYe0m3Ocw10mfwcRlyX0bkSsipjxI67at7_c4TRwgiUWjdL4sJZql6TxNVBDAN5x6JCKN457f15T4tDXv9hyYuBbiD-gHeg5n59CpkZjLVj8IGusO8U46oi_XPZW9zGbIvJeDF4XXxsKqJHLSo7YDuGVKU1tVQF1xFXkmDKZ84CaRKnTRPYQgatoyWNYxv2yGDpJ7wXnOnm9HUoJ6AMEAfuTsB9xjM1MpB50uIobXzF5mny-Tk" alt=""/>
-                  <span>42 shared connections</span>
-                </div>
-                <div class="pt-2">
-                  <button class="btn-connect flex items-center gap-2 px-6 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-[0_4px_12px_rgba(0,93,143,0.2)] active:scale-95 transition-all" onclick="connectPerson(this, 'Dr. Robert Chen')">
-                    <span class="material-symbols-outlined text-lg">person_add</span> Connect
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+        <!-- Tab 1 placeholder content (you can check by clicking tabs) -->
+        <section id="manage-tab-1" class="hidden">
+          <h2 class="font-headline text-2xl font-extrabold tracking-tight text-on-surface mb-4">Your Contacts</h2>
+          <p class="text-on-surface-variant">3,102 contacts • All synced from your professional network.</p>
+          <div class="mt-8 text-center text-sm text-on-surface-variant">Contact list would appear here in a full app. (Demo ready)</div>
         </section>
-
-        <!-- Company Detail -->
-        <section class="bg-surface-container-low rounded-xl border border-outline-variant/20 p-8 shadow-sm">
-          <div class="flex flex-col md:flex-row gap-8">
-            <div class="w-full md:w-1/3">
-              <div class="bg-white rounded-xl p-6 border border-zinc-200 shadow-sm">
-                <img class="w-24 h-24 object-contain mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADZLstFtmrWR-p6x2aV-tJKLvmkQ67uwWmiczEor6H4p-GWrnYu9ZBCrL8Ki6YwDfGoZEFz5iO8kFYUVx5wdyefLwSyNA2c4S55f7ii-qbJr6U35YdoZosDcSHppyzkP-Wc1NKK8yh74E5znaJjIksuPzxViSyMk9yjAXRzSjUIJ0wUqLdvyXSmWFCQWuO5r1t54d2K573KW9-bs0xIUot2oeZ5Ja4SlXUUTC3bjKcAINCFXKDpbwTemFrQr80nfg84s-c4ZKPewc" alt="TaskLink"/>
-                <h3 class="font-headline text-2xl font-extrabold text-on-surface">TaskLink AI</h3>
-                <p class="text-primary font-bold text-sm mb-4 cursor-pointer hover:underline" onclick="showToast('Opening tasklink.ai/careers')">tasklink.ai/careers</p>
-                <div class="space-y-3">
-                  <div class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-zinc-400">location_on</span>San Francisco, CA</div>
-                  <div class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-zinc-400">group</span>501-1,000 employees</div>
-                  <div class="flex items-center gap-3 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-zinc-400">domain</span>Information Technology</div>
-                </div>
-                <button class="w-full mt-6 py-3 rounded-full bg-primary text-white font-bold hover:bg-primary-container transition-colors shadow-lg shadow-primary/20" onclick="showToast('Now following TaskLink AI!')">Follow TaskLink</button>
-              </div>
-            </div>
-            <div class="w-full md:w-2/3 space-y-6">
-              <div>
-                <h4 class="font-headline font-bold text-lg mb-2">About the Company</h4>
-                <p class="text-zinc-600 leading-relaxed text-sm">At TaskLink AI, we believe the future of work isn't just about productivity—it's about augmentation. Our platform integrates seamless AI agents into your daily professional stack, automating the mundane to let you focus on the architectural.</p>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div class="bg-white p-4 rounded-lg border border-zinc-100">
-                  <p class="text-xs text-zinc-400 font-bold uppercase">Recent Activity</p>
-                  <p class="text-sm font-medium text-zinc-800 mt-1">4 new jobs posted today</p>
-                </div>
-                <div class="bg-white p-4 rounded-lg border border-zinc-100">
-                  <p class="text-xs text-zinc-400 font-bold uppercase">Network</p>
-                  <p class="text-sm font-medium text-zinc-800 mt-1">12 alumni work here</p>
-                </div>
-              </div>
-              <div class="pt-4 border-t border-zinc-200">
-                <h4 class="font-headline font-bold text-sm text-zinc-400 uppercase tracking-widest mb-4">Featured Insights</h4>
-                <div class="bg-white rounded-lg p-4 border border-zinc-100 flex gap-4 cursor-pointer hover:shadow-md transition-shadow" onclick="showToast('Opening article...')">
-                  <div class="w-20 h-20 bg-zinc-100 rounded-md overflow-hidden flex-shrink-0">
-                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5lt0Iv8rTSdj-A6M-Ww1pQF5fZIFkqPUNJuhsfpNU-Z4Kz_53vgiqBuFLVQa4YgG90FGisy7L42h4WSQKCzAmaq806cX8hp-ynQuiDX5q2WXgdzNi-spSGSZMTGClTtNQ1XXCFTlgkKDuD0XmoYnccl8-q-GoDiddKEnIBP7i8zNh8h1jl7a_Vef2c6uhbw2vpLAPAYVNTJp3L5OSwMuEXYnrwcKw3F7eQkYZ85bQ6sTuN7CQ0yOKw34AOVpA70eQ7TmpQrzQT94" alt="Report"/>
-                  </div>
-                  <div>
-                    <p class="text-xs text-primary font-bold">REPORT • JAN 2024</p>
-                    <p class="font-bold text-zinc-800 leading-tight mt-1">The State of AI in Enterprise: A 2024 Retrospective</p>
-                    <p class="text-xs text-zinc-500 mt-2">6 min read • 4,200 reads</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <section id="manage-tab-2" class="hidden"><h2 class="font-headline text-2xl font-extrabold tracking-tight text-on-surface mb-4">Following &amp; Followers</h2><p class="text-on-surface-variant">You follow 842 people • 406 follow you back.</p></section>
+        <section id="manage-tab-3" class="hidden"><h2 class="font-headline text-2xl font-extrabold tracking-tight text-on-surface mb-4">Groups</h2><p class="text-on-surface-variant">12 active groups • AI Designers • LLM Builders • etc.</p></section>
+        <section id="manage-tab-4" class="hidden"><h2 class="font-headline text-2xl font-extrabold tracking-tight text-on-surface mb-4">Events</h2><p class="text-on-surface-variant">Upcoming events you are invited to.</p></section>
+        <section id="manage-tab-5" class="hidden"><h2 class="font-headline text-2xl font-extrabold tracking-tight text-on-surface mb-4">Newsletters</h2><p class="text-on-surface-variant">4 subscribed newsletters from XWITE and partners.</p></section>
       </div>
     </div>
   </main>
 </div>
 
 <!-- ============================= -->
-<!-- PAGE: POST                    -->
+<!-- PAGE: POST -->
 <!-- ============================= -->
 <div id="page-post" class="page">
   <main class="pt-24 pb-20 px-4 max-w-2xl mx-auto min-h-screen">
     <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-zinc-200/10 mt-4">
       <h2 class="font-headline font-extrabold text-2xl text-on-surface mb-6">Create a Post</h2>
-      <div class="flex gap-3 mb-4">
+      <div class="flex gap-3 mb-6">
         <img class="w-12 h-12 rounded-lg object-cover flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3SikYaU-Swj8h87lW8qxswRtRlmNEqbOYDB6quuu-5fYN75vnZLB4KDtpH9D7K6yUsOajbE5c9A1Y5voA4mBBlm4dCkNbPU0ZtLD0FHjdnQB9xMbn7cpC4jMfPf2JQBEipk1ZW4jxCRZ9HWCLT02FGhm1VRu6Q4KQ-0ajc1DTQQiDXaOwHqmK5QZipenMfgp4USgPMNwBETX4s9i49LZJmM4QZg6InXJnb5hUYrQawoqbwoikSmNvw2tHghhM2YEZ2gTfsfwPFBE" alt="Marcus"/>
-        <div class="flex-1">
-          <textarea id="full-post-content" class="w-full bg-surface-container-low rounded-xl p-4 text-sm border-none resize-none focus:ring-2 focus:ring-primary outline-none" rows="6" placeholder="What collaboration are you looking for? Share your project or skill offering..."></textarea>
-        </div>
+        <textarea id="full-post-content" class="flex-1 bg-surface-container-low rounded-xl p-4 text-sm border-none resize-none focus:ring-2 focus:ring-primary outline-none" rows="5" placeholder="Description of your collaboration request or project..."></textarea>
       </div>
       <div class="mb-6">
-        <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Post Type</p>
-        <div class="flex gap-2 flex-wrap">
+        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Post Type</label>
+        <div class="mt-2 flex gap-2 flex-wrap">
           <button class="full-post-type active-type flex items-center gap-1.5 px-4 py-2 rounded-full border-2 border-primary text-primary text-sm font-bold" onclick="selectFullPostType(this, 'Propose Collab')">
             <span class="material-symbols-outlined text-sm">add_circle</span> Propose Collab
           </button>
@@ -916,10 +726,15 @@
           </button>
         </div>
       </div>
+      <!-- Task Title placed below Post Type and above Budget/Duration -->
+      <div class="mb-6">
+        <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Task Title</label>
+        <input id="full-post-title" type="text" class="mt-2 w-full bg-surface-container-low rounded-xl p-3 text-sm border-none focus:ring-2 focus:ring-primary outline-none" placeholder="e.g. AI Dashboard Design Collaboration"/>
+      </div>
       <div class="grid grid-cols-2 gap-4 mb-6">
         <div>
           <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Budget / Value</label>
-          <input type="text" class="mt-2 w-full bg-surface-container-low rounded-xl p-3 text-sm border-none focus:ring-2 focus:ring-primary outline-none" placeholder="e.g. $1,200 or Skill Swap"/>
+          <input id="full-post-budget" type="text" class="mt-2 w-full bg-surface-container-low rounded-xl p-3 text-sm border-none focus:ring-2 focus:ring-primary outline-none" placeholder="e.g. $1,200 or Skill Swap"/>
         </div>
         <div>
           <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Duration</label>
@@ -930,7 +745,7 @@
       </div>
       <div class="mb-6">
         <label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Skills Required</label>
-        <input type="text" class="mt-2 w-full bg-surface-container-low rounded-xl p-3 text-sm border-none focus:ring-2 focus:ring-primary outline-none" placeholder="e.g. React, UX Design, AWS (comma separated)"/>
+        <input id="full-post-skills" type="text" class="mt-2 w-full bg-surface-container-low rounded-xl p-3 text-sm border-none focus:ring-2 focus:ring-primary outline-none" placeholder="e.g. React, UX Design, AWS (comma separated)"/>
       </div>
       <div class="flex gap-3">
         <button class="flex-1 py-3 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold text-sm shadow-md hover:opacity-95 transition-all active:scale-95" onclick="publishFullPost()">Publish Post</button>
@@ -941,7 +756,7 @@
 </div>
 
 <!-- ============================= -->
-<!-- PAGE: ALERTS                  -->
+<!-- PAGE: ALERTS -->
 <!-- ============================= -->
 <div id="page-alerts" class="page">
   <main class="pt-24 pb-20 px-4 max-w-2xl mx-auto min-h-screen">
@@ -970,21 +785,13 @@
           <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 mt-0.5">thumb_up</span>
           <div><p class="text-sm font-medium text-on-surface">David Miller liked your recent post</p><p class="text-xs text-on-surface-variant mt-1">Cloud Architecture collaboration • 1d ago</p></div>
         </div>
-        <div class="bg-white border border-zinc-200/20 p-4 rounded-xl flex gap-4 cursor-pointer hover:bg-surface-container-low transition-colors alert-item" onclick="readAlert(this)">
-          <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 mt-0.5">comment</span>
-          <div><p class="text-sm font-medium text-on-surface">Marcus Thorne commented on your post</p><p class="text-xs text-on-surface-variant mt-1">"This is exactly what we need! I'd love to connect..." • 2d ago</p></div>
-        </div>
-        <div class="bg-white border border-zinc-200/20 p-4 rounded-xl flex gap-4 cursor-pointer hover:bg-surface-container-low transition-colors alert-item" onclick="readAlert(this)">
-          <span class="material-symbols-outlined text-on-surface-variant flex-shrink-0 mt-0.5">rocket_launch</span>
-          <div><p class="text-sm font-medium text-on-surface">Your profile was viewed 84 times this week</p><p class="text-xs text-on-surface-variant mt-1">That's 23% more than last week • 3d ago</p></div>
-        </div>
       </div>
     </div>
   </main>
 </div>
 
 <!-- ============================= -->
-<!-- PAGE: PROFILE                 -->
+<!-- PAGE: PROFILE -->
 <!-- ============================= -->
 <div id="page-profile" class="page">
   <main class="pt-24 pb-20 px-4 max-w-3xl mx-auto min-h-screen">
@@ -1014,7 +821,6 @@
         </div>
       </div>
     </div>
-
     <!-- Stats -->
     <div class="grid grid-cols-3 gap-4 mt-6">
       <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-zinc-200/10 text-center">
@@ -1030,7 +836,6 @@
         <p class="text-xs text-on-surface-variant mt-1 font-medium">Proposals Sent</p>
       </div>
     </div>
-
     <!-- Experience -->
     <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-zinc-200/10 mt-6">
       <div class="flex justify-between items-center mb-4">
@@ -1044,7 +849,7 @@
           </div>
           <div>
             <p class="font-bold text-sm text-on-surface">Principal Product Designer</p>
-            <p class="text-xs text-on-surface-variant">TaskLink AI • 2023 – Present</p>
+            <p class="text-xs text-on-surface-variant">XWITE • 2023 – Present</p>
             <p class="text-xs text-on-surface mt-1 leading-relaxed">Leading the design of AI-powered collaboration tools and enterprise dashboards.</p>
           </div>
         </div>
@@ -1064,7 +869,55 @@
 </div>
 
 <!-- ============================= -->
-<!-- BOTTOM NAV (Mobile)           -->
+<!-- PAGE: AI AGENT -->
+<!-- ============================= -->
+<div id="page-agent" class="page">
+  <main class="pt-24 pb-20 px-4 md:px-6 max-w-screen-xl mx-auto">
+    <div class="max-w-2xl mx-auto">
+      <h1 class="font-headline font-extrabold text-3xl mb-2 text-primary">AI Agent</h1>
+      <p class="text-on-surface-variant mb-8">Your personal collaboration assistant on XWITE</p>
+      
+      <!-- Recent Notifications (exactly 2) -->
+      <div class="bg-surface-container-lowest rounded-2xl p-6 mb-8">
+        <h3 class="font-headline font-bold text-lg mb-5 flex items-center gap-2">
+          <span class="material-symbols-outlined">notifications</span>
+          Recent Notifications
+        </h3>
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <span class="material-symbols-outlined text-3xl text-primary flex-shrink-0">auto_awesome</span>
+            <div class="flex-1">
+              <p class="font-medium">AI Agent found 2 perfect matches for your last post</p>
+              <p class="text-xs text-on-surface-variant mt-1">Sarah Chen + David Miller • 11 minutes ago</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <span class="material-symbols-outlined text-3xl text-tertiary flex-shrink-0">handshake</span>
+            <div class="flex-1">
+              <p class="font-medium">Proposal accepted by Sophia Marchesi</p>
+              <p class="text-xs text-on-surface-variant mt-1">Design System Audit collaboration confirmed • 4 hours ago</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scan Task Option -->
+      <div onclick="scanTasks()" class="bg-gradient-to-br from-primary to-primary-container text-white rounded-3xl p-8 cursor-pointer hover:brightness-110 transition-all flex items-center justify-between">
+        <div>
+          <span class="material-symbols-outlined text-5xl">scan</span>
+          <h2 class="font-headline font-extrabold text-2xl mt-3">Scan Tasks</h2>
+          <p class="opacity-90">Instantly match with the best collaborators across XWITE</p>
+        </div>
+        <div class="text-6xl">→</div>
+      </div>
+
+      <p class="text-center text-xs text-on-surface-variant mt-10">Your AI Agent is always learning from your activity</p>
+    </div>
+  </main>
+</div>
+
+<!-- ============================= -->
+<!-- BOTTOM NAV (Mobile) -->
 <!-- ============================= -->
 <nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 bg-white border-t border-zinc-200 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] z-50">
   <button class="mobile-nav-btn flex flex-col items-center justify-center active" onclick="navigate('home')">
@@ -1081,7 +934,6 @@
   <button class="mobile-nav-btn flex flex-col items-center justify-center relative" onclick="navigate('alerts')">
     <div class="nav-indicator relative">
       <span class="material-symbols-outlined">notifications</span>
-      <span id="mobile-notif-badge" class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
     </div>
     <span class="text-[10px] font-medium tracking-wide uppercase mt-0.5">Alerts</span>
   </button>
@@ -1101,18 +953,19 @@
 
   // ── Navigation ─────────────────────────────────────────
   function navigate(page) {
-    // Hide current
     const prev = document.getElementById('page-' + currentPage);
-    if (prev) { prev.classList.remove('visible'); setTimeout(() => { prev.classList.remove('active'); }, 220); }
-
+    if (prev) {
+      prev.classList.remove('visible');
+      setTimeout(() => { prev.classList.remove('active'); }, 220);
+    }
     currentPage = page;
-
-    // Show new
     setTimeout(() => {
       const next = document.getElementById('page-' + page);
       if (next) {
         next.classList.add('active');
-        requestAnimationFrame(() => { requestAnimationFrame(() => { next.classList.add('visible'); }); });
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => { next.classList.add('visible'); });
+        });
       }
     }, 50);
 
@@ -1129,13 +982,6 @@
       const pages = ['home','network','post','alerts','profile'];
       if (pages[i] === page) btn.classList.add('active');
     });
-
-    // Clear notification badge on alerts
-    if (page === 'alerts') {
-      document.getElementById('notif-badge').style.display = 'none';
-      const mb = document.getElementById('mobile-notif-badge');
-      if (mb) mb.style.display = 'none';
-    }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -1159,7 +1005,7 @@
     setTimeout(() => document.getElementById('search-input').focus(), 100);
   }
   function closeSearchModal(e) {
-    if (!e || e.target === document.getElementById('search-modal') || e.type === 'click' && !e.target.closest('#search-input')) {
+    if (!e || e.target === document.getElementById('search-modal') || (e.type === 'click' && !e.target.closest('#search-input'))) {
       document.getElementById('search-modal').classList.remove('open');
     }
   }
@@ -1201,10 +1047,11 @@
     document.getElementById('post-modal-title').textContent = type || 'Create Post';
     document.getElementById('post-modal-overlay').classList.add('open');
     document.querySelectorAll('.post-type-btn').forEach(b => {
-      b.classList.toggle('border-primary', b.textContent.trim().includes(type));
-      b.classList.toggle('text-primary', b.textContent.trim().includes(type));
-      b.classList.toggle('border-outline-variant', !b.textContent.trim().includes(type));
-      b.classList.toggle('text-on-surface-variant', !b.textContent.trim().includes(type));
+      const match = b.textContent.trim().includes(type);
+      b.classList.toggle('border-primary', match);
+      b.classList.toggle('text-primary', match);
+      b.classList.toggle('border-outline-variant', !match);
+      b.classList.toggle('text-on-surface-variant', !match);
     });
   }
   function closePostModal(e) {
@@ -1242,10 +1089,15 @@
   }
   function publishFullPost() {
     const content = document.getElementById('full-post-content').value.trim();
-    if (!content) { showToast('Please write your post content!'); return; }
+    const title = document.getElementById('full-post-title').value.trim();
+    if (!content || !title) { 
+      showToast('Task title and description are required!'); 
+      return; 
+    }
     document.getElementById('full-post-content').value = '';
+    document.getElementById('full-post-title').value = '';
     showToast('Post published! 🚀 Redirecting to feed...');
-    setTimeout(() => navigate('home'), 1500);
+    setTimeout(() => navigate('home'), 1200);
   }
 
   // ── Like / Bookmark ────────────────────────────────────
@@ -1265,6 +1117,23 @@
     icon.style.fontVariationSettings = bookmarked ? "'FILL' 0" : "'FILL' 1";
     btn.style.color = bookmarked ? '' : '#005d8f';
     showToast(bookmarked ? 'Removed from saved' : 'Post saved!');
+  }
+
+  // ── Read more for long feed descriptions (>6 lines) ─────
+  function setupReadMore() {
+    document.querySelectorAll('.feed-card .feed-description').forEach(desc => {
+      // Force check if content exceeds 6 lines
+      if (desc.scrollHeight > desc.clientHeight + 5) {
+        const moreLink = document.createElement('span');
+        moreLink.className = 'read-more-link';
+        moreLink.innerHTML = 'Read more <span class="material-symbols-outlined text-xs align-middle">expand_more</span>';
+        moreLink.onclick = function() {
+          desc.classList.add('expanded');
+          this.remove();
+        };
+        desc.parentNode.appendChild(moreLink);
+      }
+    });
   }
 
   // ── Network: Connect / Follow / Dismiss ────────────────
@@ -1297,7 +1166,13 @@
   }
   function dismissPerson(id) {
     const el = document.getElementById(id);
-    if (el) { el.style.opacity = '0'; el.style.transform = 'scale(0.95)'; el.style.transition = 'all 0.2s'; setTimeout(() => el.remove(), 200); showToast('Suggestion dismissed'); }
+    if (el) { 
+      el.style.opacity = '0'; 
+      el.style.transform = 'scale(0.95)'; 
+      el.style.transition = 'all 0.2s'; 
+      setTimeout(() => el.remove(), 200); 
+      showToast('Suggestion dismissed'); 
+    }
   }
 
   // ── Invitations ────────────────────────────────────────
@@ -1318,6 +1193,25 @@
   function updateInviteCount() {
     const el = document.getElementById('invite-count');
     if (el) el.textContent = pendingInvites;
+  }
+
+  // ── Manage Network Tabs (fully functional) ─────────────
+  function switchManageTab(tabIndex) {
+    // Remove active from all tabs
+    document.querySelectorAll('.manage-tab').forEach(t => t.classList.remove('active-tab'));
+    // Activate clicked tab
+    const activeTab = document.querySelector(`.manage-tab[data-tab="${tabIndex}"]`);
+    if (activeTab) activeTab.classList.add('active-tab');
+    
+    // Hide all sections
+    document.querySelectorAll('#network-main-content > section').forEach(s => s.classList.add('hidden'));
+    // Show the selected one
+    const target = document.getElementById('manage-tab-' + tabIndex);
+    if (target) target.classList.remove('hidden');
+    else {
+      // Fallback to default tab 0
+      document.getElementById('manage-tab-0').classList.remove('hidden');
+    }
   }
 
   // ── Alerts ─────────────────────────────────────────────
@@ -1349,13 +1243,8 @@
           <div class="text-right"><div class="text-primary font-extrabold text-lg font-headline">$2,500</div><div class="text-[10px] text-on-surface-variant font-bold uppercase mt-1">Project Budget</div></div>
         </div>
         <h3 class="font-headline font-extrabold text-xl text-primary mb-2">Autonomous Vehicle Data Pipeline Optimization</h3>
-        <p class="text-on-surface text-sm leading-relaxed mb-3">Seeking an experienced ML Ops engineer to help optimize our real-time sensor data pipeline. Offering strategy consulting in return. 3-week sprint.</p>
-        <div class="flex gap-2 flex-wrap mb-4">
-          <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase">ML Ops</span>
-          <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase">Python</span>
-          <span class="bg-surface-container-high text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase">Real-time Data</span>
-        </div>
-        <div class="flex gap-3">
+        <p class="feed-description text-on-surface text-sm leading-relaxed">Seeking an experienced ML Ops engineer to help optimize our real-time sensor data pipeline. Offering strategy consulting in return. 3-week sprint. The project involves complex real-time data processing, edge computing, and safety-critical validation pipelines.</p>
+        <div class="flex gap-3 mt-5">
           <button class="flex-1 bg-gradient-to-r from-primary to-primary-container text-white py-2.5 rounded-lg font-bold text-sm shadow-md hover:opacity-95 active:scale-95 transition-all" onclick="openProposalModal('Dr. Robert Chen')">Propose Collaboration</button>
           <button class="flex items-center justify-center bg-surface-container-high text-primary px-4 py-2.5 rounded-lg font-bold text-sm hover:bg-surface-container-highest" onclick="showToast('AI Agent matching...')"><span class="material-symbols-outlined mr-2">psychology</span>Agent Match</button>
         </div>
@@ -1366,7 +1255,18 @@
       btn.textContent = 'Load More Posts';
       btn.disabled = false;
       showToast('New posts loaded!');
-    }, 1000);
+      // Re-apply read-more to the newly added card
+      setupReadMore();
+    }, 900);
+  }
+
+  // ── AI Agent Scan Task ─────────────────────────────────
+  function scanTasks() {
+    showToast('🔍 Scanning all open tasks across XWITE...');
+    setTimeout(() => {
+      showToast('✅ Found 7 new perfect matches for you!');
+      navigate('home');
+    }, 1600);
   }
 
   // ── Keyboard shortcuts ─────────────────────────────────
@@ -1376,8 +1276,19 @@
       document.getElementById('post-modal-overlay').classList.remove('open');
       document.getElementById('search-modal').classList.remove('open');
     }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearchModal(); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') { 
+      e.preventDefault(); 
+      openSearchModal(); 
+    }
   });
+
+  // ── Initialize everything ──────────────────────────────
+  window.onload = function() {
+    setupReadMore();           // Enable read-more on long feed descriptions
+    updateInviteCount();       // Make sure invite count is correct
+    console.log('%c✅ XWITE full index.html ready. All requested changes applied.', 'color:#005d8f; font-weight:700');
+  };
 </script>
 </body>
 </html>
+```
