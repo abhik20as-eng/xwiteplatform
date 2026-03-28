@@ -149,17 +149,6 @@ body{background:#faf9f6}
     </div>
   </aside>
   <section class="lg:col-span-6 space-y-5">
-    <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-zinc-200/10">
-      <div class="flex gap-3">
-        <img class="w-12 h-12 rounded-lg object-cover flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3SikYaU-Swj8h87lW8qxswRtRlmNEqbOYDB6quuu-5fYN75vnZLB4KDtpH9D7K6yUsOajbE5c9A1Y5voA4mBBlm4dCkNbPU0ZtLD0FHjdnQB9xMbn7cpC4jMfPf2JQBEipk1ZW4jxCRZ9HWCLT02FGhm1VRu6Q4KQ-0ajc1DTQQiDXaOwHqmK5QZipenMfgp4USgPMNwBETX4s9i49LZJmM4QZg6InXJnb5hUYrQawoqbwoikSmNvw2tHghhM2YEZ2gTfsfwPFBE"/>
-        <button class="flex-1 bg-surface-container-low text-on-surface-variant text-left px-5 rounded-full hover:bg-surface-container-high text-sm font-medium" onclick="nav('post')">Request a skill or project collaboration...</button>
-      </div>
-      <div class="flex justify-around mt-4 pt-2 border-t border-surface-container-high">
-        <button class="flex items-center gap-2 text-on-surface-variant hover:bg-surface-container-low px-3 py-2 rounded-lg" onclick="nav('post')"><span class="material-symbols-outlined text-primary">add_circle</span><span class="text-xs font-semibold">Propose Collab</span></button>
-        <button class="flex items-center gap-2 text-on-surface-variant hover:bg-surface-container-low px-3 py-2 rounded-lg" onclick="nav('post')"><span class="material-symbols-outlined text-tertiary">handshake</span><span class="text-xs font-semibold">Skill Exchange</span></button>
-        <button class="flex items-center gap-2 text-on-surface-variant hover:bg-surface-container-low px-3 py-2 rounded-lg" onclick="nav('post')"><span class="material-symbols-outlined text-secondary">rocket_launch</span><span class="text-xs font-semibold">Post Project</span></button>
-      </div>
-    </div>
     <div id="feed" class="space-y-5"></div>
   </section>
   <aside class="hidden lg:block lg:col-span-3 space-y-5">
@@ -352,44 +341,92 @@ body{background:#faf9f6}
 
 <!-- ===== PAGE: AGENT ===== -->
 <div id="pg-agent" class="pg">
-<main class="pt-24 pb-20 px-4 max-w-2xl mx-auto">
-  <div class="mt-4 bg-gradient-to-br from-primary/10 to-primary-container/10 rounded-2xl p-6 border border-primary/20">
-    <div class="flex items-center gap-3 mb-1">
-      <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1">smart_toy</span>
-      <h2 class="font-headline font-extrabold text-2xl text-primary">AI Agent</h2>
-      <span class="flex items-center gap-1.5 ml-auto bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold"><span class="w-2 h-2 bg-green-500 rounded-full pulse"></span>Active</span>
+<style>
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.thinking-dot{width:8px;height:8px;border-radius:50%;background:#005d8f;animation:bounce 1.4s infinite ease-in-out both}
+.thinking-dot:nth-child(1){animation-delay:-0.32s}.thinking-dot:nth-child(2){animation-delay:-0.16s}
+@keyframes bounce{0%,80%,100%{transform:scale(0);opacity:.4}40%{transform:scale(1);opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.msg-in{animation:fadeUp .3s ease forwards}
+.agent-bubble{background:linear-gradient(135deg,#f0f7ff 0%,#e8f3ff 100%);border:1px solid #cde5ff}
+.task-card-action{transition:all .15s;border:1.5px solid transparent}
+.task-card-action:hover{border-color:#005d8f;background:#f0f7ff}
+.task-card-action.done{background:#f0fdf4;border-color:#86efac;color:#15803d}
+</style>
+<main class="pt-16 pb-20 max-w-2xl mx-auto flex flex-col min-h-screen">
+
+  <!-- Agent Header Bar -->
+  <div class="sticky top-16 z-10 bg-white/95 backdrop-blur border-b border-zinc-100 px-4 py-3 flex items-center gap-3">
+    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-sm">
+      <span class="material-symbols-outlined text-white text-base" style="font-variation-settings:'FILL' 1">smart_toy</span>
     </div>
-    <p class="text-sm text-on-surface-variant">Your intelligent collaboration assistant — monitoring your network and matching you with the best opportunities.</p>
+    <div class="flex-1">
+      <p class="font-headline font-bold text-sm text-on-surface">Xwite AI Agent</p>
+      <p class="text-[11px] text-green-600 font-medium flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full inline-block pulse"></span>Active · Ready to assist</p>
+    </div>
+    <button onclick="nav('home')" class="p-2 rounded-full hover:bg-surface-container-high"><span class="material-symbols-outlined text-on-surface-variant text-sm">close</span></button>
   </div>
 
-  <div class="mt-6 bg-surface-container-lowest rounded-xl shadow-sm border border-zinc-200/10">
-    <div class="p-5 border-b border-surface-container-high">
-      <h3 class="font-headline font-bold text-base">Recent Activity</h3>
-    </div>
-    <div class="divide-y divide-surface-container-high">
-      <div class="p-4 flex gap-4 hover:bg-surface-container-low cursor-pointer" onclick="nav('alerts')">
-        <div class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-primary text-sm">handshake</span></div>
-        <div><p class="text-sm font-bold">Sarah Chen responded to your proposal</p><p class="text-xs text-on-surface-variant mt-0.5">She's interested in the AI Dashboard project • 20m ago</p></div>
+  <!-- Chat Window -->
+  <div class="flex-1 px-4 py-5 space-y-4 overflow-y-auto" id="agent-chat">
+
+    <!-- Greeting bubble -->
+    <div class="flex gap-3 msg-in">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1">smart_toy</span>
       </div>
-      <div class="p-4 flex gap-4 hover:bg-surface-container-low cursor-pointer" onclick="nav('alerts')">
-        <div class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-primary text-sm">person_add</span></div>
-        <div><p class="text-sm font-bold">Elena Vance sent you a connection request</p><p class="text-xs text-on-surface-variant mt-0.5">Product Lead at NeuroLink • 1h ago</p></div>
+      <div class="agent-bubble rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
+        <p class="text-sm text-on-surface leading-relaxed">Hi Marcus 👋 I'm your Xwite AI Agent. I monitor your network, match collaborations, and help you take action faster.</p>
       </div>
     </div>
-    <button class="w-full py-3 text-xs font-bold text-primary hover:bg-surface-container-low border-t border-surface-container text-center" onclick="nav('alerts')">View all notifications →</button>
+
+    <!-- Recent notifications as agent messages -->
+    <div class="flex gap-3 msg-in" style="animation-delay:.1s">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1">smart_toy</span>
+      </div>
+      <div class="space-y-2 max-w-xs">
+        <p class="text-xs text-on-surface-variant font-bold uppercase tracking-wider ml-1 mb-1">Recent activity I noticed</p>
+        <div class="agent-bubble rounded-2xl rounded-tl-sm px-4 py-3 cursor-pointer hover:shadow-sm transition-shadow" onclick="nav('alerts')">
+          <div class="flex items-start gap-2">
+            <span class="material-symbols-outlined text-primary text-base flex-shrink-0 mt-0.5">handshake</span>
+            <div><p class="text-sm font-bold text-on-surface">Sarah Chen responded to your proposal</p><p class="text-xs text-on-surface-variant mt-0.5">Interested in the AI Dashboard project · 20m ago</p></div>
+          </div>
+        </div>
+        <div class="agent-bubble rounded-2xl rounded-tl-sm px-4 py-3 cursor-pointer hover:shadow-sm transition-shadow" onclick="nav('alerts')">
+          <div class="flex items-start gap-2">
+            <span class="material-symbols-outlined text-primary text-base flex-shrink-0 mt-0.5">person_add</span>
+            <div><p class="text-sm font-bold text-on-surface">Elena Vance sent a connection request</p><p class="text-xs text-on-surface-variant mt-0.5">Product Lead at NeuroLink · 1h ago</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scan prompt bubble -->
+    <div class="flex gap-3 msg-in" style="animation-delay:.2s">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1">smart_toy</span>
+      </div>
+      <div class="agent-bubble rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
+        <p class="text-sm text-on-surface leading-relaxed">Want me to scan the current feed tasks and find the best collaboration matches for your skill profile?</p>
+      </div>
+    </div>
+
+    <!-- Thinking / results inject here -->
+    <div id="agent-scan-area"></div>
   </div>
 
-  <div class="mt-6 bg-surface-container-lowest rounded-xl shadow-sm border border-zinc-200/10 p-5">
-    <div class="flex items-center justify-between mb-3">
-      <h3 class="font-headline font-bold text-base">Scan Tasks</h3>
-      <span class="text-xs text-on-surface-variant">AI-powered matching</span>
+  <!-- Bottom action bar -->
+  <div class="sticky bottom-16 md:bottom-0 px-4 py-4 bg-white border-t border-zinc-100">
+    <div class="flex gap-3 mb-3" id="agent-chips">
+      <button class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container-high text-on-surface text-xs font-bold hover:bg-surface-container-highest transition-colors" onclick="nav('alerts')"><span class="material-symbols-outlined text-sm">notifications</span>View Alerts</button>
+      <button class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container-high text-on-surface text-xs font-bold hover:bg-surface-container-highest transition-colors" onclick="nav('network')"><span class="material-symbols-outlined text-sm">group</span>My Network</button>
     </div>
-    <p class="text-sm text-on-surface-variant mb-4">Let the AI Agent analyze current feed tasks and find the best collaboration matches for your skill profile.</p>
-    <button id="scanbtn" onclick="scanTasks()" class="w-full py-3 rounded-full bg-gradient-to-r from-primary to-primary-container text-white font-bold text-sm shadow-md hover:opacity-95 active:scale-95 flex items-center justify-center gap-2">
-      <span class="material-symbols-outlined text-sm">psychology</span> Scan Tasks Now
+    <button id="agent-scan-btn" onclick="agentScan()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-primary to-primary-container text-white font-bold text-sm shadow-lg hover:opacity-95 active:scale-[.98] transition-all flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-base">manage_search</span> Scan Tasks
     </button>
-    <div id="scan-results" class="hidden mt-5 space-y-3"></div>
   </div>
+
 </main>
 </div>
 
@@ -465,20 +502,53 @@ function buildFeed() {
 const netSections = {
   default: ()=>`
     <section class="mb-8">
-      <h2 class="font-headline text-2xl font-extrabold mb-1">Recommended Companies</h2>
-      <p class="text-on-surface-variant mb-5 text-sm">Stay ahead with insights from leading AI and design firms.</p>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        ${[['Xwite','Artificial Intelligence • 1.2M followers','Pioneering the next generation of autonomous workflow orchestration for creative agencies.'],
-           ['Design Systems Inc.','UI/UX Design • 450K followers','The global authority on building scalable and accessible design languages for enterprise.'],
-           ['Future Ventures','Venture Capital • 89K followers','Investing in early-stage startups that focus on radical human-computer interaction models.']
-        ].map(([n,s,d])=>`
-        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm p-5 hover:shadow-md transition-shadow">
-          <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-3"><span class="material-symbols-outlined text-primary">bolt</span></div>
-          <h3 class="font-headline font-bold">${n}</h3>
-          <p class="text-xs text-on-surface-variant mb-1">${s}</p>
-          <p class="text-sm text-zinc-500 mb-3 text-xs leading-relaxed">${d}</p>
-          <button class="w-full py-2 rounded-full border-2 border-primary text-primary font-bold text-sm hover:bg-primary/5" onclick="togFollow(this,'${n}')"><span class="material-symbols-outlined text-sm">add</span> Follow</button>
-        </div>`).join('')}
+      <div class="flex items-end justify-between mb-6">
+        <div>
+          <h2 class="font-headline text-2xl font-extrabold tracking-tight text-on-surface">Recommended for your Industry</h2>
+          <p class="text-on-surface-variant mt-1">Stay ahead with insights from leading AI and design firms.</p>
+        </div>
+        <button class="text-primary font-bold text-sm flex items-center gap-1 hover:underline" onclick="showT('Showing all recommended companies')">See all <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
+          <div class="h-16 bg-gradient-to-br from-primary-fixed to-primary-container relative">
+            <div class="absolute -bottom-6 left-6 w-14 h-14 bg-white rounded-lg p-2 shadow-sm border border-surface-container-highest">
+              <img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkK6gJV1D1w-3RJulgrB89Gal3yKeDmTi-TU9tE82LHvGytXDP-3gHpVZrTogmbds9ffPEn2mNvbl5tGz-_Mk2YiYRb628CX4HMuVNZVY4E_D8UKzzLO80Myl5CloKueCdfivwS0PLF2hKcl78ppi8_F0ufAjPDbhtcVD1b3K1GeAx-CZu6u0O5DqlITP0jYsvX4XHVyLsFo9bSI-9fkV9g1wLNoTD1b-M8QkchSlgm1nORkkgWcaqwAectFa_kyfn-H1YFkhYhZA"/>
+            </div>
+          </div>
+          <div class="p-6 pt-8">
+            <h3 class="font-headline font-bold text-lg group-hover:text-primary transition-colors">Xwite</h3>
+            <p class="text-xs text-on-surface-variant mb-1">Artificial Intelligence • 1.2M followers</p>
+            <p class="text-sm text-zinc-500 line-clamp-2 mb-4 leading-relaxed">Pioneering the next generation of autonomous workflow orchestration for creative agencies.</p>
+            <button class="w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="togFollow(this,'Xwite')"><span class="material-symbols-outlined text-sm">add</span> Follow</button>
+          </div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
+          <div class="h-16 bg-gradient-to-br from-secondary-container to-secondary relative">
+            <div class="absolute -bottom-6 left-6 w-14 h-14 bg-white rounded-lg p-2 shadow-sm border border-surface-container-highest">
+              <img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhlBiGuGGnEW4a9JW90fr8oB-E2YxH5iC2pbnkQ5Cy_gYEiazpsTtRF-RrhfsXyNq3kBT8HJ45zm-zOlS0W__9Yj5yuu48nuVEcmX5PuKxSi3NhbBRsKpt6jitNmT94DPin1zG35c-RqeQZWv-P9Y4UZyy4bOntrFa2mMhqdpwawGSi3Rx2FrrBvxASQr-CT1TYTIryzw5DRIiCIQUHfMOi47l45uPO1r1lbPMVud1zTcBI5B3zCu7SYkwA7ewyJdClns23d-CjGU"/>
+            </div>
+          </div>
+          <div class="p-6 pt-8">
+            <h3 class="font-headline font-bold text-lg group-hover:text-primary transition-colors">Design Systems Inc.</h3>
+            <p class="text-xs text-on-surface-variant mb-1">UI/UX Design • 450K followers</p>
+            <p class="text-sm text-zinc-500 line-clamp-2 mb-4 leading-relaxed">The global authority on building scalable and accessible design languages for enterprise.</p>
+            <button class="w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="togFollow(this,'Design Systems Inc.')"><span class="material-symbols-outlined text-sm">add</span> Follow</button>
+          </div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden group hover:shadow-md transition-shadow">
+          <div class="h-16 bg-gradient-to-br from-tertiary-fixed to-tertiary-container relative">
+            <div class="absolute -bottom-6 left-6 w-14 h-14 bg-white rounded-lg p-2 shadow-sm border border-surface-container-highest">
+              <img class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5tA4bAgowunD0vSoQtpb8dO71DTWqnkb3viM9AznuqMx2ZXNMPCMwWMow2JfgP5MMQN12gnTrwiGUIUiDDJAo7Am173GXysyxfcQGTJHuDevTjZJwS8JaiMZ6jVv4LE5l-nsposnWv5HIMtuqKGCSiLdyn5FZD11YZRk0yUCKHjFG2X4SIQ9kvIOgSJrxh3DHyjzZ8ssK_MQj1WkfuY5KWBw_q4W4VmC7Oi6DHBnfDBYzyn5m3Q3QVDtyJqgr66YKQ1dwSXuN7QA"/>
+            </div>
+          </div>
+          <div class="p-6 pt-8">
+            <h3 class="font-headline font-bold text-lg group-hover:text-primary transition-colors">Future Ventures</h3>
+            <p class="text-xs text-on-surface-variant mb-1">Venture Capital • 89K followers</p>
+            <p class="text-sm text-zinc-500 line-clamp-2 mb-4 leading-relaxed">Investing in early-stage startups that focus on radical human-computer interaction models.</p>
+            <button class="w-full flex items-center justify-center gap-2 py-2 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary/5 transition-all" onclick="togFollow(this,'Future Ventures')"><span class="material-symbols-outlined text-sm">add</span> Follow</button>
+          </div>
+        </div>
       </div>
     </section>
     <section>
@@ -752,31 +822,117 @@ function loadMore(){
   },1000);
 }
 
-// ── Agent Scan ───────────────────────────
-function scanTasks(){
-  const btn=document.getElementById('scanbtn'),res=document.getElementById('scan-results');
-  btn.textContent='Scanning...';btn.disabled=true;
+// ── Agent Scan (Gemini-style) ─────────────
+function agentScan(){
+  const btn=document.getElementById('agent-scan-btn');
+  const area=document.getElementById('agent-scan-area');
+  const chips=document.getElementById('agent-chips');
+  btn.disabled=true;
+  btn.innerHTML='<span class="material-symbols-outlined text-base animate-spin">progress_activity</span> Scanning...';
+  chips.style.display='none';
+
+  // User bubble
+  area.innerHTML=`
+    <div class="flex justify-end msg-in">
+      <div class="bg-primary text-white rounded-2xl rounded-br-sm px-4 py-3 max-w-xs">
+        <p class="text-sm font-medium">Scan tasks for me</p>
+      </div>
+    </div>`;
+
+  // Thinking dots
   setTimeout(()=>{
-    res.innerHTML=`
-      <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Top Matches for Your Skills</p>
-      ${[{score:'98%',title:'AI Dashboard Design Collaboration',name:'Sarah Chen',match:'Matches: UI/UX Design, AI Strategy',color:'bg-green-100 text-green-700'},
-         {score:'91%',title:'Design System Audit for ML Pipeline',name:'Sophia Marchesi',match:'Matches: Figma, Design Systems',color:'bg-primary/10 text-primary'},
-         {score:'78%',title:'Cloud Architecture Sprint',name:'David Miller',match:'Matches: AI Strategy',color:'bg-yellow-100 text-yellow-700'}
-      ].map(m=>`
-      <div class="bg-surface-container-low rounded-xl p-4 flex items-start gap-3 border border-outline-variant/20">
-        <span class="text-xs font-extrabold px-2.5 py-1 rounded-full ${m.color} flex-shrink-0">${m.score}</span>
-        <div class="flex-1 min-w-0">
-          <p class="font-bold text-sm truncate">${m.title}</p>
-          <p class="text-xs text-on-surface-variant">${m.name} • ${m.match}</p>
-        </div>
-        <button class="text-xs bg-primary text-white px-3 py-1.5 rounded-full font-bold flex-shrink-0 hover:opacity-90" onclick="openProp('${m.name}')">Propose</button>
-      </div>`).join('')}`;
-    res.classList.remove('hidden');
-    btn.innerHTML='<span class="material-symbols-outlined text-sm">psychology</span> Scan Tasks Now';
-    btn.disabled=false;
-    showT('Found 3 great matches!');
-  },1800);
+    area.innerHTML+=`
+    <div class="flex gap-3 msg-in" id="thinking-row">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center flex-shrink-0 shadow-sm">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1">smart_toy</span>
+      </div>
+      <div class="agent-bubble rounded-2xl rounded-tl-sm px-5 py-4 flex items-center gap-2">
+        <div class="thinking-dot"></div><div class="thinking-dot"></div><div class="thinking-dot"></div>
+      </div>
+    </div>`;
+    area.scrollIntoView({behavior:'smooth',block:'end'});
+  },300);
+
+  const tasks=[
+    {score:'98%',scoreColor:'bg-green-100 text-green-700',title:'AI Dashboard Design Collaboration',name:'Sarah Chen',role:'Design Lead at NeuralSystems',match:'UI/UX Design, AI Strategy',img:imgs.sarah},
+    {score:'91%',scoreColor:'bg-blue-100 text-blue-700',title:'Design System Audit for ML Pipeline',name:'Sophia Marchesi',role:'CDO at Anthropic',match:'Figma, Design Systems',img:imgs.sophia},
+    {score:'78%',scoreColor:'bg-yellow-100 text-yellow-700',title:'Cloud Architecture Sprint',name:'David Miller',role:'CTO at CloudScale AI',match:'AI Strategy',img:imgs.david}
+  ];
+
+  setTimeout(()=>{
+    const tr=document.getElementById('thinking-row');
+    if(tr)tr.remove();
+
+    // Agent result intro
+    area.innerHTML+=`
+    <div class="flex gap-3 msg-in">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+        <span class="material-symbols-outlined text-white text-sm" style="font-variation-settings:'FILL' 1">smart_toy</span>
+      </div>
+      <div class="agent-bubble rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
+        <p class="text-sm text-on-surface">I scanned <strong>3 active tasks</strong> and found your top matches based on your skills in UI/UX Design, AI Strategy, and Figma.</p>
+      </div>
+    </div>`;
+
+    // Task cards
+    tasks.forEach((t,i)=>{
+      const cid='tc'+i;
+      setTimeout(()=>{
+        area.innerHTML+=`
+        <div class="ml-11 msg-in" style="animation-delay:${i*0.1}s">
+          <div class="bg-white rounded-2xl border border-zinc-200/60 shadow-sm overflow-hidden">
+            <div class="p-4 flex items-start gap-3 border-b border-zinc-100">
+              <img class="w-10 h-10 rounded-lg object-cover flex-shrink-0" src="${t.img}"/>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-0.5">
+                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${t.scoreColor}">${t.score} match</span>
+                </div>
+                <p class="font-headline font-bold text-sm text-primary leading-tight">${t.title}</p>
+                <p class="text-xs text-on-surface-variant mt-0.5">${t.name} · ${t.role}</p>
+                <p class="text-[10px] text-on-surface-variant mt-1">Skill match: <span class="font-semibold text-on-surface">${t.match}</span></p>
+              </div>
+            </div>
+            <div class="flex divide-x divide-zinc-100">
+              <button class="task-card-action flex-1 py-2.5 text-xs font-bold text-on-surface-variant flex items-center justify-center gap-1" onclick="viewTaskDetail('${t.title}',this)">
+                <span class="material-symbols-outlined text-sm">visibility</span>View
+              </button>
+              <button class="task-card-action flex-1 py-2.5 text-xs font-bold text-primary flex items-center justify-center gap-1" onclick="openProp('${t.name}');markAction(this,'Proposed')">
+                <span class="material-symbols-outlined text-sm">send</span>Propose
+              </button>
+              <button class="task-card-action flex-1 py-2.5 text-xs font-bold text-on-surface-variant flex items-center justify-center gap-1" onclick="markAction(this,'Done ✓')">
+                <span class="material-symbols-outlined text-sm">check_circle</span>Complete
+              </button>
+            </div>
+          </div>
+        </div>`;
+        area.scrollIntoView({behavior:'smooth',block:'end'});
+      },i*200);
+    });
+
+    setTimeout(()=>{
+      btn.innerHTML='<span class="material-symbols-outlined text-base">manage_search</span> Scan Again';
+      btn.disabled=false;
+      chips.style.display='';
+      showT('Found 3 great matches!');
+    },tasks.length*200+100);
+
+  },2000);
 }
+
+function viewTaskDetail(title,btn){
+  markAction(btn,'Viewed');
+  showT('Opening: '+title);
+  setTimeout(()=>nav('home'),600);
+}
+
+function markAction(btn,label){
+  btn.classList.add('done');
+  btn.innerHTML=`<span class="material-symbols-outlined text-sm">check</span>${label}`;
+  btn.disabled=true;
+}
+
+// Legacy stub so old references don't break
+function scanTasks(){agentScan();}
 
 // ── Keyboard ─────────────────────────────
 document.addEventListener('keydown',e=>{
